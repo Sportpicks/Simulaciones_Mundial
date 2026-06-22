@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mundial 2026 — Picks & Bankroll</title>
+<style>
+:root{--bg:#0d1220;--panel:#161d31;--panel2:#1c2540;--tx:#eef1f8;--tx2:#9aa5c0;
+--lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--or:#fb923c}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12px 16px;
+display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+nav .logo{font-weight:700;font-size:1rem;color:var(--ac)}
+nav .links{display:flex;gap:16px}
+nav a{color:var(--tx2);text-decoration:none;font-size:.83rem;font-weight:600}
+nav a:hover{color:var(--tx)}
+header{text-align:center;padding:32px 0 16px}
+header h1{font-size:1.5rem;font-weight:700}
+header p{color:var(--tx2);font-size:.88rem;margin-top:6px}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+@media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:14px;text-align:center}
+.stat .val{font-size:1.5rem;font-weight:700}
+.stat .lbl{font-size:.75rem;color:var(--tx2);margin-top:2px}
+.green{color:var(--v)}.red{color:var(--d)}.yellow{color:var(--e)}.blue{color:var(--ac)}
+h2{font-size:1rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.pick-card{background:var(--panel);border:1px solid var(--lin);border-radius:12px;
+padding:16px;margin-bottom:10px}
+.pick-card.ganado{border-color:var(--v)}
+.pick-card.perdido{border-color:var(--d)}
+.pick-card.pendiente{border-color:var(--e)}
+.pick-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.pick-partido{font-weight:700;font-size:.95rem}
+.pick-fecha{font-size:.76rem;color:var(--tx2)}
+.pick-mercado{font-size:.82rem;color:var(--ac);margin-bottom:6px}
+.pick-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.78rem;color:var(--tx2)}
+.pick-meta span{background:var(--panel2);border-radius:6px;padding:2px 8px}
+.pick-razon{font-size:.8rem;color:var(--tx2);margin-top:6px;font-style:italic}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 10px;font-size:.78rem;font-weight:700}
+.badge-ganado{background:#0d2e1a;color:var(--v);border:1px solid var(--v)}
+.badge-perdido{background:#2e0d0d;color:var(--d);border:1px solid var(--d)}
+.badge-pendiente{background:#2e2a0d;color:var(--e);border:1px solid var(--e)}
+.badge-void{background:#1a1a2e;color:var(--pu);border:1px solid var(--pu)}
+.pg{font-size:.85rem;font-weight:700}
+/* Gráfica */
+.chart-wrap{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:16px;margin-bottom:20px}
+canvas{width:100%!important}
+.conf-muy-alta{color:var(--v)}
+.conf-alta{color:var(--e)}
+.conf-media{color:var(--or)}
+.telegram-btn{display:block;text-align:center;background:var(--ac);color:#0d1220;
+border-radius:10px;padding:12px;font-weight:700;text-decoration:none;margin:16px 0;font-size:.9rem}
+.telegram-btn:hover{opacity:.9}
+.empty{text-align:center;color:var(--tx2);padding:32px;background:var(--panel);
+border-radius:12px;border:1px dashed var(--lin)}
+.racha{background:var(--panel2);border-radius:8px;padding:6px 14px;font-size:.82rem;display:inline-block}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filtro-btn{background:var(--panel);border:1px solid var(--lin);color:var(--tx2);
+border-radius:999px;padding:4px 14px;font-size:.8rem;cursor:pointer;font-weight:600}
+.filtro-btn.active{background:var(--ac);border-color:var(--ac);color:#0d1220}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">⚽ Mundial 2026 Picks</span>
+  <div class="links">
+    <a href="#picks">Picks</a>
+    <a href="#bankroll">Bankroll</a>
+    <a href="#stats">Estadísticas</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>⚽ Picks Profesionales — Mundial 2026</h1>
+    <p>Sistema híbrido: XGBoost + 25 casas de apuestas + Dixon-Coles + Valor de Mercado</p>
+    <a class="telegram-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat"><div class="val blue" id="s-total">—</div><div class="lbl">Picks totales</div></div>
+    <div class="stat"><div class="val green" id="s-acierto">—</div><div class="lbl">% Acierto</div></div>
+    <div class="stat"><div class="val" id="s-roi">—</div><div class="lbl">ROI</div></div>
+    <div class="stat"><div class="val" id="s-bank">—</div><div class="lbl">Bankroll actual</div></div>
+  </div>
+
+  <div id="s-racha" style="margin-bottom:16px;text-align:center"></div>
+
+  <!-- Gráfica bankroll -->
+  <h2 id="bankroll">📈 Evolución del Bankroll</h2>
+  <div class="chart-wrap">
+    <canvas id="chart-bank" height="200"></canvas>
+  </div>
+
+  <!-- Picks -->
+  <h2 id="picks">🎯 Historial de Picks</h2>
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('pendiente',this)">⏳ Pendientes</button>
+    <button class="filtro-btn" onclick="filtrar('ganado',this)">✅ Ganados</button>
+    <button class="filtro-btn" onclick="filtrar('perdido',this)">❌ Perdidos</button>
+    <button class="filtro-btn" onclick="filtrar('muy-alta',this)">🟢 Muy Alta</button>
+    <button class="filtro-btn" onclick="filtrar('alta',this)">🟡 Alta</button>
+  </div>
+  <div id="picks-list"></div>
+
+  <!-- Stats detalle -->
+  <h2 id="stats">📊 Estadísticas por mercado</h2>
+  <div id="stats-mercado"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const KEY_PICKS    = 'tipster_picks_v1';
+const KEY_BANKROLL = 'tipster_bankroll_v1';
+
+function cargarPicks(){ try{ return JSON.parse(localStorage.getItem(KEY_PICKS)||'[]'); }catch{ return []; } }
+function cargarBankroll(){ return JSON.parse(localStorage.getItem(KEY_BANKROLL)||'{"inicial":100,"actual":100}'); }
+
+let filtroActual = 'todos';
+let chartInstance = null;
+
+function renderStats(){
+  const picks = cargarPicks();
+  const b = cargarBankroll();
+  const resueltos = picks.filter(p => p.estado==='ganado'||p.estado==='perdido');
+  const ganados   = picks.filter(p => p.estado==='ganado');
+  const pct = resueltos.length ? Math.round(ganados.length/resueltos.length*100) : 0;
+  const roi = b.inicial > 0 ? ((b.actual-b.inicial)/b.inicial*100).toFixed(1) : 0;
+
+  document.getElementById('s-total').textContent   = picks.length;
+  document.getElementById('s-acierto').textContent = pct + '%';
+  const roiEl = document.getElementById('s-roi');
+  roiEl.textContent = (roi>=0?'+':'')+roi+'%';
+  roiEl.className   = 'val '+(roi>=0?'green':'red');
+  document.getElementById('s-bank').textContent = '$'+b.actual;
+
+  // Racha actual
+  let racha = 0, tipo = '';
+  for(const p of picks){
+    if(p.estado==='ganado'){ if(tipo==='ganado'||!tipo){ racha++; tipo='ganado'; } else break; }
+    else if(p.estado==='perdido'){ if(tipo==='perdido'||!tipo){ racha++; tipo='perdido'; } else break; }
+    else break;
+  }
+  const rachaEl = document.getElementById('s-racha');
+  if(racha>0){
+    rachaEl.innerHTML = `<span class="racha" style="color:${tipo==='ganado'?'var(--v)':'var(--d)'}">
+      ${tipo==='ganado'?'🔥':'❄️'} Racha actual: ${racha} ${tipo==='ganado'?'ganados':'perdidos'} consecutivos
+    </span>`;
+  }
+}
+
+function renderChart(){
+  const picks = [...cargarPicks()].reverse();
+  const b = cargarBankroll();
+  let bank = b.inicial;
+  const labels = ['Inicio'];
+  const data   = [bank];
+
+  picks.forEach(p => {
+    if(p.estado==='ganado'){
+      bank += bank*(p.pct/100)*(p.cuota-1);
+    } else if(p.estado==='perdido'){
+      bank -= bank*(p.pct/100);
+    } else { return; }
+    labels.push(p.partido.split(' vs ')[0]);
+    data.push(Math.round(bank*100)/100);
+  });
+
+  const ctx = document.getElementById('chart-bank').getContext('2d');
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets:[{
+        label: 'Bankroll ($)',
+        data,
+        borderColor: '#60a5fa',
+        backgroundColor: 'rgba(96,165,250,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 4,
+        pointBackgroundColor: data.map((v,i) => i===0?'#60a5fa':v>=data[i-1]?'#34d399':'#fb7185'),
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y.toFixed(2)}}},
+      scales:{
+        x:{ticks:{color:'#9aa5c0',font:{size:11}},grid:{color:'#2a3554'}},
+        y:{ticks:{color:'#9aa5c0',callback:v=>'$'+v},grid:{color:'#2a3554'}}
+      }
+    }
+  });
+}
+
+function renderPicks(){
+  const picks = cargarPicks();
+  const b = cargarBankroll();
+  let bankSim = b.inicial;
+  const pgMap = {};
+  [...picks].reverse().forEach(p => {
+    let pg = 0;
+    if(p.estado==='ganado')  { pg = bankSim*(p.pct/100)*(p.cuota-1); bankSim+=pg; }
+    else if(p.estado==='perdido'){ pg = -bankSim*(p.pct/100); bankSim+=pg; }
+    pgMap[p.id] = pg;
+  });
+
+  let filtrados = picks;
+  if(filtroActual==='pendiente'||filtroActual==='ganado'||filtroActual==='perdido'){
+    filtrados = picks.filter(p=>p.estado===filtroActual);
+  } else if(filtroActual==='muy-alta'||filtroActual==='alta'||filtroActual==='media'){
+    filtrados = picks.filter(p=>p.confianza===filtroActual);
+  }
+
+  const cont = document.getElementById('picks-list');
+  if(!filtrados.length){
+    cont.innerHTML = '<div class="empty">No hay picks en esta categoría aún</div>';
+    return;
+  }
+
+  cont.innerHTML = filtrados.map(p => {
+    const badge = p.estado==='ganado'?'<span class="badge badge-ganado">✅ Ganado</span>'
+      :p.estado==='perdido'?'<span class="badge badge-perdido">❌ Perdido</span>'
+      :p.estado==='void'?'<span class="badge badge-void">🔄 Void</span>'
+      :'<span class="badge badge-pendiente">⏳ Pendiente</span>';
+    const conf = p.confianza==='muy-alta'?'<span class="conf-muy-alta">🟢 Muy Alta</span>'
+      :p.confianza==='alta'?'<span class="conf-alta">🟡 Alta</span>'
+      :'<span class="conf-media">⚠️ Media</span>';
+    const pg = pgMap[p.id]||0;
+    const pgStr = pg===0?'':`<span class="pg ${pg>0?'green':'red'}">${pg>0?'+':''}$${pg.toFixed(2)}</span>`;
+    return `<div class="pick-card ${p.estado}">
+      <div class="pick-header">
+        <div>
+          <div class="pick-partido">${p.partido}</div>
+          <div class="pick-fecha">${p.fecha}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">${pgStr}${badge}</div>
+      </div>
+      <div class="pick-mercado">📌 ${p.mercado}</div>
+      <div class="pick-meta">
+        <span>💵 Cuota: <b>${p.cuota}</b></span>
+        <span>💰 ${p.pct}% del bank</span>
+        <span>${conf}</span>
+      </div>
+      ${p.razon?`<div class="pick-razon">📊 ${p.razon}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function renderStatsMercado(){
+  const picks = cargarPicks().filter(p=>p.estado==='ganado'||p.estado==='perdido');
+  const mapa = {};
+  picks.forEach(p => {
+    const cat = p.mercado.split('—')[0].trim().split(' ')[0];
+    if(!mapa[cat]) mapa[cat] = {g:0,p:0};
+    if(p.estado==='ganado') mapa[cat].g++;
+    else mapa[cat].p++;
+  });
+  const cont = document.getElementById('stats-mercado');
+  if(!Object.keys(mapa).length){ cont.innerHTML='<div class="empty">Sin datos aún</div>'; return; }
+  cont.innerHTML = Object.entries(mapa).map(([cat,v])=>{
+    const total = v.g+v.p;
+    const pct = Math.round(v.g/total*100);
+    return `<div style="background:var(--panel);border:1px solid var(--lin);border-radius:10px;
+    padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span>${cat}</span>
+      <span style="display:flex;gap:12px;font-size:.82rem">
+        <span class="green">✅ ${v.g}</span>
+        <span class="red">❌ ${v.p}</span>
+        <span class="${pct>=55?'green':pct>=45?'yellow':'red'}">${pct}% acierto</span>
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function filtrar(tipo, btn){
+  filtroActual = tipo;
+  document.querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPicks();
+}
+
+// Init
+renderStats();
+renderChart();
+renderPicks();
+renderStatsMercado();
+</script>
+</body>
+</html>
