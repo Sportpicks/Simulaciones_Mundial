@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Picks Premium 💎 — Mundial 2026</title>
+<style>
+:root{--bg:#0d1220;--panel:#161d31;--panel2:#1c2540;--tx:#eef1f8;--tx2:#9aa5c0;
+--lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--go:#ffd700}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12px 16px;
+position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:700;color:var(--go);font-size:.95rem}
+.nav-links a{color:var(--tx2);text-decoration:none;font-size:.82rem;margin-left:12px;font-weight:600}
+header{text-align:center;padding:26px 0 16px;border-bottom:1px solid rgba(255,215,0,.15);margin-bottom:18px}
+header h1{font-size:1.45rem;font-weight:700;color:var(--go)}
+header p{color:var(--tx2);font-size:.84rem;margin-top:5px}
+.badge{display:inline-block;border:1px solid var(--go);border-radius:999px;
+padding:2px 11px;font-size:.75rem;color:var(--go);margin:3px 2px}
+.resumen{background:linear-gradient(135deg,var(--panel),rgba(255,215,0,.04));
+border:1px solid rgba(255,215,0,.2);border-radius:12px;
+padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.rs-v{font-size:1.25rem;font-weight:700;color:var(--go)}
+.rs-l{font-size:.7rem;color:var(--tx2)}
+.acum-box{background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);border-radius:10px;
+padding:12px 16px;text-align:center;margin-bottom:16px}
+.acum-box .title{font-size:.8rem;color:var(--tx2);margin-bottom:4px}
+.acum-box .val{font-size:1.6rem;font-weight:700;color:var(--go)}
+.pick{background:linear-gradient(135deg,var(--panel),rgba(255,215,0,.03));
+border:1px solid rgba(255,215,0,.25);border-radius:14px;padding:18px;margin-bottom:12px;position:relative}
+.pick-n{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--go);
+font-weight:700;background:rgba(255,215,0,.1);border-radius:5px;padding:1px 7px}
+.seg-bar{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:10px 0}
+.seg-inner{height:100%;background:linear-gradient(90deg,var(--v),var(--go));border-radius:4px;transition:width .5s}
+.ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.ph-em{font-size:1.7rem;flex-shrink:0;line-height:1}
+.ph-info .sub{font-size:.75rem;color:var(--tx2);margin-bottom:2px}
+.ph-info .merc{font-size:.95rem;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
+.sb{background:var(--panel2);border-radius:9px;padding:9px;text-align:center}
+.sb .v{font-size:1.2rem;font-weight:700}
+.sb .l{font-size:.69rem;color:var(--tx2);margin-top:2px}
+.desc{font-size:.79rem;color:var(--tx2);margin-top:8px;padding:7px 10px;
+background:rgba(255,215,0,.05);border-radius:7px;border-left:3px solid var(--go)}
+.aviso{background:var(--panel);border-left:4px solid var(--go);border-radius:0 10px 10px 0;
+padding:11px 13px;font-size:.79rem;color:var(--tx2);margin-top:18px}
+footer{text-align:center;color:var(--tx2);font-size:.75rem;margin-top:22px}
+footer a{color:var(--ac);text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">💎 Sportpicks Premium</span>
+  <div class="nav-links">
+    <a href="index_final.html">🔮 Modelo</a>
+    <a href="picks_dia.html">🎯 Picks públicos</a>
+    <a href="picks_publicos_v2.html">📊 Historial</a>
+  </div>
+</nav>
+<div class="wrap">
+  <header>
+    <h1>💎 Picks Premium — 2026-06-23</h1>
+    <p>Los 4 picks con mayor probabilidad de acierto del día</p>
+    <span class="badge">📅 23-06-2026 23:41 UTC</span>
+    <span class="badge">🔐 Acceso exclusivo suscriptores</span>
+  </header>
+  <div class="resumen" id="res"></div>
+  <div class="acum-box">
+    <div class="title">📈 Cuota acumulador (los 4 combinados)</div>
+    <div class="val">@1.83</div>
+  </div>
+  <div id="picks"></div>
+  <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
+  para obtener mejor cuota manteniendo alta probabilidad de acierto.</div>
+  <footer>
+    <a href="picks_dia.html">🎯 Ver picks públicos</a> ·
+    <a href="index_final.html">Modelo completo</a> ·
+    ⚠️ Apuesta con responsabilidad
+  </footer>
+</div>
+<script>
+const PICKS=[{"partido": "Inglaterra vs Ghana", "local": "Inglaterra", "visitante": "Ghana", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados", "fuente": "real", "tipo": "premium"}, {"partido": "Colombia vs RD Congo", "local": "Colombia", "visitante": "RD Congo", "mercado": "Faltas +18.5", "prob": 82.0, "cuota": 1.16, "ev": -0.049, "emoji": "🦵", "categoria": "Faltas", "descripcion": "22.9 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "Inglaterra vs Ghana", "local": "Inglaterra", "visitante": "Ghana", "mercado": "Sin empate (1 o 2)", "prob": 81.5, "cuota": 1.17, "ev": -0.046, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cualquier equipo gana", "fuente": "real", "tipo": "premium"}, {"partido": "Portugal vs Uzbekistán", "local": "Portugal", "visitante": "Uzbekistán", "mercado": "Más de 1.5 goles", "prob": 81.5, "cuota": 1.17, "ev": -0.046, "emoji": "🥅", "categoria": "Goles", "descripcion": "xG total 3.1", "fuente": "real", "tipo": "premium"}];
+const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
+const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
+
+const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
+const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+p.cuota,0)/PICKS.length).toFixed(2):0;
+document.getElementById('res').innerHTML=`
+  <div><div class="rs-v">${PICKS.length}</div><div class="rs-l">Picks premium</div></div>
+  <div><div class="rs-v">${probP}%</div><div class="rs-l">Prob. promedio</div></div>
+  <div><div class="rs-v">${cuotaP}</div><div class="rs-l">Cuota prom.</div></div>`;
+
+const cont=document.getElementById('picks');
+PICKS.forEach((pk,i)=>{
+  const d=document.createElement('div');
+  d.className='pick';
+  d.innerHTML=`
+    <div class="pick-n">💎 #${i+1}</div>
+    <div class="ph">
+      <div class="ph-em">${pk.emoji}</div>
+      <div class="ph-info">
+        <div class="sub">${fl(pk.local)} ${pk.partido} · ${pk.categoria}</div>
+        <div class="merc">${pk.mercado}</div>
+      </div>
+    </div>
+    <div class="seg-bar"><div class="seg-inner" style="width:${pk.prob}%"></div></div>
+    <div class="stats">
+      <div class="sb"><div class="v" style="color:var(--v)">${pk.prob}%</div><div class="l">Probabilidad</div></div>
+      <div class="sb"><div class="v" style="color:var(--go)">@${pk.cuota}</div><div class="l">Cuota est.</div></div>
+      <div class="sb"><div class="v" style="color:var(--pu)">#${i+1}</div><div class="l">Ranking</div></div>
+    </div>
+    ${pk.descripcion?`<div class="desc">💡 ${pk.descripcion}</div>`:''}
+  `;
+  cont.appendChild(d);
+});
+</script>
+</body></html>
