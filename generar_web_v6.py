@@ -43,37 +43,98 @@ def p_poisson_mas_de(lam, linea):
     except:
         return 0.0
 
-def mejor_apuesta_1x2(p):
-    """Calcula mejor apuesta 1X2 y doble oportunidad."""
+def mejor_apuesta_global(p):
+    """
+    Busca la MEJOR apuesta entre TODOS los mercados disponibles.
+    No solo 1X2 — también goles, córners, tiros, faltas y tarjetas.
+    Retorna el mercado con mayor probabilidad de acierto.
+    """
+    local  = p['local']
+    visit  = p['visitante']
+    p1     = p['p1']
+    px     = p['px']
+    p2     = p['p2']
+    xgl    = p.get('xgl', 0)
+    xgv    = p.get('xgv', 0)
+    xg_total  = xgl + xgv
+    lam_cor   = p.get('cor', 9.0)
+    lam_tar   = p.get('tar', 4.0)
+    lam_tiros = p.get('tiros', 7.0)
+    lam_fal   = p.get('faltas', 22.0)
+
     candidatos = []
-    p1, px, p2 = p['p1'], p['px'], p['p2']
-    local, visit = p['local'], p['visitante']
 
-    if p1 > px and p1 > p2 and p1 > 65:
-        candidatos.append({'mercado': f'Victoria {local}', 'prob': p1, 'tipo': '1x2'})
-    elif p2 > px and p2 > p1 and p2 > 65:
-        candidatos.append({'mercado': f'Victoria {visit}', 'prob': p2, 'tipo': '1x2'})
+    # ── 1X2 ──
+    if p1 > 60:
+        candidatos.append({'mercado': f'Victoria {local}',   'prob': p1,  'emoji': '⚽', 'cat': '1X2'})
+    if p2 > 60:
+        candidatos.append({'mercado': f'Victoria {visit}',   'prob': p2,  'emoji': '⚽', 'cat': '1X2'})
 
-    do_1x = round(p1 + px, 1)
-    do_x2 = round(px + p2, 1)
-    do_12 = round(p1 + p2, 1)
-    if do_1x > 75: candidatos.append({'mercado': '1X (local o empate)', 'prob': do_1x, 'tipo': 'doble'})
-    if do_x2 > 75: candidatos.append({'mercado': 'X2 (empate o visitante)', 'prob': do_x2, 'tipo': 'doble'})
-    if do_12 > 75: candidatos.append({'mercado': '12 (sin empate)', 'prob': do_12, 'tipo': 'doble'})
+    # ── Doble oportunidad ──
+    do_1x = round(p1+px, 1)
+    do_x2 = round(px+p2, 1)
+    do_12 = round(p1+p2, 1)
+    if do_1x >= 70: candidatos.append({'mercado': f'1X ({local} o empate)',    'prob': do_1x, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+    if do_x2 >= 70: candidatos.append({'mercado': f'X2 (empate o {visit})',    'prob': do_x2, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+    if do_12 >= 75: candidatos.append({'mercado': 'Sin empate (1 o 2)',         'prob': do_12, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+
+    # ── Goles via xG (sin líneas triviales) ──
+    for linea, label in [(1.5,'1.5'),(2.5,'2.5'),(3.5,'3.5')]:
+        prob = round(p_poisson_mas_de(xg_total, linea)*100)
+        if prob >= 55:
+            candidatos.append({'mercado': f'Más de {label} goles', 'prob': prob, 'emoji': '🥅', 'cat': 'Goles'})
+    prob_u25 = round((1-p_poisson_mas_de(xg_total, 2.5))*100 + p_poisson_mas_de(xg_total,2.5)*100)
+    prob_u25 = 100 - round(p_poisson_mas_de(xg_total, 2.5)*100)
+    if prob_u25 >= 60:
+        candidatos.append({'mercado': 'Menos de 2.5 goles', 'prob': prob_u25, 'emoji': '🔒', 'cat': 'Goles'})
+
+    # ── Córners ──
+    for linea in [7.5, 8.5, 9.5, 10.5]:
+        prob = round(p_poisson_mas_de(lam_cor, linea)*100)
+        if prob >= 55:
+            candidatos.append({'mercado': f'Córners más de {linea}', 'prob': prob, 'emoji': '⛳', 'cat': 'Córners'})
+
+    # ── Tiros a puerta ──
+    for linea in [4.5, 5.5, 6.5]:
+        prob = round(p_poisson_mas_de(lam_tiros, linea)*100)
+        if prob >= 55:
+            candidatos.append({'mercado': f'Tiros a puerta más de {linea}', 'prob': prob, 'emoji': '🎯', 'cat': 'Tiros'})
+
+    # ── Faltas ──
+    for linea in [18.5, 20.5]:
+        prob = round(p_poisson_mas_de(lam_fal, linea)*100)
+        if prob >= 55:
+            candidatos.append({'mercado': f'Faltas más de {linea}', 'prob': prob, 'emoji': '🦵', 'cat': 'Faltas'})
+
+    # ── Tarjetas ──
+    for linea in [3.5, 4.5]:
+        prob = round(p_poisson_mas_de(lam_tar, linea)*100)
+        if prob >= 55:
+            candidatos.append({'mercado': f'Tarjetas más de {linea}', 'prob': prob, 'emoji': '🟨', 'cat': 'Tarjetas'})
 
     if not candidatos:
         return None
 
+    # Elegir el de MAYOR probabilidad
     mejor = max(candidatos, key=lambda x: x['prob'])
     prob  = mejor['prob']
-    if prob >= 80:   nivel, emoji, texto = 'muy-alta', '🟢', 'Muy Alta'
-    elif prob >= 65: nivel, emoji, texto = 'alta',     '🟡', 'Alta'
-    elif prob >= 55: nivel, emoji, texto = 'media',    '🟠', 'Media'
+
+    if prob >= 85:   nivel, emoji_n, clase = 'Muy Alta', '🟢', 'muy-alta'
+    elif prob >= 75: nivel, emoji_n, clase = 'Alta',     '🟢', 'alta'
+    elif prob >= 65: nivel, emoji_n, clase = 'Media',    '🟡', 'media'
+    elif prob >= 55: nivel, emoji_n, clase = 'Leve',     '🟠', 'leve'
     else: return None
 
-    return {'mercado': mejor['mercado'], 'prob': prob,
-            'nivel': nivel, 'emoji': emoji, 'texto': texto,
-            'tipo_emoji': '⚽' if mejor['tipo']=='1x2' else '🛡️'}
+    return {
+        'mercado'    : mejor['mercado'],
+        'prob'       : prob,
+        'nivel'      : nivel,
+        'emoji'      : emoji_n,
+        'texto'      : nivel,
+        'tipo_emoji' : mejor['emoji'],
+        'categoria'  : mejor['cat'],
+        'clase'      : clase,
+    }
 
 def construir_datos():
     if not os.path.exists(CSV_FINAL):
@@ -124,16 +185,19 @@ def construir_datos():
             'p2dc': round(float(r.get('DC_Prob_2', r['Prob_2_Final'])), 1),
             'xgl' : round(float(r.get('xG_L', 0)), 2),
             'xgv' : round(float(r.get('xG_V', 0)), 2),
-            # Tarjetas (siempre total)
-            'tar' : round(lam_tar, 1),
-            't35' : round(p_poisson_mas_de(lam_tar,3.5)*100),
-            't45' : round(p_poisson_mas_de(lam_tar,4.5)*100),
-            'vml' : int(vm_l), 'vmv': int(vm_v),
+            # Mercados adicionales
+            'cor'   : round(lam_cor, 1),
+            'tiros' : round(lam_tiros, 1),
+            'faltas': round(lam_faltas, 1),
+            'tar'   : round(lam_tar, 1),
+            't35'   : round(p_poisson_mas_de(lam_tar,3.5)*100),
+            't45'   : round(p_poisson_mas_de(lam_tar,4.5)*100),
+            'vml'   : int(vm_l), 'vmv': int(vm_v),
             'es_sorpresa': es_sorpresa,
         }
 
-        # Mejor apuesta 1X2
-        p['mejor_apuesta'] = mejor_apuesta_1x2(p)
+        # Mejor apuesta GLOBAL (todos los mercados)
+        p['mejor_apuesta'] = mejor_apuesta_global(p)
 
         # Mercados razonados por equipo o total
         mercados_razonados = razonar_partido(a, b, lam_tiros, lam_cor, lam_faltas)
@@ -240,7 +304,7 @@ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fuentes{background:var(--panel2);border-radius:8px;padding:6px 10px;font-size:.72rem;color:var(--tx2);margin-bottom:8px}
 .fuentes b{color:var(--tx);display:block;margin-bottom:3px;font-size:.74rem}
 .fuentes-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center}
-.fuentes-grid div{background:var(--bg);border-radius:6px;padding:3px 4px;overflow:hidden;word-break:break-all;font-size:.65rem}
+.fuentes-grid div{background:var(--bg);border-radius:6px;padding:3px 6px}
 .fuentes-grid span{display:block;font-size:.68rem;opacity:.7}
 .vm-bar{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:.72rem;color:var(--tx2)}
 .vm-bar-inner{flex:1;height:5px;background:var(--panel2);border-radius:3px;overflow:hidden}
@@ -356,9 +420,9 @@ function tarjeta(p){
   if(!yaJugado && p.mejor_apuesta){
     const ma = p.mejor_apuesta;
     mejorHTML = `
-    <div class="mejor-apuesta ${ma.nivel}">
+    <div class="mejor-apuesta ${ma.clase||ma.nivel}">
       <div>
-        <div class="ma-label">🏆 Mejor apuesta del modelo</div>
+        <div class="ma-label">🏆 Mejor apuesta · <span style="opacity:.7;font-size:.68rem">${ma.categoria||''}</span></div>
         <div class="ma-mercado">${ma.tipo_emoji} ${ma.mercado}</div>
       </div>
       <div class="ma-right">
