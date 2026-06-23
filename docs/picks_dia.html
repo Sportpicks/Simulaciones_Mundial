@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Picks del Día — Mundial 2026</title>
+<style>
+:root{--bg:#0d1220;--panel:#161d31;--panel2:#1c2540;--tx:#eef1f8;--tx2:#9aa5c0;
+--lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;
+--or:#fb923c;--ro:#f43f5e;--go:#ffd700}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12px 16px;
+position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:700;color:var(--ac);font-size:1rem}
+.nav-links a{color:var(--tx2);text-decoration:none;font-size:.83rem;font-weight:600;margin-left:16px}
+header{text-align:center;padding:28px 0 16px}
+header h1{font-size:1.5rem;font-weight:700}
+header p{color:var(--tx2);font-size:.85rem;margin-top:6px}
+.badge{display:inline-block;border:1px solid var(--lin);border-radius:999px;
+padding:2px 12px;font-size:.76rem;color:var(--tx2);margin:4px 2px}
+.badge.hoy{border-color:var(--ac);color:var(--ac)}
+.partido-wrap{margin-bottom:20px}
+.partido-header{background:var(--panel);border:1px solid var(--lin);border-radius:14px 14px 0 0;
+padding:14px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.partido-equipos{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem}
+.marcador-badge{background:var(--panel2);border:1px solid var(--lin);border-radius:8px;
+padding:2px 10px;font-size:.95rem}
+.partido-probs{font-size:.78rem;color:var(--tx2);display:flex;gap:10px}
+.barra{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--panel2);margin:4px 0}
+.barra i{display:block;height:100%}
+.picks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;
+background:var(--panel2);border:1px solid var(--lin);border-top:none;
+border-radius:0 0 14px 14px;padding:12px}
+.pick-card{background:var(--panel);border:1px solid var(--lin);border-radius:10px;padding:10px 12px;
+position:relative;overflow:hidden}
+.pick-card.muy-alta{border-color:var(--v)}
+.pick-card.alta{border-color:var(--v)}
+.pick-card.media{border-color:var(--e)}
+.pick-card.leve{border-color:var(--or)}
+.pick-card.value{border-color:var(--go);background:rgba(255,215,0,0.05)}
+.pick-header{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:4px}
+.pick-mercado{font-size:.84rem;font-weight:600;line-height:1.3;flex:1}
+.pick-prob{font-size:1.2rem;font-weight:700;flex-shrink:0;white-space:nowrap}
+.muy-alta .pick-prob,.alta .pick-prob{color:var(--v)}
+.media .pick-prob{color:var(--e)}
+.leve .pick-prob{color:var(--or)}
+.value .pick-prob{color:var(--go)}
+.pick-meta{display:flex;justify-content:space-between;align-items:center;margin-top:4px;flex-wrap:wrap;gap:4px}
+.pick-cat{font-size:.7rem;background:var(--panel2);border-radius:4px;padding:1px 6px;color:var(--tx2)}
+.pick-nivel{font-size:.7rem;color:var(--tx2)}
+.pick-razon{font-size:.72rem;color:var(--tx2);margin-top:4px;line-height:1.4}
+.pick-ev{font-size:.75rem;font-weight:600;color:var(--go);margin-top:2px}
+.pick-cuota{font-size:.75rem;color:var(--tx2)}
+.fl{width:20px;height:15px;border-radius:2px;vertical-align:-2px;object-fit:cover}
+.resumen-box{background:var(--panel);border:1px solid var(--lin);border-radius:12px;
+padding:16px;margin-bottom:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.res-stat .val{font-size:1.4rem;font-weight:700;color:var(--ac)}
+.res-stat .lbl{font-size:.74rem;color:var(--tx2)}
+.sin-picks{text-align:center;color:var(--tx2);padding:20px;font-size:.85rem}
+.vd{color:var(--v)}.em{color:var(--e)}.dr{color:var(--d)}
+footer{text-align:center;color:var(--tx2);font-size:.76rem;margin-top:24px}
+footer a{color:var(--ac);text-decoration:none}
+@media(max-width:560px){.picks-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">⚽ Sportpicks — Mundial 2026</span>
+  <div class="nav-links">
+    <a href="index_final.html">🔮 Modelo</a>
+    <a href="picks_publicos_v2.html">🎯 Picks</a>
+  </div>
+</nav>
+<div class="wrap">
+  <header>
+    <h1>🎯 Picks del Día — 2026-06-23</h1>
+    <p>Todos los mercados ordenados por probabilidad de acierto</p>
+    <span class="badge hoy">📅 23-06-2026 16:10 UTC</span>
+    <span class="badge">🤖 XGBoost + 25 casas + Razonamiento por equipo</span>
+  </header>
+
+  <div class="resumen-box" id="resumen"></div>
+  <div id="partidos"></div>
+
+  <footer>
+    <a href="index_final.html">Ver modelo completo</a> ·
+    <a href="picks_publicos_v2.html">Historial de picks</a> ·
+    ⚠️ Apuesta con responsabilidad
+  </footer>
+</div>
+
+<script>
+const PARTIDOS = [{"local": "Inglaterra", "visitante": "Ghana", "grupo": "L", "marcador": "3-0", "p1": 71.1, "px": 18.8, "p2": 10.1, "vml": 1100, "vmv": 120, "picks": [{"mercado": "Inglaterra +3.5 córners", "prob": 100, "categoria": "Córners", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "⛳", "razon": "👤 Equipo — Inglaterra domina en córners (11.0 por partido)", "detalle": "Inglaterra promedia 11.0 córners | rival 3.0"}, {"mercado": "Córners totales +7.5", "prob": 97, "categoria": "Córners", "ev": null, "cuota": null, "tipo": "total", "emoji": "⛳", "razon": "🏟️ Total — Ambos equipos generan córners — total esperado 14.0", "detalle": "Inglaterra (11.0) + Ghana (3.0) = 14.0 esp."}, {"mercado": "1X — Inglaterra o Empate", "prob": 89.9, "categoria": "Doble Op.", "ev": null, "cuota": null, "tipo": "doble", "emoji": "🛡️", "razon": "Cubre victoria Inglaterra + empate = 89.9%"}, {"mercado": "Tiros a puerta +4.5", "prob": 83, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "total", "emoji": "🎯", "razon": "🏟️ Total — Ambos equipos generan tiros — total esperado 7.0", "detalle": "Inglaterra (4.0) + Ghana (3.0) = 7.0 esp."}, {"mercado": "Sin empate (1 o 2)", "prob": 81.2, "categoria": "Doble Op.", "ev": null, "cuota": null, "tipo": "doble", "emoji": "🛡️", "razon": "Cualquier ganador = 81.2%"}, {"mercado": "Más de 1.5 goles", "prob": 80, "categoria": "Goles", "ev": null, "cuota": null, "tipo": "goles", "emoji": "🥅", "razon": "xG total 3.0 → 80% de superar 1.5"}, {"mercado": "Victoria Inglaterra", "prob": 71.1, "categoria": "1X2", "ev": -0.133, "cuota": 1.22, "tipo": "resultado", "emoji": "⚽", "razon": "Inglaterra favorito con 71.1% de probabilidad"}, {"mercado": "🔥 VALUE: Empate", "prob": 18.8, "categoria": "Value Bet", "ev": 0.288, "cuota": 6.85, "tipo": "value", "emoji": "💰", "razon": "Modelo 18.8% vs Pinnacle 14.6% (cuota 6.85)"}, {"mercado": "🔥 VALUE: Victoria Ghana", "prob": 10.1, "categoria": "Value Bet", "ev": 0.461, "cuota": 14.46, "tipo": "value", "emoji": "💰", "razon": "Modelo 10.1% vs Pinnacle 6.9% (cuota 14.46)"}], "n_picks": 9, "mejor_prob": 100}, {"local": "Portugal", "visitante": "Uzbekistán", "grupo": "K", "marcador": "3-0", "p1": 59.5, "px": 28.3, "p2": 12.2, "vml": 850, "vmv": 35, "picks": [{"mercado": "Portugal +3.5 córners", "prob": 96, "categoria": "Córners", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "⛳", "razon": "👤 Equipo — Portugal domina en córners (8.0 por partido)", "detalle": "Portugal promedia 8.0 córners | rival 4.5"}, {"mercado": "Tiros a puerta +4.5", "prob": 95, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "total", "emoji": "🎯", "razon": "🏟️ Total — Ambos equipos generan tiros — total esperado 9.3", "detalle": "Portugal (5.0) + Uzbekistán (4.3) = 9.3 esp."}, {"mercado": "Córners totales +7.5", "prob": 93, "categoria": "Córners", "ev": null, "cuota": null, "tipo": "total", "emoji": "⛳", "razon": "🏟️ Total — Ambos equipos generan córners — total esperado 12.5", "detalle": "Portugal (8.0) + Uzbekistán (4.5) = 12.5 esp."}, {"mercado": "Portugal +2.5 tiros a puerta", "prob": 88, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🎯", "razon": "👤 Equipo — Portugal es dominante en tiros (5.0 por partido)", "detalle": "Portugal promedia 5.0 tiros | 4.3 del rival"}, {"mercado": "1X — Portugal o Empate", "prob": 87.8, "categoria": "Doble Op.", "ev": null, "cuota": null, "tipo": "doble", "emoji": "🛡️", "razon": "Cubre victoria Portugal + empate = 87.8%"}, {"mercado": "Más de 1.5 goles", "prob": 82, "categoria": "Goles", "ev": null, "cuota": null, "tipo": "goles", "emoji": "🥅", "razon": "xG total 3.1 → 82% de superar 1.5"}, {"mercado": "Uzbekistán +8.5 faltas", "prob": 77, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🦵", "razon": "👤 Equipo — Uzbekistán es un equipo físico (11.0 faltas por partido)", "detalle": "Uzbekistán promedia 11.0 faltas | rival 6.0"}, {"mercado": "Más de 2.5 goles", "prob": 60, "categoria": "Goles", "ev": null, "cuota": null, "tipo": "goles", "emoji": "🥅", "razon": "xG total 3.1 → 60% de superar 2.5"}, {"mercado": "🔥 VALUE: Empate", "prob": 28.3, "categoria": "Value Bet", "ev": 1.371, "cuota": 8.38, "tipo": "value", "emoji": "💰", "razon": "Modelo 28.3% vs Pinnacle 11.9% (cuota 8.38)"}, {"mercado": "🔥 VALUE: Victoria Uzbekistán", "prob": 12.2, "categoria": "Value Bet", "ev": 1.441, "cuota": 20.01, "tipo": "value", "emoji": "💰", "razon": "Modelo 12.2% vs Pinnacle 5.0% (cuota 20.01)"}], "n_picks": 10, "mejor_prob": 96}, {"local": "Panamá", "visitante": "Croacia", "grupo": "L", "marcador": "0-2", "p1": 13.6, "px": 26.0, "p2": 60.4, "vml": 40, "vmv": 290, "picks": [{"mercado": "Faltas totales +18.5", "prob": 94, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "total", "emoji": "🦵", "razon": "🏟️ Total — Partido físico esperado — 26.0 faltas proyectadas", "detalle": "Panamá (13.0) + Croacia (13.0) = 26.0 esp."}, {"mercado": "Tiros a puerta +4.5", "prob": 90, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "total", "emoji": "🎯", "razon": "🏟️ Total — Ambos equipos generan tiros — total esperado 8.0", "detalle": "Panamá (5.0) + Croacia (3.0) = 8.0 esp."}, {"mercado": "Panamá +8.5 faltas", "prob": 90, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🦵", "razon": "👤 Equipo — Panamá es un equipo físico (13.0 faltas por partido)", "detalle": "Panamá promedia 13.0 faltas | rival 13.0"}, {"mercado": "Croacia +8.5 faltas", "prob": 90, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🦵", "razon": "👤 Equipo — Croacia es un equipo físico (13.0 faltas por partido)", "detalle": "Croacia promedia 13.0 faltas | rival 13.0"}, {"mercado": "Panamá +2.5 tiros a puerta", "prob": 88, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🎯", "razon": "👤 Equipo — Panamá es dominante en tiros (5.0 por partido)", "detalle": "Panamá promedia 5.0 tiros | 3.0 del rival"}, {"mercado": "X2 — Empate o Croacia", "prob": 86.4, "categoria": "Doble Op.", "ev": null, "cuota": null, "tipo": "doble", "emoji": "🛡️", "razon": "Cubre empate + victoria Croacia = 86.4%"}, {"mercado": "Más de 1.5 goles", "prob": 77, "categoria": "Goles", "ev": null, "cuota": null, "tipo": "goles", "emoji": "🥅", "razon": "xG total 2.8 → 77% de superar 1.5"}, {"mercado": "Victoria Croacia", "prob": 60.4, "categoria": "1X2", "ev": -0.088, "cuota": 1.51, "tipo": "resultado", "emoji": "⚽", "razon": "Croacia favorito con 60.4% de probabilidad"}, {"mercado": "🔥 VALUE: Empate", "prob": 26.0, "categoria": "Value Bet", "ev": 0.136, "cuota": 4.37, "tipo": "value", "emoji": "💰", "razon": "Modelo 26.0% vs Pinnacle 22.9% (cuota 4.37)"}], "n_picks": 9, "mejor_prob": 94}, {"local": "Colombia", "visitante": "RD Congo", "grupo": "K", "marcador": "1-0", "p1": 44.6, "px": 35.5, "p2": 20.0, "vml": 320, "vmv": 45, "picks": [{"mercado": "Tiros a puerta +4.5", "prob": 84, "categoria": "Tiros", "ev": null, "cuota": null, "tipo": "total", "emoji": "🎯", "razon": "🏟️ Total — Ambos equipos generan tiros — total esperado 7.1", "detalle": "Colombia (3.5) + RD Congo (3.5) = 7.1 esp."}, {"mercado": "1X — Colombia o Empate", "prob": 80.1, "categoria": "Doble Op.", "ev": null, "cuota": null, "tipo": "doble", "emoji": "🛡️", "razon": "Cubre victoria Colombia + empate = 80.1%"}, {"mercado": "Faltas totales +18.5", "prob": 77, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "total", "emoji": "🦵", "razon": "🏟️ Total — Partido físico esperado — 22.0 faltas proyectadas", "detalle": "Colombia (11.0) + RD Congo (11.0) = 22.0 esp."}, {"mercado": "Colombia +8.5 faltas", "prob": 77, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🦵", "razon": "👤 Equipo — Colombia es un equipo físico (11.0 faltas por partido)", "detalle": "Colombia promedia 11.0 faltas | rival 11.0"}, {"mercado": "RD Congo +8.5 faltas", "prob": 77, "categoria": "Faltas", "ev": null, "cuota": null, "tipo": "equipo", "emoji": "🦵", "razon": "👤 Equipo — RD Congo es un equipo físico (11.0 faltas por partido)", "detalle": "RD Congo promedia 11.0 faltas | rival 11.0"}, {"mercado": "Más de 1.5 goles", "prob": 71, "categoria": "Goles", "ev": null, "cuota": null, "tipo": "goles", "emoji": "🥅", "razon": "xG total 2.5 → 71% de superar 1.5"}, {"mercado": "Córners totales +7.5", "prob": 68, "categoria": "Córners", "ev": null, "cuota": null, "tipo": "total", "emoji": "⛳", "razon": "🏟️ Total — Ambos equipos generan córners — total esperado 9.0", "detalle": "Colombia (4.5) + RD Congo (4.5) = 9.0 esp."}, {"mercado": "🔥 VALUE: Empate", "prob": 35.5, "categoria": "Value Bet", "ev": 0.424, "cuota": 4.14, "tipo": "value", "emoji": "💰", "razon": "Modelo 35.5% vs Pinnacle 24.2% (cuota 4.14)"}, {"mercado": "🔥 VALUE: Victoria RD Congo", "prob": 20.0, "categoria": "Value Bet", "ev": 0.315, "cuota": 6.48, "tipo": "value", "emoji": "💰", "razon": "Modelo 20.0% vs Pinnacle 15.4% (cuota 6.48)"}], "n_picks": 9, "mejor_prob": 84}];
+const ISO      = {"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
+const fl = eq => ISO[eq]?`<img class="fl" loading="lazy" alt="" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
+
+// Resumen
+const totalPicks  = PARTIDOS.reduce((s,p)=>s+p.picks.length,0);
+const mejorProb   = Math.max(...PARTIDOS.map(p=>p.mejor_prob));
+const nValueBets  = PARTIDOS.reduce((s,p)=>s+p.picks.filter(pk=>pk.tipo==='value').length,0);
+document.getElementById('resumen').innerHTML = `
+  <div class="res-stat"><div class="val">${PARTIDOS.length}</div><div class="lbl">Partidos hoy</div></div>
+  <div class="res-stat"><div class="val">${totalPicks}</div><div class="lbl">Picks totales</div></div>
+  <div class="res-stat"><div class="val" style="color:var(--go)">${nValueBets}</div><div class="lbl">Value Bets 💰</div></div>
+`;
+
+// Partidos
+const cont = document.getElementById('partidos');
+PARTIDOS.forEach(p => {
+  const div = document.createElement('div');
+  div.className = 'partido-wrap';
+
+  const vmMax = Math.max(p.vml, p.vmv, 1);
+  div.innerHTML = `
+    <div class="partido-header">
+      <div>
+        <div class="partido-equipos">
+          ${fl(p.local)} ${p.local}
+          <span class="marcador-badge">${p.marcador}</span>
+          ${p.visitante} ${fl(p.visitante)}
+        </div>
+        <div class="barra" style="margin-top:6px;width:200px">
+          <i style="width:${p.p1}%;background:var(--v)"></i>
+          <i style="width:${p.px}%;background:var(--e)"></i>
+          <i style="width:${p.p2}%;background:var(--d)"></i>
+        </div>
+      </div>
+      <div class="partido-probs">
+        <span class="vd">1·${p.p1}%</span>
+        <span class="em">X·${p.px}%</span>
+        <span class="dr">2·${p.p2}%</span>
+        <span style="color:var(--tx2);font-size:.7rem">Grupo ${p.grupo}</span>
+      </div>
+    </div>
+    <div class="picks-grid">
+      ${p.picks.length === 0
+        ? '<div class="sin-picks">Sin picks disponibles con suficiente confianza</div>'
+        : p.picks.map(pk => {
+          const nivel = pk.prob>=85?'muy-alta':pk.prob>=75?'alta':pk.prob>=65?'media':pk.prob>=55?'leve':'baja';
+          const claseCard = pk.tipo==='value'?'value':nivel;
+          const emoji_nivel = pk.prob>=75?'🟢':pk.prob>=65?'🟡':'🟠';
+          const evHTML = pk.ev ? `<div class="pick-ev">💰 EV: ${pk.ev>0?'+':''}${(pk.ev*100).toFixed(1)}%</div>` : '';
+          const cuotaHTML = pk.cuota ? `<div class="pick-cuota">Cuota: ${pk.cuota}</div>` : '';
+          const razonHTML = pk.razon ? `<div class="pick-razon">💡 ${pk.razon}</div>` : '';
+          return `<div class="pick-card ${claseCard}">
+            <div class="pick-header">
+              <div class="pick-mercado">${pk.emoji} ${pk.mercado}</div>
+              <div class="pick-prob">${pk.prob}%</div>
+            </div>
+            <div class="pick-meta">
+              <span class="pick-cat">${pk.categoria}</span>
+              <span class="pick-nivel">${emoji_nivel} ${pk.prob>=85?'Muy Alta':pk.prob>=75?'Alta':pk.prob>=65?'Media':'Leve'}</span>
+            </div>
+            ${evHTML}${cuotaHTML}${razonHTML}
+          </div>`;
+        }).join('')
+      }
+    </div>`;
+  cont.appendChild(div);
+});
+</script>
+</body>
+</html>
