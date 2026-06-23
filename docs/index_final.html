@@ -54,24 +54,23 @@ h2 small{color:var(--tx2);font-weight:400;font-size:.82rem}
 .mejor-apuesta .ma-nivel{font-size:.72rem;color:var(--tx2)}
 /* Mercados razonados */
 .mercados-razonados{margin-top:10px}
-.mercados-razonados .titulo-sec{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;
-color:var(--tx2);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.mercados-razonados .titulo-sec{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;
+color:var(--tx2);font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:6px}
 .mercados-razonados .titulo-sec::after{content:'';flex:1;height:1px;background:var(--lin)}
-.mercado-item{background:var(--panel2);border-radius:8px;padding:8px 10px;margin-bottom:6px;
-display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.mercado-item .mi-left{flex:1;min-width:0}
-.mercado-item .mi-nombre{font-size:.82rem;font-weight:600;color:var(--tx)}
-.mercado-item .mi-tipo{display:inline-block;font-size:.68rem;border-radius:4px;padding:1px 6px;margin-right:4px;font-weight:600}
+.mercado-item{background:var(--panel2);border-radius:6px;padding:5px 8px;margin-bottom:4px;
+display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mercado-item .mi-left{display:flex;align-items:center;gap:5px;min-width:0;flex:1}
+.mercado-item .mi-nombre{font-size:.78rem;font-weight:500;color:var(--tx);
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-tipo{font-size:.7rem;border-radius:3px;padding:1px 4px;flex-shrink:0}
 .mi-tipo.total{background:rgba(96,165,250,0.15);color:var(--ac)}
 .mi-tipo.equipo{background:rgba(167,139,250,0.15);color:var(--pu)}
-.mercado-item .mi-detalle{font-size:.74rem;color:var(--tx2);margin-top:2px}
-.mercado-item .mi-razon{font-size:.72rem;color:var(--tx2);font-style:italic;margin-top:2px}
-.mercado-item .mi-prob{font-size:1rem;font-weight:700;flex-shrink:0;white-space:nowrap}
+.mercado-item .mi-prob{font-size:.9rem;font-weight:700;flex-shrink:0;white-space:nowrap}
 .prob-alta{color:var(--v)}.prob-media{color:var(--e)}.prob-baja{color:var(--or)}
 .fuentes{background:var(--panel2);border-radius:8px;padding:6px 10px;font-size:.72rem;color:var(--tx2);margin-bottom:8px}
 .fuentes b{color:var(--tx);display:block;margin-bottom:3px;font-size:.74rem}
 .fuentes-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center}
-.fuentes-grid div{background:var(--bg);border-radius:6px;padding:3px 6px}
+.fuentes-grid div{background:var(--bg);border-radius:6px;padding:3px 4px;overflow:hidden;word-break:break-all;font-size:.65rem}
 .fuentes-grid span{display:block;font-size:.68rem;opacity:.7}
 .vm-bar{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:.72rem;color:var(--tx2)}
 .vm-bar-inner{flex:1;height:5px;background:var(--panel2);border-radius:3px;overflow:hidden}
@@ -116,7 +115,7 @@ footer a{color:var(--ac);text-decoration:none}
   <h1>⚽ Mundial 2026 — Modelo Final</h1>
   <p>Mercados razonados por equipo o total según datos estadísticos reales</p>
   <div class="badges">
-    <span class="badge">📅 23-06-2026 03:37 UTC</span>
+    <span class="badge">📅 23-06-2026 03:52 UTC</span>
     <span class="badge v1">🤖 XGBoost</span>
     <span class="badge v2">📈 25 Casas de Apuestas</span>
     <span class="badge v3">📐 Dixon-Coles</span>
@@ -204,15 +203,15 @@ function tarjeta(p){
   if(!yaJugado && p.mercados_razonados && p.mercados_razonados.length > 0){
     const items = p.mercados_razonados.map(m => {
       const tipoBadge = m.tipo==='total'
-        ? '<span class="mi-tipo total">🏟️ Total</span>'
-        : '<span class="mi-tipo equipo">👤 Equipo</span>';
-      return `<div class="mercado-item">
+        ? '<span class="mi-tipo total">🏟️</span>'
+        : '<span class="mi-tipo equipo">👤</span>';
+      const pc = probClass(m.prob);
+      return `<div class="mercado-item" title="${m.razon}">
         <div class="mi-left">
-          <div class="mi-nombre">${tipoBadge}${m.emoji} ${m.mercado}</div>
-          <div class="mi-detalle">📊 ${m.detalle}</div>
-          <div class="mi-razon">💡 ${m.razon}</div>
+          ${tipoBadge}
+          <span class="mi-nombre">${m.emoji} ${m.mercado}</span>
         </div>
-        <div class="mi-prob ${probClass(m.prob)}">${m.prob}%</div>
+        <div class="mi-prob ${pc}">${m.prob}%</div>
       </div>`;
     }).join('');
 
