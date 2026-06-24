@@ -62,13 +62,13 @@ footer a{color:var(--ac);text-decoration:none}
   <header>
     <h1>💎 Picks Premium — 2026-06-24</h1>
     <p>Los 4 picks con mayor probabilidad de acierto del día</p>
-    <span class="badge">📅 24-06-2026 15:24 UTC</span>
+    <span class="badge">📅 24-06-2026 15:43 UTC</span>
     <span class="badge">🔐 Acceso exclusivo suscriptores</span>
   </header>
   <div class="resumen" id="res"></div>
   <div class="acum-box">
     <div class="title">📈 Cuota acumulador (los 4 combinados)</div>
-    <div class="val">@1.52</div>
+    <div class="val">@2.83</div>
   </div>
   <div id="picks"></div>
   <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
@@ -80,7 +80,7 @@ footer a{color:var(--ac);text-decoration:none}
   </footer>
 </div>
 <script>
-const PICKS=[{"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "República Checa vs México", "local": "República Checa", "visitante": "México", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados", "fuente": "real", "tipo": "premium"}];
+const PICKS=[{"partido": "COMBINADA PREMIUM", "local": "Bosnia-Herzegovina vs Catar + República Checa vs México + Suiza vs Canadá", "visitante": "", "mercado": "🦵 Faltas +22.5 + 🦵 Faltas +22.5 + 🎯 Tiros a puerta +4.5", "prob": 56.8, "cuota": 1.52, "cuota_display": 1.52, "ev": -0.137, "emoji": "💎", "categoria": "Triple Combinada", "descripcion": "3 picks seguros combinados — prob. 56.8% | cuota @1.52", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real"}, {"partido": "República Checa vs México", "local": "República Checa", "visitante": "México", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real"}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados", "fuente": "real"}]}, {"partido": "COMBINADA PREMIUM", "local": "Bosnia-Herzegovina vs Catar + Escocia vs Brasil", "visitante": "", "mercado": "🦵 Faltas +22.5 + ⛳ Escocia córners +4.5", "prob": 68.6, "cuota": 1.32, "cuota_display": 1.32, "ev": -0.094, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 68.6% — máxima seguridad", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real"}, {"partido": "Escocia vs Brasil", "local": "Escocia", "visitante": "Brasil", "mercado": "Escocia córners +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "⛳", "categoria": "Córners Escocia", "descripcion": "Escocia promedia 7.0 córners/partido", "fuente": "real"}]}, {"partido": "COMBINADA PREMIUM", "local": "Bosnia-Herzegovina vs Catar + Sudáfrica vs Corea del Sur", "visitante": "", "mercado": "🦵 Faltas +22.5 + 🛡️ X2 — Empate o Corea del Sur", "prob": 63.9, "cuota": 1.41, "cuota_display": 1.41, "ev": -0.099, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 63.9% — máxima seguridad", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real"}, {"partido": "Sudáfrica vs Corea del Sur", "local": "Sudáfrica", "visitante": "Corea del Sur", "mercado": "X2 — Empate o Corea del Sur", "prob": 77.1, "cuota": 1.23, "ev": -0.052, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Corea del Sur", "fuente": "real"}]}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
 
@@ -95,21 +95,34 @@ const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{
   const d=document.createElement('div');
   d.className='pick';
+  const esC = pk.tipo==='combinada';
+  let comboH='';
+  if(esC&&pk.picks_combo){
+    comboH='<div style="margin-top:8px">'+pk.picks_combo.map((s,si)=>`
+      <div style="display:flex;align-items:center;gap:7px;padding:5px 9px;
+        background:rgba(255,215,0,.05);border-radius:7px;margin-bottom:4px;font-size:.8rem">
+        ${s.emoji} ${fl(s.local)} ${s.partido} · <b>${s.mercado}</b>
+        <span style="margin-left:auto;color:#34d399">${s.prob}%</span>
+        <span style="color:var(--go);margin-left:5px">@${s.cuota}</span></div>
+      ${si<pk.picks_combo.length-1?'<div style="text-align:center;font-size:.72rem;color:var(--tx2)">✖️</div>':''}
+    `).join('')+'</div>';
+  }
   d.innerHTML=`
     <div class="pick-n">💎 #${i+1}</div>
     <div class="ph">
       <div class="ph-em">${pk.emoji}</div>
       <div class="ph-info">
-        <div class="sub">${fl(pk.local)} ${pk.partido} · ${pk.categoria}</div>
+        <div class="sub">${esC?'🔗 COMBINADA':fl(pk.local)+' '+pk.partido} · ${pk.categoria}</div>
         <div class="merc">${pk.mercado}</div>
       </div>
     </div>
     <div class="seg-bar"><div class="seg-inner" style="width:${pk.prob}%"></div></div>
     <div class="stats">
       <div class="sb"><div class="v" style="color:var(--v)">${pk.prob}%</div><div class="l">Probabilidad</div></div>
-      <div class="sb"><div class="v" style="color:var(--go)">@${pk.cuota}</div><div class="l">Cuota est.</div></div>
+      <div class="sb"><div class="v" style="color:var(--go)">@${pk.cuota_display||pk.cuota}</div><div class="l">Cuota</div></div>
       <div class="sb"><div class="v" style="color:var(--pu)">#${i+1}</div><div class="l">Ranking</div></div>
     </div>
+    ${comboH}
     ${pk.descripcion?`<div class="desc">💡 ${pk.descripcion}</div>`:''}
   `;
   cont.appendChild(d);

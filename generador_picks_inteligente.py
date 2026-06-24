@@ -375,67 +375,121 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
 
 def seleccionar_premium(todos, max_picks=3, prob_min=75):
     """
-    Selecciona 3 picks premium: solos o combinados.
-    - prob >= 75% y cuota >= 1.15
-    - Variedad de mercados: no repetir categoría del mismo partido
-    - Incluye combinadas de 2 picks muy seguros si mejoran la cuota
+    Selecciona 3 picks premium con estas reglas:
+    - Máximo 1 pick por partido
+    - Prob >= 75% y cuota >= 1.15
+    - Si todos tienen cuota baja (<1.25), crea combinadas para subir la cuota
+    - Puede ser: 3 individuales, 2 individuales + 1 combinada,
+                 1 individual + 1 combinada de 2, o 1 combinada de 3
     """
     candidatos = [pk for pk in todos
                  if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
     candidatos.sort(key=lambda x: x['prob'], reverse=True)
 
-    resultado = []
-    vistos = set()
-
-    # Primero picks individuales variados
+    # Paso 1: 1 pick por partido (el mejor de cada partido)
+    mejores_por_partido = {}
     for pk in candidatos:
-        key = f"{pk['partido']}|{pk['categoria'][:10]}"
-        if key not in vistos:
-            vistos.add(key)
+        p = pk['partido']
+        if p not in mejores_por_partido:
+            mejores_por_partido[p] = pk
+
+    base = sorted(mejores_por_partido.values(), key=lambda x: x['prob'], reverse=True)
+
+    resultado = []
+
+    # Si hay suficientes con cuota >= 1.30 → mostrar individuales
+    buenos = [pk for pk in base if pk['cuota'] >= 1.30]
+    if len(buenos) >= max_picks:
+        for pk in buenos[:max_picks]:
             pk['tipo'] = 'premium'
             resultado.append(pk)
+        return resultado
+
+    # Si las cuotas son bajas → crear combinadas inteligentes
+    # Combinada de 3 picks seguros de distintos partidos
+    if len(base) >= 3:
+        pk1, pk2, pk3 = base[0], base[1], base[2]
+        cuota_3 = round(pk1['cuota'] * pk2['cuota'] * pk3['cuota'], 2)
+        prob_3  = round(pk1['prob']/100 * pk2['prob']/100 * pk3['prob']/100 * 100, 1)
+        if cuota_3 >= 1.40 and prob_3 >= 50:
+            combo3 = {
+                'partido'    : 'COMBINADA PREMIUM',
+                'local'      : f"{pk1['partido']} + {pk2['partido']} + {pk3['partido']}",
+                'visitante'  : '',
+                'mercado'    : f"{pk1['emoji']} {pk1['mercado'][:22]} + {pk2['emoji']} {pk2['mercado'][:22]} + {pk3['emoji']} {pk3['mercado'][:22]}",
+                'prob'       : prob_3,
+                'cuota'      : cuota_3,
+                'cuota_display': cuota_3,
+                'ev'         : round((prob_3/100)*cuota_3 - 1, 3),
+                'emoji'      : '💎',
+                'categoria'  : 'Triple Combinada',
+                'descripcion': f"3 picks seguros combinados — prob. {prob_3}% | cuota @{cuota_3}",
+                'fuente'     : 'calculada',
+                'tipo'       : 'combinada',
+                'picks_combo': [pk1, pk2, pk3],
+            }
+            resultado.append(combo3)
+
+    # Combinadas de 2 de distintos partidos
+    for i in range(len(base)):
+        for j in range(i+1, len(base)):
+            pk1, pk2 = base[i], base[j]
+            cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
+            prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
+            if cuota_c < 1.25 or prob_c < 55: continue
+            # No duplicar partidos ya usados en la triple
+            ya_usados = set()
+            if resultado and resultado[0].get('picks_combo'):
+                ya_usados = {p['partido'] for p in resultado[0]['picks_combo']}
+            if pk1['partido'] in ya_usados and pk2['partido'] in ya_usados:
+                continue
+            combo = {
+                'partido'    : 'COMBINADA PREMIUM',
+                'local'      : f"{pk1['partido']} + {pk2['partido']}",
+                'visitante'  : '',
+                'mercado'    : f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
+                'prob'       : prob_c,
+                'cuota'      : cuota_c,
+                'cuota_display': cuota_c,
+                'ev'         : round((prob_c/100)*cuota_c - 1, 3),
+                'emoji'      : '💎',
+                'categoria'  : 'Combinada Premium',
+                'descripcion': f"Prob. combinada: {prob_c}% — máxima seguridad",
+                'fuente'     : 'calculada',
+                'tipo'       : 'combinada',
+                'picks_combo': [pk1, pk2],
+            }
+            resultado.append(combo)
+            if len(resultado) >= max_picks: break
         if len(resultado) >= max_picks: break
 
-    # Si faltan, crear combinadas de 2 picks muy seguros de distintos partidos
-    if len(resultado) < max_picks:
-        muy_seguros = [pk for pk in candidatos if pk['prob'] >= 80 and pk['cuota'] >= 1.12]
-        for i in range(len(muy_seguros)):
-            for j in range(i+1, len(muy_seguros)):
-                pk1, pk2 = muy_seguros[i], muy_seguros[j]
-                if pk1['partido'] == pk2['partido']: continue
-                cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
-                prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-                if cuota_c < 1.25 or prob_c < 60: continue
-                combo = {
-                    'partido': 'COMBINADA PREMIUM',
-                    'local': f"{pk1['partido']} + {pk2['partido']}",
-                    'visitante': '',
-                    'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
-                    'prob': prob_c,
-                    'cuota': cuota_c,
-                    'cuota_display': cuota_c,
-                    'ev': round((prob_c/100)*cuota_c - 1, 3),
-                    'emoji': '💎',
-                    'categoria': 'Combinada Premium',
-                    'descripcion': f"Dos picks de máxima seguridad combinados — prob. {prob_c}%",
-                    'fuente': 'calculada',
-                    'tipo': 'combinada',
-                    'picks_combo': [pk1, pk2],
-                }
-                resultado.append(combo)
-                if len(resultado) >= max_picks: break
-            if len(resultado) >= max_picks: break
+    # Completar con individuales si faltan
+    partidos_en_res = set()
+    for r in resultado:
+        if r.get('picks_combo'):
+            for p in r['picks_combo']:
+                partidos_en_res.add(p['partido'])
+        else:
+            partidos_en_res.add(r.get('partido',''))
 
-    # Si aún faltan, bajar umbral a 70%
+    for pk in base:
+        if pk['partido'] not in partidos_en_res:
+            pk['tipo'] = 'premium'
+            resultado.append(pk)
+            partidos_en_res.add(pk['partido'])
+        if len(resultado) >= max_picks: break
+
+    # Si aún faltan, bajar umbral
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
             if pk['cuota'] >= 1.12 and pk['prob'] >= 70:
-                key = f"{pk['partido']}|{pk['categoria'][:10]}"
-                if key not in vistos:
-                    vistos.add(key)
+                if pk['partido'] not in partidos_en_res:
                     pk['tipo'] = 'premium'
                     resultado.append(pk)
+                    partidos_en_res.add(pk['partido'])
             if len(resultado) >= max_picks: break
+
+    return resultado[:max_picks]
 
     return resultado[:max_picks]
 
@@ -689,21 +743,34 @@ const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{{
   const d=document.createElement('div');
   d.className='pick';
+  const esC = pk.tipo==='combinada';
+  let comboH='';
+  if(esC&&pk.picks_combo){{
+    comboH='<div style="margin-top:8px">'+pk.picks_combo.map((s,si)=>`
+      <div style="display:flex;align-items:center;gap:7px;padding:5px 9px;
+        background:rgba(255,215,0,.05);border-radius:7px;margin-bottom:4px;font-size:.8rem">
+        ${{s.emoji}} ${{fl(s.local)}} ${{s.partido}} · <b>${{s.mercado}}</b>
+        <span style="margin-left:auto;color:#34d399">${{s.prob}}%</span>
+        <span style="color:var(--go);margin-left:5px">@${{s.cuota}}</span></div>
+      ${{si<pk.picks_combo.length-1?'<div style="text-align:center;font-size:.72rem;color:var(--tx2)">✖️</div>':''}}
+    `).join('')+'</div>';
+  }}
   d.innerHTML=`
     <div class="pick-n">💎 #${{i+1}}</div>
     <div class="ph">
       <div class="ph-em">${{pk.emoji}}</div>
       <div class="ph-info">
-        <div class="sub">${{fl(pk.local)}} ${{pk.partido}} · ${{pk.categoria}}</div>
+        <div class="sub">${{esC?'🔗 COMBINADA':fl(pk.local)+' '+pk.partido}} · ${{pk.categoria}}</div>
         <div class="merc">${{pk.mercado}}</div>
       </div>
     </div>
     <div class="seg-bar"><div class="seg-inner" style="width:${{pk.prob}}%"></div></div>
     <div class="stats">
       <div class="sb"><div class="v" style="color:var(--v)">${{pk.prob}}%</div><div class="l">Probabilidad</div></div>
-      <div class="sb"><div class="v" style="color:var(--go)">@${{pk.cuota}}</div><div class="l">Cuota est.</div></div>
+      <div class="sb"><div class="v" style="color:var(--go)">@${{pk.cuota_display||pk.cuota}}</div><div class="l">Cuota</div></div>
       <div class="sb"><div class="v" style="color:var(--pu)">#${{i+1}}</div><div class="l">Ranking</div></div>
     </div>
+    ${{comboH}}
     ${{pk.descripcion?`<div class="desc">💡 ${{pk.descripcion}}</div>`:''}}
   `;
   cont.appendChild(d);
