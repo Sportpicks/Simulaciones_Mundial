@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+<!-- ts:1782316589 -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks del Día — Mundial 2026</title>
@@ -13,7 +14,6 @@ nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12p
 position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}
 .logo{font-weight:700;color:var(--ac);font-size:.95rem}
 .nav-links a{color:var(--tx2);text-decoration:none;font-size:.82rem;margin-left:12px;font-weight:600}
-.nav-links a:hover{color:var(--tx)}
 header{text-align:center;padding:26px 0 16px}
 header h1{font-size:1.45rem;font-weight:700}
 header p{color:var(--tx2);font-size:.84rem;margin-top:5px}
@@ -22,16 +22,13 @@ padding:2px 11px;font-size:.75rem;color:var(--tx2);margin:3px 2px}
 .badge.hoy{border-color:var(--ac);color:var(--ac)}
 .tg-btn{display:block;text-align:center;background:var(--ac);color:#0d1220;border-radius:10px;
 padding:11px;font-weight:700;text-decoration:none;margin:14px 0;font-size:.88rem}
-.tg-btn:hover{opacity:.9}
 .resumen{background:var(--panel);border:1px solid var(--lin);border-radius:12px;
 padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
 .rs-v{font-size:1.25rem;font-weight:700;color:var(--ac)}
 .rs-l{font-size:.7rem;color:var(--tx2)}
 .pick{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}
-.pick.alta{border-color:var(--v)}
-.pick.combo{border-color:var(--pu)}
-.pick.value{border-color:var(--go)}
+.pick.alta{border-color:var(--v)}.pick.combo{border-color:var(--pu)}.pick.value{border-color:var(--go)}
 .pick-n{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--tx2);
 font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}
 .ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
@@ -71,7 +68,7 @@ footer a{color:var(--ac);text-decoration:none}
   <header>
     <h1>🎯 Picks del Día — 2026-06-24</h1>
     <p>Selección inteligente con cuota mínima 1.50 — máximo 4 picks</p>
-    <span class="badge hoy">📅 24-06-2026 15:50 UTC</span>
+    <span class="badge hoy">📅 24-06-2026 15:56 UTC</span>
     <span class="badge">🤖 XGBoost + 25 casas + Razonamiento automático</span>
   </header>
   <a class="tg-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
@@ -89,17 +86,14 @@ footer a{color:var(--ac);text-decoration:none}
 const PICKS=[{"partido": "Marruecos vs Haití", "local": "Marruecos", "visitante": "Haití", "mercado": "Tiros a puerta +6.5", "prob": 63.5, "cuota": 1.5, "ev": -0.047, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.6 tiros esperados", "fuente": "real", "tipo": "individual", "cuota_display": 1.5}, {"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "X2 — Empate o Catar", "prob": 62.1, "cuota": 1.53, "ev": -0.05, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Catar", "fuente": "real", "tipo": "individual", "cuota_display": 1.53}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "Faltas +22.5", "prob": 60.8, "cuota": 1.56, "ev": -0.052, "emoji": "🦵", "categoria": "Faltas", "descripcion": "24.0 faltas esperadas", "fuente": "real", "tipo": "individual", "cuota_display": 1.56}, {"partido": "Sudáfrica vs Corea del Sur", "local": "Sudáfrica", "visitante": "Corea del Sur", "mercado": "Menos de 2.5 goles", "prob": 60, "cuota": 1.58, "ev": -0.052, "emoji": "🔒", "categoria": "Goles", "descripcion": "xG bajo (2.3)", "fuente": "real", "tipo": "individual", "cuota_display": 1.58}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
-
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
 const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+(p.cuota_display||p.cuota),0)/PICKS.length).toFixed(2):0;
-const nC=PICKS.filter(p=>p.tipo==='combinada').length;
 const nV=PICKS.filter(p=>p.ev&&p.ev>0.05).length;
 document.getElementById('res').innerHTML=`
   <div><div class="rs-v">${PICKS.length}</div><div class="rs-l">Picks</div></div>
   <div><div class="rs-v" style="color:var(--v)">${probP}%</div><div class="rs-l">Prob. prom.</div></div>
   <div><div class="rs-v" style="color:var(--go)">${cuotaP}</div><div class="rs-l">Cuota prom.</div></div>
   <div><div class="rs-v" style="color:var(--pu)">${nV}</div><div class="rs-l">Con EV+</div></div>`;
-
 const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{
   const esC=pk.tipo==='combinada';

@@ -3,13 +3,13 @@
 generador_picks_inteligente.py
 Genera dos paneles de picks para el canal de Telegram.
 
-PANEL PÚBLICO:  Máx 4 picks con cuota promedio +1.50
-PANEL PREMIUM:  4 picks más seguros con cuota real mínima 1.05
+PANEL PÚBLICO:  Máx 4 picks con cuota >= 1.50 y prob >= 60%
+PANEL PREMIUM:  3 picks — máx 1 por partido, combinadas inteligentes
 
 Uso: python generador_picks_inteligente.py
 """
 
-import os, sys, json, math, requests
+import os, sys, json, math, requests, time
 from datetime import datetime, timezone, date
 import pandas as pd
 
@@ -66,13 +66,10 @@ def p_poisson(lam, linea):
         return 0.0
 
 def cuota_estimada(prob):
-    """Cuota estimada con 5% margen de casa. Mínimo real 1.05."""
     if prob <= 0 or prob >= 100: return 1.05
-    c = round((100/prob)*0.95, 2)
-    return max(1.05, c)
+    return max(1.05, round((100/prob)*0.95, 2))
 
 def obtener_cuotas():
-    """Obtiene cuotas h2h de The Odds API promediando todas las casas."""
     cuotas = {}
     try:
         r = requests.get(
@@ -105,7 +102,6 @@ def obtener_cuotas():
     return cuotas
 
 def generar_picks_partido(r, cuotas_p):
-    """Genera todos los picks válidos para un partido."""
     local  = r['Local']
     visit  = r['Visitante']
     p1     = float(r['Prob_1_Final'])
@@ -118,32 +114,30 @@ def generar_picks_partido(r, cuotas_p):
     lam_tar   = float(r.get('tar',4.0))
     lam_tiros = float(r.get('tiros_esp',7.0))
     lam_fal   = float(r.get('faltas_esp',22.0))
-
     c1 = cuotas_p.get('c1',0)
     cx = cuotas_p.get('cx',0)
     c2 = cuotas_p.get('c2',0)
-
     picks = []
 
-    def add(mercado, prob, cuota, emoji, cat, desc="", partido_key=None):
+    def add(mercado, prob, cuota, emoji, cat, desc=""):
         if prob < 52 or cuota < 1.05: return
         ev = round((prob/100)*cuota - 1, 3)
         picks.append({
-            'partido'  : f"{local} vs {visit}",
-            'local'    : local, 'visitante': visit,
-            'mercado'  : mercado, 'prob': round(prob,1),
-            'cuota'    : cuota, 'ev': ev,
-            'emoji'    : emoji, 'categoria': cat,
+            'partido': f"{local} vs {visit}",
+            'local': local, 'visitante': visit,
+            'mercado': mercado, 'prob': round(prob,1),
+            'cuota': cuota, 'ev': ev,
+            'emoji': emoji, 'categoria': cat,
             'descripcion': desc,
-            'fuente'   : 'real' if cuota > 1.10 else 'estimada',
+            'fuente': 'real' if cuota > 1.10 else 'estimada',
         })
 
     # 1X2
     if c1 > 1.05: add(f"Victoria {local}", p1, c1, '⚽','1X2', f"{local} favorito ({p1:.0f}%)")
-    if cx > 1.05: add("Empate",            px, cx, '⚖️','1X2', f"Empate esperado ({px:.0f}%)")
+    if cx > 1.05: add("Empate", px, cx, '⚖️','1X2', f"Empate esperado ({px:.0f}%)")
     if c2 > 1.05: add(f"Victoria {visit}", p2, c2, '⚽','1X2', f"{visit} favorito ({p2:.0f}%)")
 
-    # Doble oportunidad (cuota estimada)
+    # Doble oportunidad
     for prob_do, label, desc_do in [
         (round(p1+px,1), f"1X — {local} o Empate", f"Cubre victoria {local} + empate"),
         (round(px+p2,1), f"X2 — Empate o {visit}", f"Cubre empate + victoria {visit}"),
@@ -151,32 +145,32 @@ def generar_picks_partido(r, cuotas_p):
     ]:
         add(label, prob_do, cuota_estimada(prob_do), '🛡️','Doble Op.', desc_do)
 
-    # Goles (solo líneas con cuota real >1.15 estimada)
+    # Goles
     for lin, lab in [(1.5,'1.5'),(2.5,'2.5'),(3.5,'3.5')]:
         pr = round(p_poisson(xg_t, lin)*100, 1)
         cu = cuota_estimada(pr)
-        if cu >= 1.15:  # Solo si hay cuota real interesante
+        if cu >= 1.15:
             add(f"Más de {lab} goles", pr, cu, '🥅','Goles', f"xG total {round(xg_t,1)}")
     pr_u = 100 - round(p_poisson(xg_t,2.5)*100)
     cu_u = cuota_estimada(pr_u)
     if cu_u >= 1.15:
         add("Menos de 2.5 goles", pr_u, cu_u, '🔒','Goles', f"xG bajo ({round(xg_t,1)})")
 
-    # Córners (solo líneas con cuota estimada >1.15 = prob <87%)
+    # Córners
     for lin in [7.5, 8.5, 9.5, 10.5]:
         pr = round(p_poisson(lam_cor, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
             add(f"Córners +{lin}", pr, cu, '⛳','Córners', f"{round(lam_cor,1)} córners esperados")
 
-    # Tiros (solo cuota >1.15)
+    # Tiros
     for lin in [4.5, 5.5, 6.5, 7.5]:
         pr = round(p_poisson(lam_tiros, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
             add(f"Tiros a puerta +{lin}", pr, cu, '🎯','Tiros', f"{round(lam_tiros,1)} tiros esperados")
 
-    # Faltas (solo cuota >1.15)
+    # Faltas
     for lin in [18.5, 20.5, 22.5]:
         pr = round(p_poisson(lam_fal, lin)*100, 1)
         cu = cuota_estimada(pr)
@@ -194,8 +188,6 @@ def generar_picks_partido(r, cuotas_p):
     stats = cargar_stats()
     for eq in [local, visit]:
         s = stats.get(eq,{})
-
-        # Tiros a puerta por equipo
         t = s.get('tiros_favor_5', s.get('tiros_favor_tot',0))
         if t >= 4:
             for lin in [2.5, 3.5, 4.5]:
@@ -204,8 +196,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} tiros a puerta +{lin}", pr, cu, '🎯', f'Tiros {eq}',
                         f"{eq} promedia {round(t,1)} tiros/partido")
-
-        # Remates totales por equipo
         rt = s.get('remates_tot_favor_5', s.get('remates_tot_favor_tot',0))
         if rt >= 10:
             for lin in [8.5, 10.5, 12.5]:
@@ -214,8 +204,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} remates totales +{lin}", pr, cu, '🎯', f'Remates {eq}',
                         f"{eq} promedia {round(rt,1)} remates/partido")
-
-        # Córners por equipo
         c = s.get('corners_favor_5', s.get('corners_favor_tot',0))
         if c >= 5:
             for lin in [3.5, 4.5, 5.5]:
@@ -224,8 +212,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} córners +{lin}", pr, cu, '⛳', f'Córners {eq}',
                         f"{eq} promedia {round(c,1)} córners/partido")
-
-        # Faltas por equipo
         f = s.get('faltas_cometidas_5', s.get('faltas_cometidas_tot',0))
         if f >= 10:
             for lin in [8.5, 9.5, 10.5]:
@@ -234,8 +220,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} faltas +{lin}", pr, cu, '🦵', f'Faltas {eq}',
                         f"{eq} promedia {round(f,1)} faltas/partido")
-
-        # Paradas del portero por equipo
         p_par = s.get('paradas_5', s.get('paradas_tot',0))
         if p_par >= 3:
             for lin in [2.5, 3.5, 4.5]:
@@ -244,8 +228,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.20:
                     add(f"{eq} portero +{lin} paradas", pr, cu, '🧤', f'Paradas {eq}',
                         f"Portero de {eq} promedia {round(p_par,1)} paradas/partido")
-
-        # Grandes ocasiones por equipo
         go = s.get('grandes_ocas_5', s.get('grandes_ocas_tot',0))
         if go >= 2.5:
             for lin in [1.5, 2.5, 3.5]:
@@ -254,8 +236,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.20:
                     add(f"{eq} grandes ocasiones +{lin}", pr, cu, '💥', f'Ocasiones {eq}',
                         f"{eq} promedia {round(go,1)} grandes ocasiones/partido")
-
-        # Saques de banda por equipo
         sb = s.get('saques_banda_5', s.get('saques_banda_tot',0))
         if sb >= 15:
             for lin in [12.5, 14.5, 16.5]:
@@ -264,8 +244,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.20:
                     add(f"{eq} saques de banda +{lin}", pr, cu, '🏳️', f'Saques {eq}',
                         f"{eq} promedia {round(sb,1)} saques de banda/partido")
-
-        # Centros por equipo
         ce = s.get('centros_5', s.get('centros_tot',0))
         if ce >= 8:
             for lin in [6.5, 8.5, 10.5]:
@@ -274,8 +252,6 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.20:
                     add(f"{eq} centros +{lin}", pr, cu, '🎯', f'Centros {eq}',
                         f"{eq} promedia {round(ce,1)} centros/partido")
-
-        # Goles por equipo (via histórico)
         gl = s.get('goles_5', s.get('goles_tot',0))
         if gl >= 1.5:
             pr = round(p_poisson(gl, 0.5)*100, 1)
@@ -284,7 +260,6 @@ def generar_picks_partido(r, cuotas_p):
                 add(f"{eq} marca al menos 1 gol", pr, cu, '⚽', f'Goles {eq}',
                     f"{eq} promedia {round(gl,1)} goles/partido")
 
-    # Saques de banda totales del partido
     sb_tot_l = stats.get(local,{}).get('saques_banda_5', stats.get(local,{}).get('saques_banda_tot',0))
     sb_tot_v = stats.get(visit,{}).get('saques_banda_5', stats.get(visit,{}).get('saques_banda_tot',0))
     sb_total = sb_tot_l + sb_tot_v
@@ -296,7 +271,6 @@ def generar_picks_partido(r, cuotas_p):
                 add(f"Saques de banda totales +{lin}", pr, cu, '🏳️', 'Saques Banda',
                     f"Total esperado {round(sb_total,1)} saques de banda")
 
-    # Eliminar duplicados, ordenar por cuota desc luego prob desc
     vistos = set()
     result = []
     for pk in sorted(picks, key=lambda x: (x['cuota'], x['prob']), reverse=True):
@@ -307,35 +281,22 @@ def generar_picks_partido(r, cuotas_p):
     return result
 
 def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
-    """
-    Selecciona picks con cuota >= 1.50 y prob >= 55%.
-    Si faltan, combina picks seguros de distintos partidos.
-    Máximo 4 picks.
-    """
-    # Candidatos individuales — prob >60% y cuota >1.50
-    # Ordenar por probabilidad primero, luego EV — el modelo elige el más confiable
-    individuales = [pk for pk in todos
-                   if pk['cuota'] >= cuota_min and pk['prob'] >= 60]
+    individuales = [pk for pk in todos if pk['cuota'] >= cuota_min and pk['prob'] >= 60]
     individuales.sort(key=lambda x: (x['prob'], x.get('ev',0)), reverse=True)
-    individuales.sort(key=lambda x: (x.get('ev',0), x['prob']), reverse=True)
 
     resultado = []
     partidos_usados = set()
     for pk in individuales:
-        if pk['partido'] not in partidos_usados or len(resultado) == 0:
+        if pk['partido'] not in partidos_usados:
             pk['tipo'] = 'individual'
             resultado.append(pk)
             partidos_usados.add(pk['partido'])
         if len(resultado) >= max_picks:
             break
 
-    # Si faltan picks, crear combinadas de 2 de distintos partidos
     if len(resultado) < max_picks:
         seguros = [pk for pk in todos if pk['prob'] >= 65 and pk['cuota'] >= 1.15]
         seguros.sort(key=lambda x: x['prob'], reverse=True)
-
-        partidos_en_res = set(pk['partido'] for pk in resultado)
-
         for i in range(len(seguros)):
             for j in range(i+1, len(seguros)):
                 pk1, pk2 = seguros[i], seguros[j]
@@ -343,61 +304,45 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
                 cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
                 prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
                 if cuota_c < cuota_min or prob_c < 55: continue
-
                 combo = {
                     'partido': 'COMBINADA',
                     'local': f"{pk1['partido']} + {pk2['partido']}",
                     'visitante': '',
                     'mercado': f"{pk1['emoji']} {pk1['mercado'][:30]} + {pk2['emoji']} {pk2['mercado'][:30]}",
-                    'prob': prob_c,
-                    'cuota': cuota_c,
-                    'cuota_display': cuota_c,
+                    'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
                     'ev': round((prob_c/100)*cuota_c - 1, 3),
-                    'emoji': '🔗',
-                    'categoria': 'Combinada',
+                    'emoji': '🔗', 'categoria': 'Combinada',
                     'descripcion': f"Prob. combinada: {prob_c}% | {pk1['partido']} + {pk2['partido']}",
-                    'fuente': 'calculada',
-                    'tipo': 'combinada',
-                    'picks_combo': [pk1, pk2],
+                    'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
                 }
                 resultado.append(combo)
                 if len(resultado) >= max_picks: break
             if len(resultado) >= max_picks: break
 
-    # Asegurar cuota_display en individuales
     for pk in resultado:
-        if 'cuota_display' not in pk:
-            pk['cuota_display'] = pk['cuota']
-        if 'tipo' not in pk:
-            pk['tipo'] = 'individual'
-
+        if 'cuota_display' not in pk: pk['cuota_display'] = pk['cuota']
+        if 'tipo' not in pk: pk['tipo'] = 'individual'
     return resultado[:max_picks]
 
 def seleccionar_premium(todos, max_picks=3, prob_min=75):
     """
-    Selecciona 3 picks premium con estas reglas:
-    - Máximo 1 pick por partido
-    - Prob >= 75% y cuota >= 1.15
-    - Si todos tienen cuota baja (<1.25), crea combinadas para subir la cuota
-    - Puede ser: 3 individuales, 2 individuales + 1 combinada,
-                 1 individual + 1 combinada de 2, o 1 combinada de 3
+    3 picks premium — máx 1 por partido.
+    Si cuotas bajas → combina automáticamente para subir la cuota.
+    Puede ser: 3 individuales, combinada doble, combinada triple.
     """
-    candidatos = [pk for pk in todos
-                 if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
+    candidatos = [pk for pk in todos if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
     candidatos.sort(key=lambda x: x['prob'], reverse=True)
 
-    # Paso 1: 1 pick por partido (el mejor de cada partido)
+    # Mejor pick por partido
     mejores_por_partido = {}
     for pk in candidatos:
-        p = pk['partido']
-        if p not in mejores_por_partido:
-            mejores_por_partido[p] = pk
-
+        if pk['partido'] not in mejores_por_partido:
+            mejores_por_partido[pk['partido']] = pk
     base = sorted(mejores_por_partido.values(), key=lambda x: x['prob'], reverse=True)
 
     resultado = []
 
-    # Si hay suficientes con cuota >= 1.30 → mostrar individuales
+    # Si hay suficientes individuales con cuota >= 1.30 → mostrar directamente
     buenos = [pk for pk in base if pk['cuota'] >= 1.30]
     if len(buenos) >= max_picks:
         for pk in buenos[:max_picks]:
@@ -405,101 +350,86 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             resultado.append(pk)
         return resultado
 
-    # Si las cuotas son bajas → crear combinadas inteligentes
-    # Combinada de 3 picks seguros de distintos partidos
+    # Combinada triple (si cuota >= 1.40 y prob >= 50%)
     if len(base) >= 3:
         pk1, pk2, pk3 = base[0], base[1], base[2]
         cuota_3 = round(pk1['cuota'] * pk2['cuota'] * pk3['cuota'], 2)
         prob_3  = round(pk1['prob']/100 * pk2['prob']/100 * pk3['prob']/100 * 100, 1)
         if cuota_3 >= 1.40 and prob_3 >= 50:
-            combo3 = {
-                'partido'    : 'COMBINADA PREMIUM',
-                'local'      : f"{pk1['partido']} + {pk2['partido']} + {pk3['partido']}",
-                'visitante'  : '',
-                'mercado'    : f"{pk1['emoji']} {pk1['mercado'][:22]} + {pk2['emoji']} {pk2['mercado'][:22]} + {pk3['emoji']} {pk3['mercado'][:22]}",
-                'prob'       : prob_3,
-                'cuota'      : cuota_3,
-                'cuota_display': cuota_3,
-                'ev'         : round((prob_3/100)*cuota_3 - 1, 3),
-                'emoji'      : '💎',
-                'categoria'  : 'Triple Combinada',
+            resultado.append({
+                'partido': 'COMBINADA PREMIUM',
+                'local': f"{pk1['partido']} + {pk2['partido']} + {pk3['partido']}",
+                'visitante': '',
+                'mercado': f"{pk1['emoji']} {pk1['mercado'][:20]} + {pk2['emoji']} {pk2['mercado'][:20]} + {pk3['emoji']} {pk3['mercado'][:20]}",
+                'prob': prob_3, 'cuota': cuota_3, 'cuota_display': cuota_3,
+                'ev': round((prob_3/100)*cuota_3 - 1, 3),
+                'emoji': '💎', 'categoria': 'Triple Combinada',
                 'descripcion': f"3 picks seguros combinados — prob. {prob_3}% | cuota @{cuota_3}",
-                'fuente'     : 'calculada',
-                'tipo'       : 'combinada',
-                'picks_combo': [pk1, pk2, pk3],
-            }
-            resultado.append(combo3)
+                'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2, pk3],
+            })
 
-    # Combinadas de 2 de distintos partidos
+    # Combinadas dobles de distintos partidos
+    partidos_en_triple = set()
+    if resultado and resultado[0].get('picks_combo'):
+        partidos_en_triple = {p['partido'] for p in resultado[0]['picks_combo']}
+
     for i in range(len(base)):
         for j in range(i+1, len(base)):
+            if len(resultado) >= max_picks: break
             pk1, pk2 = base[i], base[j]
+            # No repetir exactamente los mismos partidos que la triple
+            if pk1['partido'] in partidos_en_triple and pk2['partido'] in partidos_en_triple:
+                continue
             cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
             prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
             if cuota_c < 1.25 or prob_c < 55: continue
-            # No duplicar partidos ya usados en la triple
-            ya_usados = set()
-            if resultado and resultado[0].get('picks_combo'):
-                ya_usados = {p['partido'] for p in resultado[0]['picks_combo']}
-            if pk1['partido'] in ya_usados and pk2['partido'] in ya_usados:
-                continue
-            combo = {
-                'partido'    : 'COMBINADA PREMIUM',
-                'local'      : f"{pk1['partido']} + {pk2['partido']}",
-                'visitante'  : '',
-                'mercado'    : f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
-                'prob'       : prob_c,
-                'cuota'      : cuota_c,
-                'cuota_display': cuota_c,
-                'ev'         : round((prob_c/100)*cuota_c - 1, 3),
-                'emoji'      : '💎',
-                'categoria'  : 'Combinada Premium',
+            resultado.append({
+                'partido': 'COMBINADA PREMIUM',
+                'local': f"{pk1['partido']} + {pk2['partido']}",
+                'visitante': '',
+                'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
+                'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
+                'ev': round((prob_c/100)*cuota_c - 1, 3),
+                'emoji': '💎', 'categoria': 'Combinada Premium',
                 'descripcion': f"Prob. combinada: {prob_c}% — máxima seguridad",
-                'fuente'     : 'calculada',
-                'tipo'       : 'combinada',
-                'picks_combo': [pk1, pk2],
-            }
-            resultado.append(combo)
-            if len(resultado) >= max_picks: break
+                'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
+            })
         if len(resultado) >= max_picks: break
 
     # Completar con individuales si faltan
-    partidos_en_res = set()
+    partidos_usados = set()
     for r in resultado:
         if r.get('picks_combo'):
-            for p in r['picks_combo']:
-                partidos_en_res.add(p['partido'])
+            for p in r['picks_combo']: partidos_usados.add(p['partido'])
         else:
-            partidos_en_res.add(r.get('partido',''))
+            partidos_usados.add(r.get('partido',''))
 
     for pk in base:
-        if pk['partido'] not in partidos_en_res:
+        if len(resultado) >= max_picks: break
+        if pk['partido'] not in partidos_usados:
             pk['tipo'] = 'premium'
             resultado.append(pk)
-            partidos_en_res.add(pk['partido'])
-        if len(resultado) >= max_picks: break
+            partidos_usados.add(pk['partido'])
 
-    # Si aún faltan, bajar umbral
+    # Bajar umbral si aún faltan
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
+            if len(resultado) >= max_picks: break
             if pk['cuota'] >= 1.12 and pk['prob'] >= 70:
-                if pk['partido'] not in partidos_en_res:
+                if pk['partido'] not in partidos_usados:
                     pk['tipo'] = 'premium'
                     resultado.append(pk)
-                    partidos_en_res.add(pk['partido'])
-            if len(resultado) >= max_picks: break
+                    partidos_usados.add(pk['partido'])
 
     return resultado[:max_picks]
 
-    return resultado[:max_picks]
 
-
-# ── HTML PÚBLICO ──────────────────────────────────────────────────────────────
-def html_publico(picks, hoy, fecha_gen):
+def html_publico(picks, hoy, fecha_gen, ts):
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
     PICKS_J = json.dumps(picks, ensure_ascii=False, default=str)
     return f"""<!DOCTYPE html>
 <html lang="es">
+<!-- ts:{ts} -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks del Día — Mundial 2026</title>
@@ -513,7 +443,6 @@ nav{{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12
 position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}}
 .logo{{font-weight:700;color:var(--ac);font-size:.95rem}}
 .nav-links a{{color:var(--tx2);text-decoration:none;font-size:.82rem;margin-left:12px;font-weight:600}}
-.nav-links a:hover{{color:var(--tx)}}
 header{{text-align:center;padding:26px 0 16px}}
 header h1{{font-size:1.45rem;font-weight:700}}
 header p{{color:var(--tx2);font-size:.84rem;margin-top:5px}}
@@ -522,16 +451,13 @@ padding:2px 11px;font-size:.75rem;color:var(--tx2);margin:3px 2px}}
 .badge.hoy{{border-color:var(--ac);color:var(--ac)}}
 .tg-btn{{display:block;text-align:center;background:var(--ac);color:#0d1220;border-radius:10px;
 padding:11px;font-weight:700;text-decoration:none;margin:14px 0;font-size:.88rem}}
-.tg-btn:hover{{opacity:.9}}
 .resumen{{background:var(--panel);border:1px solid var(--lin);border-radius:12px;
 padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}}
 .rs-v{{font-size:1.25rem;font-weight:700;color:var(--ac)}}
 .rs-l{{font-size:.7rem;color:var(--tx2)}}
 .pick{{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}}
-.pick.alta{{border-color:var(--v)}}
-.pick.combo{{border-color:var(--pu)}}
-.pick.value{{border-color:var(--go)}}
+.pick.alta{{border-color:var(--v)}}.pick.combo{{border-color:var(--pu)}}.pick.value{{border-color:var(--go)}}
 .pick-n{{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--tx2);
 font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}}
 .ph{{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}}
@@ -589,17 +515,14 @@ footer a{{color:var(--ac);text-decoration:none}}
 const PICKS={PICKS_J};
 const ISO={ISO_J};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${{ISO[eq]}}.png">`:'';
-
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
 const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+(p.cuota_display||p.cuota),0)/PICKS.length).toFixed(2):0;
-const nC=PICKS.filter(p=>p.tipo==='combinada').length;
 const nV=PICKS.filter(p=>p.ev&&p.ev>0.05).length;
 document.getElementById('res').innerHTML=`
   <div><div class="rs-v">${{PICKS.length}}</div><div class="rs-l">Picks</div></div>
   <div><div class="rs-v" style="color:var(--v)">${{probP}}%</div><div class="rs-l">Prob. prom.</div></div>
   <div><div class="rs-v" style="color:var(--go)">${{cuotaP}}</div><div class="rs-l">Cuota prom.</div></div>
   <div><div class="rs-v" style="color:var(--pu)">${{nV}}</div><div class="rs-l">Con EV+</div></div>`;
-
 const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{{
   const esC=pk.tipo==='combinada';
@@ -641,13 +564,13 @@ PICKS.forEach((pk,i)=>{{
 </script>
 </body></html>"""
 
-# ── HTML PREMIUM ──────────────────────────────────────────────────────────────
-def html_premium(picks, hoy, fecha_gen):
+def html_premium(picks, hoy, fecha_gen, ts):
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
     PICKS_J = json.dumps(picks, ensure_ascii=False, default=str)
     cuota_acum = round(__import__('functools').reduce(lambda a,b: a*b, [p['cuota'] for p in picks], 1), 2) if picks else 1
     return f"""<!DOCTYPE html>
 <html lang="es">
+<!-- ts:{ts} -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks Premium 💎 — Mundial 2026</title>
@@ -680,7 +603,7 @@ border:1px solid rgba(255,215,0,.25);border-radius:14px;padding:18px;margin-bott
 .pick-n{{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--go);
 font-weight:700;background:rgba(255,215,0,.1);border-radius:5px;padding:1px 7px}}
 .seg-bar{{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:10px 0}}
-.seg-inner{{height:100%;background:linear-gradient(90deg,var(--v),var(--go));border-radius:4px;transition:width .5s}}
+.seg-inner{{height:100%;background:linear-gradient(90deg,var(--v),var(--go));border-radius:4px}}
 .ph{{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}}
 .ph-em{{font-size:1.7rem;flex-shrink:0;line-height:1}}
 .ph-info .sub{{font-size:.75rem;color:var(--tx2);margin-bottom:2px}}
@@ -709,13 +632,13 @@ footer a{{color:var(--ac);text-decoration:none}}
 <div class="wrap">
   <header>
     <h1>💎 Picks Premium — {hoy}</h1>
-    <p>Los 4 picks con mayor probabilidad de acierto del día</p>
+    <p>Los 3 picks con mayor probabilidad de acierto del día</p>
     <span class="badge">📅 {fecha_gen}</span>
     <span class="badge">🔐 Acceso exclusivo suscriptores</span>
   </header>
   <div class="resumen" id="res"></div>
   <div class="acum-box">
-    <div class="title">📈 Cuota acumulador (los 4 combinados)</div>
+    <div class="title">📈 Cuota acumulador (combinados)</div>
     <div class="val">@{cuota_acum}</div>
   </div>
   <div id="picks"></div>
@@ -731,19 +654,17 @@ footer a{{color:var(--ac);text-decoration:none}}
 const PICKS={PICKS_J};
 const ISO={ISO_J};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${{ISO[eq]}}.png">`:'';
-
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
 const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+p.cuota,0)/PICKS.length).toFixed(2):0;
 document.getElementById('res').innerHTML=`
   <div><div class="rs-v">${{PICKS.length}}</div><div class="rs-l">Picks premium</div></div>
   <div><div class="rs-v">${{probP}}%</div><div class="rs-l">Prob. promedio</div></div>
   <div><div class="rs-v">${{cuotaP}}</div><div class="rs-l">Cuota prom.</div></div>`;
-
 const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{{
   const d=document.createElement('div');
   d.className='pick';
-  const esC = pk.tipo==='combinada';
+  const esC=pk.tipo==='combinada';
   let comboH='';
   if(esC&&pk.picks_combo){{
     comboH='<div style="margin-top:8px">'+pk.picks_combo.map((s,si)=>`
@@ -778,12 +699,12 @@ PICKS.forEach((pk,i)=>{{
 </script>
 </body></html>"""
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
     print("\n🚀 GENERADOR DE PICKS INTELIGENTE")
     print("="*55)
-    hoy      = date.today().strftime('%Y-%m-%d')
+    hoy       = date.today().strftime('%Y-%m-%d')
     fecha_gen = datetime.now(timezone.utc).strftime('%d-%m-%Y %H:%M UTC')
+    ts        = int(time.time())  # timestamp único — fuerza detección de cambios en Git
 
     csv = os.path.join(RAIZ,'Predicciones','predicciones_finales.csv')
     df  = pd.read_csv(csv)
@@ -818,8 +739,10 @@ def main():
         print(f"      {pk['partido']} | {pk['prob']}% | @{pk['cuota']}")
 
     os.makedirs('docs', exist_ok=True)
-    with open('docs/picks_dia.html',     'w', encoding='utf-8') as f: f.write(html_publico(picks_pub,  hoy, fecha_gen))
-    with open('docs/picks_premium.html', 'w', encoding='utf-8') as f: f.write(html_premium(picks_prem, hoy, fecha_gen))
+    with open('docs/picks_dia.html',     'w', encoding='utf-8') as f:
+        f.write(html_publico(picks_pub,  hoy, fecha_gen, ts))
+    with open('docs/picks_premium.html', 'w', encoding='utf-8') as f:
+        f.write(html_premium(picks_prem, hoy, fecha_gen, ts))
 
     print(f"\n✅ docs/picks_dia.html generado")
     print(f"✅ docs/picks_premium.html generado")
