@@ -60,15 +60,15 @@ footer a{color:var(--ac);text-decoration:none}
 </nav>
 <div class="wrap">
   <header>
-    <h1>💎 Picks Premium — 2026-06-23</h1>
+    <h1>💎 Picks Premium — 2026-06-24</h1>
     <p>Los 4 picks con mayor probabilidad de acierto del día</p>
-    <span class="badge">📅 23-06-2026 23:41 UTC</span>
+    <span class="badge">📅 24-06-2026 14:45 UTC</span>
     <span class="badge">🔐 Acceso exclusivo suscriptores</span>
   </header>
   <div class="resumen" id="res"></div>
   <div class="acum-box">
     <div class="title">📈 Cuota acumulador (los 4 combinados)</div>
-    <div class="val">@1.83</div>
+    <div class="val">@1.75</div>
   </div>
   <div id="picks"></div>
   <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
@@ -80,7 +80,7 @@ footer a{color:var(--ac);text-decoration:none}
   </footer>
 </div>
 <script>
-const PICKS=[{"partido": "Inglaterra vs Ghana", "local": "Inglaterra", "visitante": "Ghana", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados", "fuente": "real", "tipo": "premium"}, {"partido": "Colombia vs RD Congo", "local": "Colombia", "visitante": "RD Congo", "mercado": "Faltas +18.5", "prob": 82.0, "cuota": 1.16, "ev": -0.049, "emoji": "🦵", "categoria": "Faltas", "descripcion": "22.9 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "Inglaterra vs Ghana", "local": "Inglaterra", "visitante": "Ghana", "mercado": "Sin empate (1 o 2)", "prob": 81.5, "cuota": 1.17, "ev": -0.046, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cualquier equipo gana", "fuente": "real", "tipo": "premium"}, {"partido": "Portugal vs Uzbekistán", "local": "Portugal", "visitante": "Uzbekistán", "mercado": "Más de 1.5 goles", "prob": 81.5, "cuota": 1.17, "ev": -0.046, "emoji": "🥅", "categoria": "Goles", "descripcion": "xG total 3.1", "fuente": "real", "tipo": "premium"}];
+const PICKS=[{"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "República Checa vs México", "local": "República Checa", "visitante": "México", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas", "fuente": "real", "tipo": "premium"}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados", "fuente": "real", "tipo": "premium"}, {"partido": "Escocia vs Brasil", "local": "Escocia", "visitante": "Brasil", "mercado": "Escocia córners +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "⛳", "categoria": "Córners Escocia", "descripcion": "Escocia promedia 7.0 córners/partido", "fuente": "real", "tipo": "premium"}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
 
