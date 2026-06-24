@@ -190,19 +190,31 @@ def generar_picks_partido(r, cuotas_p):
         if cu >= 1.15:
             add(f"Tarjetas +{lin}", pr, cu, '🟨','Tarjetas', f"{round(lam_tar,1)} tarjetas esperadas")
 
-    # Stats por equipo
+    # Stats por equipo — mercados avanzados
     stats = cargar_stats()
     for eq in [local, visit]:
         s = stats.get(eq,{})
-        # Tiros por equipo
+
+        # Tiros a puerta por equipo
         t = s.get('tiros_favor_5', s.get('tiros_favor_tot',0))
         if t >= 4:
             for lin in [2.5, 3.5, 4.5]:
                 pr = round(p_poisson(t, lin)*100, 1)
                 cu = cuota_estimada(pr)
                 if cu >= 1.15:
-                    add(f"{eq} tiros +{lin}", pr, cu, '🎯', f'Tiros {eq}',
+                    add(f"{eq} tiros a puerta +{lin}", pr, cu, '🎯', f'Tiros {eq}',
                         f"{eq} promedia {round(t,1)} tiros/partido")
+
+        # Remates totales por equipo
+        rt = s.get('remates_tot_favor_5', s.get('remates_tot_favor_tot',0))
+        if rt >= 10:
+            for lin in [8.5, 10.5, 12.5]:
+                pr = round(p_poisson(rt, lin)*100, 1)
+                cu = cuota_estimada(pr)
+                if cu >= 1.15:
+                    add(f"{eq} remates totales +{lin}", pr, cu, '🎯', f'Remates {eq}',
+                        f"{eq} promedia {round(rt,1)} remates/partido")
+
         # Córners por equipo
         c = s.get('corners_favor_5', s.get('corners_favor_tot',0))
         if c >= 5:
@@ -212,6 +224,7 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} córners +{lin}", pr, cu, '⛳', f'Córners {eq}',
                         f"{eq} promedia {round(c,1)} córners/partido")
+
         # Faltas por equipo
         f = s.get('faltas_cometidas_5', s.get('faltas_cometidas_tot',0))
         if f >= 10:
@@ -221,6 +234,67 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.15:
                     add(f"{eq} faltas +{lin}", pr, cu, '🦵', f'Faltas {eq}',
                         f"{eq} promedia {round(f,1)} faltas/partido")
+
+        # Paradas del portero por equipo
+        p_par = s.get('paradas_5', s.get('paradas_tot',0))
+        if p_par >= 3:
+            for lin in [2.5, 3.5, 4.5]:
+                pr = round(p_poisson(p_par, lin)*100, 1)
+                cu = cuota_estimada(pr)
+                if cu >= 1.20:
+                    add(f"{eq} portero +{lin} paradas", pr, cu, '🧤', f'Paradas {eq}',
+                        f"Portero de {eq} promedia {round(p_par,1)} paradas/partido")
+
+        # Grandes ocasiones por equipo
+        go = s.get('grandes_ocas_5', s.get('grandes_ocas_tot',0))
+        if go >= 2.5:
+            for lin in [1.5, 2.5, 3.5]:
+                pr = round(p_poisson(go, lin)*100, 1)
+                cu = cuota_estimada(pr)
+                if cu >= 1.20:
+                    add(f"{eq} grandes ocasiones +{lin}", pr, cu, '💥', f'Ocasiones {eq}',
+                        f"{eq} promedia {round(go,1)} grandes ocasiones/partido")
+
+        # Saques de banda por equipo
+        sb = s.get('saques_banda_5', s.get('saques_banda_tot',0))
+        if sb >= 15:
+            for lin in [12.5, 14.5, 16.5]:
+                pr = round(p_poisson(sb, lin)*100, 1)
+                cu = cuota_estimada(pr)
+                if cu >= 1.20:
+                    add(f"{eq} saques de banda +{lin}", pr, cu, '🏳️', f'Saques {eq}',
+                        f"{eq} promedia {round(sb,1)} saques de banda/partido")
+
+        # Centros por equipo
+        ce = s.get('centros_5', s.get('centros_tot',0))
+        if ce >= 8:
+            for lin in [6.5, 8.5, 10.5]:
+                pr = round(p_poisson(ce, lin)*100, 1)
+                cu = cuota_estimada(pr)
+                if cu >= 1.20:
+                    add(f"{eq} centros +{lin}", pr, cu, '🎯', f'Centros {eq}',
+                        f"{eq} promedia {round(ce,1)} centros/partido")
+
+        # Goles por equipo (via histórico)
+        gl = s.get('goles_5', s.get('goles_tot',0))
+        if gl >= 1.5:
+            pr = round(p_poisson(gl, 0.5)*100, 1)
+            cu = cuota_estimada(pr)
+            if cu >= 1.20:
+                add(f"{eq} marca al menos 1 gol", pr, cu, '⚽', f'Goles {eq}',
+                    f"{eq} promedia {round(gl,1)} goles/partido")
+
+    # Saques de banda totales del partido
+    sb_tot_l = stats.get(local,{}).get('saques_banda_5', stats.get(local,{}).get('saques_banda_tot',0))
+    sb_tot_v = stats.get(visit,{}).get('saques_banda_5', stats.get(visit,{}).get('saques_banda_tot',0))
+    sb_total = sb_tot_l + sb_tot_v
+    if sb_total >= 25:
+        for lin in [22.5, 25.5, 28.5]:
+            pr = round(p_poisson(sb_total, lin)*100, 1)
+            cu = cuota_estimada(pr)
+            if cu >= 1.20:
+                add(f"Saques de banda totales +{lin}", pr, cu, '🏳️', 'Saques Banda',
+                    f"Total esperado {round(sb_total,1)} saques de banda")
 
     # Eliminar duplicados, ordenar por cuota desc luego prob desc
     vistos = set()
@@ -238,9 +312,11 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
     Si faltan, combina picks seguros de distintos partidos.
     Máximo 4 picks.
     """
-    # Candidatos individuales
+    # Candidatos individuales — prob >60% y cuota >1.50
+    # Ordenar por probabilidad primero, luego EV — el modelo elige el más confiable
     individuales = [pk for pk in todos
-                   if pk['cuota'] >= cuota_min and pk['prob'] >= 55]
+                   if pk['cuota'] >= cuota_min and pk['prob'] >= 60]
+    individuales.sort(key=lambda x: (x['prob'], x.get('ev',0)), reverse=True)
     individuales.sort(key=lambda x: (x.get('ev',0), x['prob']), reverse=True)
 
     resultado = []
@@ -255,7 +331,7 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
 
     # Si faltan picks, crear combinadas de 2 de distintos partidos
     if len(resultado) < max_picks:
-        seguros = [pk for pk in todos if pk['prob'] >= 72 and pk['cuota'] >= 1.10]
+        seguros = [pk for pk in todos if pk['prob'] >= 65 and pk['cuota'] >= 1.15]
         seguros.sort(key=lambda x: x['prob'], reverse=True)
 
         partidos_en_res = set(pk['partido'] for pk in resultado)
@@ -266,7 +342,7 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
                 if pk1['partido'] == pk2['partido']: continue
                 cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
                 prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-                if cuota_c < cuota_min or prob_c < 52: continue
+                if cuota_c < cuota_min or prob_c < 55: continue
 
                 combo = {
                     'partido': 'COMBINADA',
@@ -297,10 +373,12 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
 
     return resultado[:max_picks]
 
-def seleccionar_premium(todos, max_picks=4, prob_min=78):
+def seleccionar_premium(todos, max_picks=3, prob_min=75):
     """
-    Selecciona los picks con mayor probabilidad que tengan cuota >= 1.15.
-    Panel premium = máxima seguridad con cuota real en casas.
+    Selecciona 3 picks premium: solos o combinados.
+    - prob >= 75% y cuota >= 1.15
+    - Variedad de mercados: no repetir categoría del mismo partido
+    - Incluye combinadas de 2 picks muy seguros si mejoran la cuota
     """
     candidatos = [pk for pk in todos
                  if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
@@ -308,6 +386,8 @@ def seleccionar_premium(todos, max_picks=4, prob_min=78):
 
     resultado = []
     vistos = set()
+
+    # Primero picks individuales variados
     for pk in candidatos:
         key = f"{pk['partido']}|{pk['categoria'][:10]}"
         if key not in vistos:
@@ -316,10 +396,40 @@ def seleccionar_premium(todos, max_picks=4, prob_min=78):
             resultado.append(pk)
         if len(resultado) >= max_picks: break
 
-    # Si no hay suficientes bajar umbral
+    # Si faltan, crear combinadas de 2 picks muy seguros de distintos partidos
+    if len(resultado) < max_picks:
+        muy_seguros = [pk for pk in candidatos if pk['prob'] >= 80 and pk['cuota'] >= 1.12]
+        for i in range(len(muy_seguros)):
+            for j in range(i+1, len(muy_seguros)):
+                pk1, pk2 = muy_seguros[i], muy_seguros[j]
+                if pk1['partido'] == pk2['partido']: continue
+                cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
+                prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
+                if cuota_c < 1.25 or prob_c < 60: continue
+                combo = {
+                    'partido': 'COMBINADA PREMIUM',
+                    'local': f"{pk1['partido']} + {pk2['partido']}",
+                    'visitante': '',
+                    'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
+                    'prob': prob_c,
+                    'cuota': cuota_c,
+                    'cuota_display': cuota_c,
+                    'ev': round((prob_c/100)*cuota_c - 1, 3),
+                    'emoji': '💎',
+                    'categoria': 'Combinada Premium',
+                    'descripcion': f"Dos picks de máxima seguridad combinados — prob. {prob_c}%",
+                    'fuente': 'calculada',
+                    'tipo': 'combinada',
+                    'picks_combo': [pk1, pk2],
+                }
+                resultado.append(combo)
+                if len(resultado) >= max_picks: break
+            if len(resultado) >= max_picks: break
+
+    # Si aún faltan, bajar umbral a 70%
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
-            if pk['cuota'] >= 1.10 and pk not in resultado:
+            if pk['cuota'] >= 1.12 and pk['prob'] >= 70:
                 key = f"{pk['partido']}|{pk['categoria'][:10]}"
                 if key not in vistos:
                     vistos.add(key)
@@ -627,7 +737,7 @@ def main():
     print(f"\n✅ Total picks: {len(todos)}")
 
     picks_pub  = seleccionar_publicos(todos)
-    picks_prem = seleccionar_premium(todos)
+    picks_prem = seleccionar_premium(todos, max_picks=3)
 
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
