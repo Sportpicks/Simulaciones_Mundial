@@ -556,9 +556,9 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
                 'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2, pk3],
             })
 
-    # ── Combinadas dobles — ANTI-CORRELACIÓN ──
-    # Regla: las combinadas dobles deben tener partidos distintos entre sí
-    # además de no repetir más de 1 partido del triple.
+    # ── Combinadas dobles — ANTI-CORRELACIÓN ESTRICTA ──
+    # Regla: si un partido ya está en la triple, NO puede anclar ninguna doble.
+    # Las dobles deben usar partidos completamente distintos al triple.
     partidos_ya_en_dobles = set()  # partidos usados en combinadas dobles previas
 
     for i in range(len(base)):
@@ -566,14 +566,12 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             if len(resultado) >= max_picks: break
             pk1, pk2 = base[i], base[j]
 
-            # ANTI-CORRELACIÓN: ambos partidos de la doble no pueden estar
-            # ya en otra combinada doble → fuerza diversificación
-            if pk1['partido'] in partidos_ya_en_dobles and pk2['partido'] in partidos_ya_en_dobles:
+            # ANTI-CORRELACIÓN: ningún partido del triple puede aparecer en dobles
+            if pk1['partido'] in partido_triple or pk2['partido'] in partido_triple:
                 continue
 
-            # Permitir hasta 1 partido compartido con el triple (no los 2)
-            compartidos_con_triple = len({pk1['partido'], pk2['partido']} & partido_triple)
-            if compartidos_con_triple == 2:
+            # Tampoco repetir partidos ya usados en otra doble
+            if pk1['partido'] in partidos_ya_en_dobles and pk2['partido'] in partidos_ya_en_dobles:
                 continue
 
             cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
@@ -598,6 +596,8 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
         if len(resultado) >= max_picks: break
 
     # Completar con individuales si faltan
+    # Nota: si no hay suficientes partidos fuera del triple para dobles,
+    # se permite 1 partido del triple en una doble (el de menor prob) como último recurso
     partidos_usados = set()
     for r in resultado:
         if r.get('picks_combo'):
@@ -605,6 +605,7 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
         else:
             partidos_usados.add(r.get('partido',''))
 
+    # Intento 1: individuales fuera del triple
     for pk in base:
         if len(resultado) >= max_picks: break
         if pk['partido'] not in partidos_usados:
@@ -612,6 +613,36 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             resultado.append(pk)
             partidos_usados.add(pk['partido'])
 
+    # Intento 2: doble con 1 partido del triple (último recurso, avisa en descripción)
+    if len(resultado) < max_picks:
+        for i in range(len(base)):
+            for j in range(i+1, len(base)):
+                if len(resultado) >= max_picks: break
+                pk1, pk2 = base[i], base[j]
+                if pk1['partido'] in partidos_usados and pk2['partido'] in partidos_usados:
+                    continue
+                # Solo 1 del triple permitido aquí
+                compartidos = len({pk1['partido'], pk2['partido']} & partido_triple)
+                if compartidos == 2: continue
+                cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
+                prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
+                if cuota_c < 1.20 or prob_c < 50: continue
+                resultado.append({
+                    'partido': 'COMBINADA PREMIUM',
+                    'local': f"{pk1['partido']} + {pk2['partido']}",
+                    'visitante': '',
+                    'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
+                    'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
+                    'ev': round((prob_c/100)*cuota_c - 1, 3),
+                    'emoji': '💎', 'categoria': 'Combinada Premium',
+                    'descripcion': f"Prob. combinada: {prob_c}% (comparte partido con triple)",
+                    'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
+                })
+                partidos_usados.add(pk1['partido'])
+                partidos_usados.add(pk2['partido'])
+            if len(resultado) >= max_picks: break
+
+    # Intento 3: individuales de cualquier partido
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
             if len(resultado) >= max_picks: break
