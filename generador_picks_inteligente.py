@@ -298,9 +298,12 @@ def generar_picks_partido(r, cuotas_p):
     c2 = cuotas_p.get('c2',0)
     picks = []
 
-    def add(mercado, prob, cuota, emoji, cat, desc=""):
+    def add(mercado, prob, cuota, emoji, cat, desc="", fuente_override=None):
         if prob < 52 or cuota < 1.05: return
         ev = round((prob/100)*cuota - 1, 3)
+        # fuente='real' SOLO cuando viene de la API (lo indica fuente_override)
+        # Por defecto todo es estimado si no hay cuotas de API
+        fuente = fuente_override if fuente_override else 'estimada'
         picks.append({
             'partido': f"{local} vs {visit}",
             'local': local, 'visitante': visit,
@@ -308,13 +311,15 @@ def generar_picks_partido(r, cuotas_p):
             'cuota': cuota, 'ev': ev,
             'emoji': emoji, 'categoria': cat,
             'descripcion': desc,
-            'fuente': 'real' if cuota > 1.10 else 'estimada',
+            'fuente': fuente,
         })
 
     # ── 1X2 ──
-    if c1 > 1.05: add(f"Victoria {local}", p1, c1, '⚽','1X2', f"{local} favorito ({p1:.0f}%)")
-    if cx > 1.05: add("Empate", px, cx, '⚖️','1X2', f"Empate esperado ({px:.0f}%)")
-    if c2 > 1.05: add(f"Victoria {visit}", p2, c2, '⚽','1X2', f"{visit} favorito ({p2:.0f}%)")
+    hay_c_real = c1 > 1.05 or cx > 1.05 or c2 > 1.05
+    f_real = 'real' if hay_c_real else 'estimada'
+    if c1 > 1.05: add(f"Victoria {local}", p1, c1, '⚽','1X2', f"{local} favorito ({p1:.0f}%)", f_real)
+    if cx > 1.05: add("Empate", px, cx, '⚖️','1X2', f"Empate esperado ({px:.0f}%)", f_real)
+    if c2 > 1.05: add(f"Victoria {visit}", p2, c2, '⚽','1X2', f"{visit} favorito ({p2:.0f}%)", f_real)
 
     # ── Doble oportunidad ──
     # Filtro de coherencia: no emitir X2 si el modelo ya favorece al local con prob > 55%
@@ -489,25 +494,27 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
     hay_cuotas_reales = any(pk.get('fuente') == 'real' for pk in todos)
 
     def score(pk):
-        es_real   = 2 if pk.get('fuente') == 'real' else 0
         es_hc     = 0 if pk.get('categoria') == 'Handicap' else 1
-        cat_score = 2 if pk.get('categoria') in ('Goles', 'Props', '1X2') else 1
-        return (es_hc, cat_score, es_real, pk['prob'])
+        # Props y 1X2 tienen mas valor predictivo que Doble Op
+        cat_score = {'1X2':3, 'Goles':3, 'Props':3,
+                     'Tiros':2, 'Faltas':2, 'Tarjetas':2, 'Córners':2,
+                     'Doble Op.':1, 'Handicap':1}.get(pk.get('categoria',''), 1)
+        return (es_hc, cat_score, pk['prob'])
 
-    # Nivel 1: cuota real >= 1.50 y prob >= 60%
-    nivel1 = [pk for pk in todos
-              if pk.get('fuente') == 'real'
-              and pk['cuota'] >= cuota_min
-              and pk['prob'] >= 60]
+    if hay_cuotas_reales:
+        # Con cuotas de API: filtro normal cuota>=1.50 y prob>=60
+        candidatos = [pk for pk in todos
+                      if pk['cuota'] >= cuota_min and pk['prob'] >= 60
+                      and pk.get('categoria') != 'Handicap' or
+                      (pk.get('categoria') == 'Handicap' and pk['prob'] >= 62)]
+    else:
+        # Sin cuotas de API: usar prob alta como criterio principal
+        # Picks con prob>=70% son altamente confiables aunque cuota sea baja
+        candidatos = [pk for pk in todos if pk['prob'] >= 70 and pk['cuota'] >= 1.15]
+        # Si no hay suficientes al 70%, bajar a 65%
+        if len(set(pk['partido'] for pk in candidatos)) < max_picks:
+            candidatos = [pk for pk in todos if pk['prob'] >= 65 and pk['cuota'] >= 1.15]
 
-    # Nivel 2: estimados con prob >= 65% cuando no hay cuotas reales
-    prob_min_est = 65 if not hay_cuotas_reales else 68
-    nivel2 = [pk for pk in todos
-              if pk.get('fuente') != 'real'
-              and pk['prob'] >= prob_min_est
-              and pk['cuota'] >= 1.15]
-
-    candidatos = nivel1 + nivel2
     candidatos.sort(key=score, reverse=True)
 
     resultado = []
