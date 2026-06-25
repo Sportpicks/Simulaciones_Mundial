@@ -205,6 +205,14 @@ def push_github():
         return False
     ok(f"Commit: {fecha}")
 
+    # Pull --rebase para sincronizar cambios remotos antes de pushear
+    rr = subprocess.run('git pull --rebase origin main', shell=True,
+                        capture_output=True, text=True)
+    if rr.returncode != 0:
+        warn(f"Pull/rebase con advertencia: {rr.stderr.strip()[:120]}")
+        # Intentar abort del rebase si quedó a medias
+        subprocess.run('git rebase --abort', shell=True, capture_output=True)
+
     rp = subprocess.run('git push origin main', shell=True,
                         capture_output=True, text=True)
     if rp.returncode != 0:
