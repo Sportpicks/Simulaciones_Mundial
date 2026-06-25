@@ -550,9 +550,15 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             # No repetir partidos ya usados en otra doble
             if pk1['partido'] in partidos_ya_en_dobles and pk2['partido'] in partidos_ya_en_dobles:
                 continue
-            # No repetir combinación de mercados exacta
-            mk = tuple(sorted([pk1['mercado'][:20], pk2['mercado'][:20]]))
+            # No repetir: misma combinación de partido+mercado
+            mk = tuple(sorted([
+                pk1['partido'][:15] + pk1['mercado'][:15],
+                pk2['partido'][:15] + pk2['mercado'][:15]
+            ]))
             if mk in mercados_en_dobles:
+                continue
+            # Tampoco combinar dos picks del mismo mercado base
+            if pk1['mercado'][:20] == pk2['mercado'][:20]:
                 continue
 
             cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
