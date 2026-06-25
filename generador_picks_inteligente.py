@@ -307,11 +307,26 @@ def generar_picks_partido(r, cuotas_p):
     if c2 > 1.05: add(f"Victoria {visit}", p2, c2, '⚽','1X2', f"{visit} favorito ({p2:.0f}%)")
 
     # ── Doble oportunidad ──
-    for prob_do, label, desc_do in [
-        (round(p1+px,1), f"1X — {local} o Empate", f"Cubre victoria {local} + empate"),
-        (round(px+p2,1), f"X2 — Empate o {visit}", f"Cubre empate + victoria {visit}"),
-        (round(p1+p2,1), "Sin empate (1 o 2)", "Cualquier equipo gana"),
-    ]:
+    # Filtro de coherencia: no emitir X2 si el modelo ya favorece al local con prob > 55%
+    # ni emitir 1X si el modelo ya favorece al visitante con prob > 55%
+    # Esto evita contradecir la propia predicción del modelo.
+    UMBRAL_FAVORITO = 55.0
+
+    opciones_do = []
+
+    # 1X — solo si el local es favorito O el partido es parejo
+    if p1 >= p2 or px >= 30:
+        opciones_do.append((round(p1+px,1), f"1X — {local} o Empate", f"Cubre victoria {local} + empate"))
+
+    # X2 — solo si el visitante es favorito O el partido es parejo (p1 < umbral)
+    if p1 < UMBRAL_FAVORITO or p2 > p1:
+        opciones_do.append((round(px+p2,1), f"X2 — Empate o {visit}", f"Cubre empate + victoria {visit}"))
+
+    # Sin empate — siempre válido si ninguno tiene prob de empate > 40%
+    if px < 40:
+        opciones_do.append((round(p1+p2,1), "Sin empate (1 o 2)", "Cualquier equipo gana"))
+
+    for prob_do, label, desc_do in opciones_do:
         add(label, prob_do, cuota_estimada(prob_do), '🛡️','Doble Op.', desc_do)
 
     # ── Handicap Asiático ──
