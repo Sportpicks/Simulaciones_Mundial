@@ -205,13 +205,18 @@ def push_github():
         return False
     ok(f"Commit: {fecha}")
 
+    # Stash de cambios locales sin commitear para poder hacer rebase
+    subprocess.run('git stash', shell=True, capture_output=True, text=True)
+
     # Pull --rebase para sincronizar cambios remotos antes de pushear
     rr = subprocess.run('git pull --rebase origin main', shell=True,
                         capture_output=True, text=True)
     if rr.returncode != 0:
         warn(f"Pull/rebase con advertencia: {rr.stderr.strip()[:120]}")
-        # Intentar abort del rebase si quedó a medias
         subprocess.run('git rebase --abort', shell=True, capture_output=True)
+
+    # Restaurar cambios locales del stash
+    subprocess.run('git stash pop', shell=True, capture_output=True, text=True)
 
     rp = subprocess.run('git push origin main', shell=True,
                         capture_output=True, text=True)
