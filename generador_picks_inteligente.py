@@ -147,82 +147,87 @@ def calcular_handicap_asiatico(xgl, xgv, handicap, lado):
 
 def generar_picks_handicap(local, visitante, xgl, xgv, p1, p2):
     """
-    Genera picks de handicap asiático para ambos equipos.
-    Solo selecciona líneas con prob >= 60% y margen estadístico claro.
+    Genera picks de handicap asiático SOLO cuando hay valor real.
+
+    Criterios estrictos para evitar que domine el panel:
+    - Solo líneas donde la ventaja de xG es CLARA (diff >= 0.6 goles)
+    - El favorito debe tener p1 o p2 >= 55% en 1X2
+    - Máximo 1 pick HC por partido (el de mayor valor)
+    - Prob mínima 62% Y cuota mínima 1.75 (real de mercado)
+    - No generar HC +0.5 para favoritos aplastantes (>80% prob) — es redundante
     """
     picks_h = []
-    diff_xg = xgl - xgv  # Diferencia esperada de goles
+    diff_xg = abs(xgl - xgv)
 
-    # Líneas a evaluar con su contexto
-    lineas = [
-        # (handicap, lado, descripción)
-        (-0.5, 'local',     f"{local} gana (sin empate)"),
-        (-1.0, 'local',     f"{local} gana por 2+"),
-        (-1.5, 'local',     f"{local} gana por 2+ (sin devolución)"),
-        (+0.5, 'visitante', f"{visitante} no pierde"),
-        (+1.0, 'visitante', f"{visitante} empata o gana / pierde por menos de 1"),
-        (+1.5, 'visitante', f"{visitante} gana o pierde por 1 solo"),
-        (+0.5, 'local',     f"{local} no pierde"),
-        (+1.0, 'local',     f"{local} empata o gana / pierde por menos de 1"),
-    ]
+    # Solo proceder si hay ventaja clara en xG
+    if diff_xg < 0.6:
+        return []
 
-    # Solo evaluar líneas coherentes con la ventaja de xG
-    lineas_filtradas = []
-    for handicap, lado, desc in lineas:
-        if lado == 'local' and handicap < 0 and diff_xg < 0.4:
-            continue  # No apostar local favorito si xG no lo respalda
-        if lado == 'visitante' and handicap < 0 and diff_xg > -0.4:
-            continue
-        if lado == 'local' and handicap > 0 and diff_xg < -0.3:
-            continue  # No dar ventaja al local si está en desventaja xG
-        lineas_filtradas.append((handicap, lado, desc))
+    # Identificar favorito claro
+    if xgl > xgv:
+        fav_lado, und_lado = 'local', 'visitante'
+        fav_eq, und_eq = local, visitante
+        fav_prob = p1
+    else:
+        fav_lado, und_lado = 'visitante', 'local'
+        fav_eq, und_eq = visitante, local
+        fav_prob = p2
 
-    for handicap, lado, desc in lineas_filtradas:
+    # Solo si el favorito tiene ventaja clara en 1X2
+    if fav_prob < 50:
+        return []
+
+    # Líneas candidatas según magnitud de ventaja xG
+    candidatas = []
+
+    if diff_xg >= 0.6:
+        # Favorito -0.5 (gana): solo si prob victoria directa < 75% (hay incertidumbre)
+        if fav_prob < 75:
+            candidatas.append((-0.5, fav_lado,
+                f"{fav_eq} gana — xG {xgl:.1f}-{xgv:.1f}"))
+        # Underdog +0.5 (no pierde): útil cuando el underdog tiene opciones reales
+        if fav_prob < 70:
+            candidatas.append((+0.5, und_lado,
+                f"{und_eq} no pierde — xG {xgl:.1f}-{xgv:.1f}"))
+
+    if diff_xg >= 1.0:
+        # Favorito -1 (gana por 2+): solo con ventaja grande
+        if fav_prob >= 60:
+            candidatas.append((-1.0, fav_lado,
+                f"{fav_eq} gana por 2+ — xG {xgl:.1f}-{xgv:.1f}"))
+
+    for handicap, lado, desc in candidatas:
         prob_w, prob_push = calcular_handicap_asiatico(xgl, xgv, handicap, lado)
 
-        # Prob efectiva: en apuesta entera, el push devuelve → prob ganancia neta
-        # Lo mostramos como prob_w para que sea conservador
-        if prob_w < 58:
+        if prob_w < 62:
             continue
 
-        # Cuota para handicap asiático: las casas siempre ofrecen ~1.85-1.95
-        # independientemente de la prob, porque el mercado es de dos lados.
-        # Usamos cuota real de la API si está disponible; si no, estimamos
-        # con el modelo de dos lados: cuota = 1 / prob * margen_casa (5%)
-        # Pero nunca menos de 1.75 ni más de 2.10 para HC estándar.
-        cuota_h_raw = round((100 / prob_w) * 0.95, 2) if prob_w > 0 else 1.90
-        cuota_h = max(1.75, min(2.10, cuota_h_raw)) if abs(handicap) <= 1.0 else cuota_estimada(prob_w)
-        if cuota_h < 1.50:
-            continue
+        # Cuota de mercado real para HC: casas ofrecen ~1.80-1.95
+        # Usamos 1.85 como base y ajustamos levemente por la prob
+        cuota_h = round(max(1.75, min(1.95, (100/prob_w)*0.93)), 2)
+        ev = round((prob_w/100)*cuota_h - 1, 3)
 
         eq_nombre = local if lado == 'local' else visitante
         signo = '+' if handicap > 0 else ''
-        mercado_str = f"HC {eq_nombre} {signo}{handicap:g}"
-
-        detalle_push = f" (push {prob_push:.0f}% si diff={abs(int(handicap))})" if prob_push > 2 else ""
-        descripcion = f"{desc}{detalle_push} — xG {xgl:.1f}-{xgv:.1f}"
+        push_str = f" · push si empate exacto {abs(int(handicap))}" if prob_push > 3 else ""
 
         picks_h.append({
             'partido': f"{local} vs {visitante}",
             'local': local, 'visitante': visitante,
-            'mercado': mercado_str,
+            'mercado': f"HC {eq_nombre} {signo}{handicap:g}",
             'prob': prob_w,
             'cuota': cuota_h,
-            'ev': round((prob_w/100)*cuota_h - 1, 3),
+            'ev': ev,
             'emoji': '⚖️',
             'categoria': 'Handicap',
-            'descripcion': descripcion,
+            'descripcion': f"{desc}{push_str}",
             'fuente': 'estimada',
         })
 
-    # Devolver solo el mejor por lado (mayor prob)
-    mejores = {}
-    for pk in picks_h:
-        lado_key = 'L' if pk['mercado'].split()[1] == local.split()[0] else 'V'
-        if lado_key not in mejores or pk['prob'] > mejores[lado_key]['prob']:
-            mejores[lado_key] = pk
-
-    return list(mejores.values())
+    # Devolver solo el pick HC de mayor EV por partido
+    if not picks_h:
+        return []
+    return [max(picks_h, key=lambda x: x['ev'])]
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -787,7 +792,7 @@ PICKS.forEach((pk,i)=>{{
   const cls=esC?'combo':esHC?'hc':esV?'value':'alta';
   const cuotaD=pk.cuota_display||pk.cuota;
   const fB=pk.fuente==='real'?'<span class="freal">real</span>':'<span class="fest">estimada</span>';
-  const evH=pk.ev!=null?`<span class="${{pk.ev>0?'ev-pos':'ev-neg'}}">${{pk.ev>0?'+':''}}{{'${{(pk.ev*100).toFixed(1)}}%'}}</span>`:'—';
+  const evH=pk.ev!=null?`<span class="${{pk.ev>0?'ev-pos':'ev-neg'}}">${{pk.ev>0?'+':''}}${{(pk.ev*100).toFixed(1)}}%</span>`:'—';
   let comboH='';
   if(esC&&pk.picks_combo){{
     comboH='<div class="combo-box">'+pk.picks_combo.map((s,si)=>`
