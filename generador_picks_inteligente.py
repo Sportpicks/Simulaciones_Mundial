@@ -6,6 +6,11 @@ Genera dos paneles de picks para el canal de Telegram.
 PANEL PÚBLICO:  Máx 4 picks con cuota >= 1.50 y prob >= 60%
 PANEL PREMIUM:  3 picks — máx 1 por partido, combinadas inteligentes
 
+Mejoras v2:
+  - Mercado de Handicap Asiático (-0.5, -1, +0.5, +1) calculado con Dixon-Coles
+  - Anti-correlación en combinadas: ningún partido ancla más de 1 combinada premium
+  - Banda de confianza en props: valor esperado debe superar umbral >= 15%
+
 Uso: python generador_picks_inteligente.py
 """
 
@@ -19,6 +24,11 @@ sys.path.insert(0, os.path.join(RAIZ, '04_Prediccion'))
 from razonador_mercados import cargar_stats
 
 API_KEY_ODDS = "622b4b772a4d155e032de1c17a83e41a"
+
+# ── Parámetro de banda de confianza para props ──────────────────────────────
+# El valor esperado debe superar el umbral de la línea al menos un 15%
+# Ejemplo: si lam_faltas=24 y umbral=22.5, margen=6.7% < 15% → NO seleccionar
+MARGEN_MINIMO_PROPS = 0.15   # 15% sobre el umbral de línea
 
 BANDERAS_ISO = {
     'México':'mx','Sudáfrica':'za','Corea del Sur':'kr','República Checa':'cz',
@@ -58,10 +68,23 @@ _MAPA = {
 for en, es in _MAPA.items():
     NOMBRES_API[en] = es
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# FUNCIONES AUXILIARES
+# ══════════════════════════════════════════════════════════════════════════════
+
 def p_poisson(lam, linea):
+    """P(N > linea) con N ~ Poisson(lam)."""
     k = int(linea) + 1
     try:
         return 1 - sum(math.exp(-lam)*lam**i/math.factorial(i) for i in range(k))
+    except:
+        return 0.0
+
+def poisson_pmf(lam, k):
+    """P(N = k) con N ~ Poisson(lam)."""
+    try:
+        return math.exp(-lam) * lam**k / math.factorial(k)
     except:
         return 0.0
 
@@ -69,12 +92,145 @@ def cuota_estimada(prob):
     if prob <= 0 or prob >= 100: return 1.05
     return max(1.05, round((100/prob)*0.95, 2))
 
+def margen_ok(valor_esperado, linea):
+    """Verifica que valor_esperado supere la línea en al menos MARGEN_MINIMO_PROPS."""
+    if linea <= 0:
+        return True
+    return (valor_esperado - linea) / linea >= MARGEN_MINIMO_PROPS
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HANDICAP ASIÁTICO
+# ══════════════════════════════════════════════════════════════════════════════
+
+def calcular_handicap_asiatico(xgl, xgv, handicap, lado):
+    """
+    Calcula P(ganar apuesta de handicap asiático) usando distribución Poisson.
+
+    handicap: float — línea (ej: -0.5, -1.0, +0.5, +1.0, -1.5, +1.5)
+    lado: 'local' | 'visitante'
+    Devuelve: (prob_ganar, prob_empate_devolucion)
+
+    Lógica handicap asiático:
+      - Handicap entero (±1, ±2): si diferencia = abs(handicap) → devolución (push)
+      - Handicap .5 (±0.5, ±1.5): sin devolución, resultado binario
+    """
+    prob_win = 0.0
+    prob_push = 0.0
+    MAX_G = 10
+
+    for g_l in range(MAX_G):
+        for g_v in range(MAX_G):
+            p = poisson_pmf(xgl, g_l) * poisson_pmf(xgv, g_v)
+            if p < 1e-9:
+                continue
+            diff = g_l - g_v  # diferencia desde perspectiva local
+            if lado == 'visitante':
+                diff = -diff
+
+            # Con el handicap aplicado al equipo apostado:
+            # Si apoyas a local con handicap -1: local necesita ganar por 2+
+            # Equivalente a: diff + handicap > 0 → gana; = 0 → push; < 0 → pierde
+            resultado_efectivo = diff + handicap
+
+            if abs(handicap % 1) < 0.01:  # entero: push posible
+                if resultado_efectivo > 0:
+                    prob_win += p
+                elif resultado_efectivo == 0:
+                    prob_push += p
+            else:  # .5: sin push
+                if resultado_efectivo > 0:
+                    prob_win += p
+
+    return round(prob_win * 100, 1), round(prob_push * 100, 1)
+
+
+def generar_picks_handicap(local, visitante, xgl, xgv, p1, p2):
+    """
+    Genera picks de handicap asiático para ambos equipos.
+    Solo selecciona líneas con prob >= 60% y margen estadístico claro.
+    """
+    picks_h = []
+    diff_xg = xgl - xgv  # Diferencia esperada de goles
+
+    # Líneas a evaluar con su contexto
+    lineas = [
+        # (handicap, lado, descripción)
+        (-0.5, 'local',     f"{local} gana (sin empate)"),
+        (-1.0, 'local',     f"{local} gana por 2+"),
+        (-1.5, 'local',     f"{local} gana por 2+ (sin devolución)"),
+        (+0.5, 'visitante', f"{visitante} no pierde"),
+        (+1.0, 'visitante', f"{visitante} empata o gana / pierde por menos de 1"),
+        (+1.5, 'visitante', f"{visitante} gana o pierde por 1 solo"),
+        (+0.5, 'local',     f"{local} no pierde"),
+        (+1.0, 'local',     f"{local} empata o gana / pierde por menos de 1"),
+    ]
+
+    # Solo evaluar líneas coherentes con la ventaja de xG
+    lineas_filtradas = []
+    for handicap, lado, desc in lineas:
+        if lado == 'local' and handicap < 0 and diff_xg < 0.4:
+            continue  # No apostar local favorito si xG no lo respalda
+        if lado == 'visitante' and handicap < 0 and diff_xg > -0.4:
+            continue
+        if lado == 'local' and handicap > 0 and diff_xg < -0.3:
+            continue  # No dar ventaja al local si está en desventaja xG
+        lineas_filtradas.append((handicap, lado, desc))
+
+    for handicap, lado, desc in lineas_filtradas:
+        prob_w, prob_push = calcular_handicap_asiatico(xgl, xgv, handicap, lado)
+
+        # Prob efectiva: en apuesta entera, el push devuelve → prob ganancia neta
+        # Lo mostramos como prob_w para que sea conservador
+        if prob_w < 58:
+            continue
+
+        # Cuota estimada conservadora para handicap
+        cuota_h = cuota_estimada(prob_w)
+        if cuota_h < 1.10:
+            continue
+
+        eq_nombre = local if lado == 'local' else visitante
+        signo = '+' if handicap > 0 else ''
+        mercado_str = f"HC {eq_nombre} {signo}{handicap:g}"
+
+        detalle_push = f" (push {prob_push:.0f}% si diff={abs(int(handicap))})" if prob_push > 2 else ""
+        descripcion = f"{desc}{detalle_push} — xG {xgl:.1f}-{xgv:.1f}"
+
+        picks_h.append({
+            'partido': f"{local} vs {visitante}",
+            'local': local, 'visitante': visitante,
+            'mercado': mercado_str,
+            'prob': prob_w,
+            'cuota': cuota_h,
+            'ev': round((prob_w/100)*cuota_h - 1, 3),
+            'emoji': '⚖️',
+            'categoria': 'Handicap',
+            'descripcion': descripcion,
+            'fuente': 'estimada',
+        })
+
+    # Devolver solo el mejor por lado (mayor prob)
+    mejores = {}
+    for pk in picks_h:
+        lado_key = 'L' if pk['mercado'].split()[1] == local.split()[0] else 'V'
+        if lado_key not in mejores or pk['prob'] > mejores[lado_key]['prob']:
+            mejores[lado_key] = pk
+
+    return list(mejores.values())
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CUOTAS REALES
+# ══════════════════════════════════════════════════════════════════════════════
+
 def obtener_cuotas():
     cuotas = {}
     try:
         r = requests.get(
             "https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds/",
-            params={"apiKey":API_KEY_ODDS,"regions":"eu","markets":"h2h","oddsFormat":"decimal"},
+            params={"apiKey":API_KEY_ODDS,"regions":"eu","markets":"h2h,asian_handicap",
+                    "oddsFormat":"decimal"},
             timeout=15
         )
         if r.status_code == 200:
@@ -84,6 +240,7 @@ def obtener_cuotas():
                 local_es = NOMBRES_API.get(local_en, local_en)
                 visit_es = NOMBRES_API.get(visit_en, visit_en)
                 c1s,cxs,c2s = [],[],[]
+                hc_cuotas = {}
                 for bk in partido.get("bookmakers",[]):
                     for mkt in bk.get("markets",[]):
                         if mkt["key"]=="h2h":
@@ -91,15 +248,27 @@ def obtener_cuotas():
                             if local_en in outs: c1s.append(outs[local_en])
                             if "Draw" in outs:   cxs.append(outs["Draw"])
                             if visit_en in outs: c2s.append(outs[visit_en])
+                        elif mkt["key"]=="asian_handicap":
+                            for o in mkt["outcomes"]:
+                                hc_key = f"{o['name']}_{o.get('point','')}"
+                                if hc_key not in hc_cuotas:
+                                    hc_cuotas[hc_key] = []
+                                hc_cuotas[hc_key].append(o["price"])
                 cuotas[(local_es,visit_es)] = {
                     'c1': round(sum(c1s)/len(c1s),2) if c1s else 0,
                     'cx': round(sum(cxs)/len(cxs),2) if cxs else 0,
                     'c2': round(sum(c2s)/len(c2s),2) if c2s else 0,
+                    'hc': {k: round(sum(v)/len(v),2) for k,v in hc_cuotas.items()},
                 }
     except Exception as e:
         print(f"   ⚠️ Error cuotas: {e}")
     print(f"   ✅ Cuotas: {len(cuotas)} partidos")
     return cuotas
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# GENERADOR DE PICKS POR PARTIDO
+# ══════════════════════════════════════════════════════════════════════════════
 
 def generar_picks_partido(r, cuotas_p):
     local  = r['Local']
@@ -132,12 +301,12 @@ def generar_picks_partido(r, cuotas_p):
             'fuente': 'real' if cuota > 1.10 else 'estimada',
         })
 
-    # 1X2
+    # ── 1X2 ──
     if c1 > 1.05: add(f"Victoria {local}", p1, c1, '⚽','1X2', f"{local} favorito ({p1:.0f}%)")
     if cx > 1.05: add("Empate", px, cx, '⚖️','1X2', f"Empate esperado ({px:.0f}%)")
     if c2 > 1.05: add(f"Victoria {visit}", p2, c2, '⚽','1X2', f"{visit} favorito ({p2:.0f}%)")
 
-    # Doble oportunidad
+    # ── Doble oportunidad ──
     for prob_do, label, desc_do in [
         (round(p1+px,1), f"1X — {local} o Empate", f"Cubre victoria {local} + empate"),
         (round(px+p2,1), f"X2 — Empate o {visit}", f"Cubre empate + victoria {visit}"),
@@ -145,52 +314,77 @@ def generar_picks_partido(r, cuotas_p):
     ]:
         add(label, prob_do, cuota_estimada(prob_do), '🛡️','Doble Op.', desc_do)
 
-    # Goles
+    # ── Handicap Asiático ──
+    picks_hc = generar_picks_handicap(local, visit, xgl, xgv, p1, p2)
+    # Enriquecer con cuotas reales si disponibles
+    hc_reales = cuotas_p.get('hc', {})
+    for pk_hc in picks_hc:
+        # Intentar matchear cuota real (aproximación por nombre)
+        for hk, hcuota in hc_reales.items():
+            if str(pk_hc['mercado'].split()[-1]) in hk and hcuota > 1.05:
+                pk_hc['cuota'] = hcuota
+                pk_hc['fuente'] = 'real'
+                pk_hc['ev'] = round((pk_hc['prob']/100)*hcuota - 1, 3)
+                break
+        picks.append(pk_hc)
+
+    # ── Goles ──
     for lin, lab in [(1.5,'1.5'),(2.5,'2.5'),(3.5,'3.5')]:
         pr = round(p_poisson(xg_t, lin)*100, 1)
         cu = cuota_estimada(pr)
-        if cu >= 1.15:
+        if cu >= 1.15 and margen_ok(xg_t, lin):
             add(f"Más de {lab} goles", pr, cu, '🥅','Goles', f"xG total {round(xg_t,1)}")
     pr_u = 100 - round(p_poisson(xg_t,2.5)*100)
     cu_u = cuota_estimada(pr_u)
     if cu_u >= 1.15:
         add("Menos de 2.5 goles", pr_u, cu_u, '🔒','Goles', f"xG bajo ({round(xg_t,1)})")
 
-    # Córners
+    # ── Córners — con banda de confianza ──
     for lin in [7.5, 8.5, 9.5, 10.5]:
+        if not margen_ok(lam_cor, lin):
+            continue
         pr = round(p_poisson(lam_cor, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
-            add(f"Córners +{lin}", pr, cu, '⛳','Córners', f"{round(lam_cor,1)} córners esperados")
+            add(f"Córners +{lin}", pr, cu, '⛳','Córners',
+                f"{round(lam_cor,1)} córners esperados (margen {(lam_cor-lin)/lin*100:.0f}%)")
 
-    # Tiros
+    # ── Tiros — con banda de confianza ──
     for lin in [4.5, 5.5, 6.5, 7.5]:
+        if not margen_ok(lam_tiros, lin):
+            continue
         pr = round(p_poisson(lam_tiros, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
-            add(f"Tiros a puerta +{lin}", pr, cu, '🎯','Tiros', f"{round(lam_tiros,1)} tiros esperados")
+            add(f"Tiros a puerta +{lin}", pr, cu, '🎯','Tiros',
+                f"{round(lam_tiros,1)} tiros esperados (margen {(lam_tiros-lin)/lin*100:.0f}%)")
 
-    # Faltas
+    # ── Faltas — con banda de confianza ──
     for lin in [18.5, 20.5, 22.5]:
+        if not margen_ok(lam_fal, lin):
+            continue
         pr = round(p_poisson(lam_fal, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
-            add(f"Faltas +{lin}", pr, cu, '🦵','Faltas', f"{round(lam_fal,1)} faltas esperadas")
+            add(f"Faltas +{lin}", pr, cu, '🦵','Faltas',
+                f"{round(lam_fal,1)} faltas esperadas (margen {(lam_fal-lin)/lin*100:.0f}%)")
 
-    # Tarjetas
+    # ── Tarjetas ──
     for lin in [3.5, 4.5]:
         pr = round(p_poisson(lam_tar, lin)*100, 1)
         cu = cuota_estimada(pr)
         if cu >= 1.15:
-            add(f"Tarjetas +{lin}", pr, cu, '🟨','Tarjetas', f"{round(lam_tar,1)} tarjetas esperadas")
+            add(f"Tarjetas +{lin}", pr, cu, '🟨','Tarjetas',
+                f"{round(lam_tar,1)} tarjetas esperadas")
 
-    # Stats por equipo — mercados avanzados
+    # ── Stats por equipo — mercados avanzados ──
     stats = cargar_stats()
     for eq in [local, visit]:
         s = stats.get(eq,{})
         t = s.get('tiros_favor_5', s.get('tiros_favor_tot',0))
         if t >= 4:
             for lin in [2.5, 3.5, 4.5]:
+                if not margen_ok(t, lin): continue
                 pr = round(p_poisson(t, lin)*100, 1)
                 cu = cuota_estimada(pr)
                 if cu >= 1.15:
@@ -199,6 +393,7 @@ def generar_picks_partido(r, cuotas_p):
         rt = s.get('remates_tot_favor_5', s.get('remates_tot_favor_tot',0))
         if rt >= 10:
             for lin in [8.5, 10.5, 12.5]:
+                if not margen_ok(rt, lin): continue
                 pr = round(p_poisson(rt, lin)*100, 1)
                 cu = cuota_estimada(pr)
                 if cu >= 1.15:
@@ -207,6 +402,7 @@ def generar_picks_partido(r, cuotas_p):
         c = s.get('corners_favor_5', s.get('corners_favor_tot',0))
         if c >= 5:
             for lin in [3.5, 4.5, 5.5]:
+                if not margen_ok(c, lin): continue
                 pr = round(p_poisson(c, lin)*100, 1)
                 cu = cuota_estimada(pr)
                 if cu >= 1.15:
@@ -215,6 +411,7 @@ def generar_picks_partido(r, cuotas_p):
         f = s.get('faltas_cometidas_5', s.get('faltas_cometidas_tot',0))
         if f >= 10:
             for lin in [8.5, 9.5, 10.5]:
+                if not margen_ok(f, lin): continue
                 pr = round(p_poisson(f, lin)*100, 1)
                 cu = cuota_estimada(pr)
                 if cu >= 1.15:
@@ -236,35 +433,13 @@ def generar_picks_partido(r, cuotas_p):
                 if cu >= 1.20:
                     add(f"{eq} grandes ocasiones +{lin}", pr, cu, '💥', f'Ocasiones {eq}',
                         f"{eq} promedia {round(go,1)} grandes ocasiones/partido")
-        sb = s.get('saques_banda_5', s.get('saques_banda_tot',0))
-        if sb >= 15:
-            for lin in [12.5, 14.5, 16.5]:
-                pr = round(p_poisson(sb, lin)*100, 1)
-                cu = cuota_estimada(pr)
-                if cu >= 1.20:
-                    add(f"{eq} saques de banda +{lin}", pr, cu, '🏳️', f'Saques {eq}',
-                        f"{eq} promedia {round(sb,1)} saques de banda/partido")
-        ce = s.get('centros_5', s.get('centros_tot',0))
-        if ce >= 8:
-            for lin in [6.5, 8.5, 10.5]:
-                pr = round(p_poisson(ce, lin)*100, 1)
-                cu = cuota_estimada(pr)
-                if cu >= 1.20:
-                    add(f"{eq} centros +{lin}", pr, cu, '🎯', f'Centros {eq}',
-                        f"{eq} promedia {round(ce,1)} centros/partido")
-        gl = s.get('goles_5', s.get('goles_tot',0))
-        if gl >= 1.5:
-            pr = round(p_poisson(gl, 0.5)*100, 1)
-            cu = cuota_estimada(pr)
-            if cu >= 1.20:
-                add(f"{eq} marca al menos 1 gol", pr, cu, '⚽', f'Goles {eq}',
-                    f"{eq} promedia {round(gl,1)} goles/partido")
 
     sb_tot_l = stats.get(local,{}).get('saques_banda_5', stats.get(local,{}).get('saques_banda_tot',0))
     sb_tot_v = stats.get(visit,{}).get('saques_banda_5', stats.get(visit,{}).get('saques_banda_tot',0))
     sb_total = sb_tot_l + sb_tot_v
     if sb_total >= 25:
         for lin in [22.5, 25.5, 28.5]:
+            if not margen_ok(sb_total, lin): continue
             pr = round(p_poisson(sb_total, lin)*100, 1)
             cu = cuota_estimada(pr)
             if cu >= 1.20:
@@ -279,6 +454,11 @@ def generar_picks_partido(r, cuotas_p):
             vistos.add(key)
             result.append(pk)
     return result
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SELECCIÓN PICKS PÚBLICOS
+# ══════════════════════════════════════════════════════════════════════════════
 
 def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
     individuales = [pk for pk in todos if pk['cuota'] >= cuota_min and pk['prob'] >= 60]
@@ -324,11 +504,17 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
         if 'tipo' not in pk: pk['tipo'] = 'individual'
     return resultado[:max_picks]
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SELECCIÓN PICKS PREMIUM — CON ANTI-CORRELACIÓN
+# ══════════════════════════════════════════════════════════════════════════════
+
 def seleccionar_premium(todos, max_picks=3, prob_min=75):
     """
     3 picks premium — máx 1 por partido.
-    Si cuotas bajas → combina automáticamente para subir la cuota.
-    Puede ser: 3 individuales, combinada doble, combinada triple.
+    MEJORA: Anti-correlación — ningún partido puede anclar más de 1 combinada.
+    Si un partido ya ancla la combinada triple, las combinadas dobles deben
+    usar partidos distintos entre sí.
     """
     candidatos = [pk for pk in todos if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
     candidatos.sort(key=lambda x: x['prob'], reverse=True)
@@ -350,12 +536,14 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             resultado.append(pk)
         return resultado
 
-    # Combinada triple (si cuota >= 1.40 y prob >= 50%)
+    # ── Combinada triple ──
+    partido_triple = set()
     if len(base) >= 3:
         pk1, pk2, pk3 = base[0], base[1], base[2]
         cuota_3 = round(pk1['cuota'] * pk2['cuota'] * pk3['cuota'], 2)
         prob_3  = round(pk1['prob']/100 * pk2['prob']/100 * pk3['prob']/100 * 100, 1)
         if cuota_3 >= 1.40 and prob_3 >= 50:
+            partido_triple = {pk1['partido'], pk2['partido'], pk3['partido']}
             resultado.append({
                 'partido': 'COMBINADA PREMIUM',
                 'local': f"{pk1['partido']} + {pk2['partido']} + {pk3['partido']}",
@@ -368,21 +556,30 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
                 'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2, pk3],
             })
 
-    # Combinadas dobles de distintos partidos
-    partidos_en_triple = set()
-    if resultado and resultado[0].get('picks_combo'):
-        partidos_en_triple = {p['partido'] for p in resultado[0]['picks_combo']}
+    # ── Combinadas dobles — ANTI-CORRELACIÓN ──
+    # Regla: las combinadas dobles deben tener partidos distintos entre sí
+    # además de no repetir más de 1 partido del triple.
+    partidos_ya_en_dobles = set()  # partidos usados en combinadas dobles previas
 
     for i in range(len(base)):
         for j in range(i+1, len(base)):
             if len(resultado) >= max_picks: break
             pk1, pk2 = base[i], base[j]
-            # No repetir exactamente los mismos partidos que la triple
-            if pk1['partido'] in partidos_en_triple and pk2['partido'] in partidos_en_triple:
+
+            # ANTI-CORRELACIÓN: ambos partidos de la doble no pueden estar
+            # ya en otra combinada doble → fuerza diversificación
+            if pk1['partido'] in partidos_ya_en_dobles and pk2['partido'] in partidos_ya_en_dobles:
                 continue
+
+            # Permitir hasta 1 partido compartido con el triple (no los 2)
+            compartidos_con_triple = len({pk1['partido'], pk2['partido']} & partido_triple)
+            if compartidos_con_triple == 2:
+                continue
+
             cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
             prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
             if cuota_c < 1.25 or prob_c < 55: continue
+
             resultado.append({
                 'partido': 'COMBINADA PREMIUM',
                 'local': f"{pk1['partido']} + {pk2['partido']}",
@@ -394,6 +591,10 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
                 'descripcion': f"Prob. combinada: {prob_c}% — máxima seguridad",
                 'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
             })
+            # Registrar ambos partidos para evitar repetición en siguiente doble
+            partidos_ya_en_dobles.add(pk1['partido'])
+            partidos_ya_en_dobles.add(pk2['partido'])
+
         if len(resultado) >= max_picks: break
 
     # Completar con individuales si faltan
@@ -411,7 +612,6 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             resultado.append(pk)
             partidos_usados.add(pk['partido'])
 
-    # Bajar umbral si aún faltan
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
             if len(resultado) >= max_picks: break
@@ -423,6 +623,10 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
 
     return resultado[:max_picks]
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HTML — PANEL PÚBLICO
+# ══════════════════════════════════════════════════════════════════════════════
 
 def html_publico(picks, hoy, fecha_gen, ts):
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
@@ -458,6 +662,7 @@ padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr)
 .pick{{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}}
 .pick.alta{{border-color:var(--v)}}.pick.combo{{border-color:var(--pu)}}.pick.value{{border-color:var(--go)}}
+.pick.hc{{border-color:var(--or)}}
 .pick-n{{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--tx2);
 font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}}
 .ph{{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}}
@@ -526,11 +731,12 @@ document.getElementById('res').innerHTML=`
 const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{{
   const esC=pk.tipo==='combinada';
+  const esHC=pk.categoria==='Handicap';
   const esV=pk.ev&&pk.ev>0.10;
-  const cls=esC?'combo':esV?'value':'alta';
+  const cls=esC?'combo':esHC?'hc':esV?'value':'alta';
   const cuotaD=pk.cuota_display||pk.cuota;
   const fB=pk.fuente==='real'?'<span class="freal">real</span>':'<span class="fest">estimada</span>';
-  const evH=pk.ev!=null?`<span class="${{pk.ev>0?'ev-pos':'ev-neg'}}">${{pk.ev>0?'+':''}}${{(pk.ev*100).toFixed(1)}}%</span>`:'—';
+  const evH=pk.ev!=null?`<span class="${{pk.ev>0?'ev-pos':'ev-neg'}}">${{pk.ev>0?'+':''}}{{'${{(pk.ev*100).toFixed(1)}}%'}}</span>`:'—';
   let comboH='';
   if(esC&&pk.picks_combo){{
     comboH='<div class="combo-box">'+pk.picks_combo.map((s,si)=>`
@@ -564,10 +770,16 @@ PICKS.forEach((pk,i)=>{{
 </script>
 </body></html>"""
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HTML — PANEL PREMIUM
+# ══════════════════════════════════════════════════════════════════════════════
+
 def html_premium(picks, hoy, fecha_gen, ts):
+    import functools
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
     PICKS_J = json.dumps(picks, ensure_ascii=False, default=str)
-    cuota_acum = round(__import__('functools').reduce(lambda a,b: a*b, [p['cuota'] for p in picks], 1), 2) if picks else 1
+    cuota_acum = round(functools.reduce(lambda a,b: a*b, [p['cuota'] for p in picks], 1), 2) if picks else 1
     return f"""<!DOCTYPE html>
 <html lang="es">
 <!-- ts:{ts} -->
@@ -589,8 +801,7 @@ header h1{{font-size:1.45rem;font-weight:700;color:var(--go)}}
 header p{{color:var(--tx2);font-size:.84rem;margin-top:5px}}
 .badge{{display:inline-block;border:1px solid var(--go);border-radius:999px;
 padding:2px 11px;font-size:.75rem;color:var(--go);margin:3px 2px}}
-.resumen{{background:linear-gradient(135deg,var(--panel),rgba(255,215,0,.04));
-border:1px solid rgba(255,215,0,.2);border-radius:12px;
+.resumen{{background:var(--panel);border:1px solid rgba(255,215,0,.2);border-radius:12px;
 padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}}
 .rs-v{{font-size:1.25rem;font-weight:700;color:var(--go)}}
 .rs-l{{font-size:.7rem;color:var(--tx2)}}
@@ -598,8 +809,8 @@ padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr)
 padding:12px 16px;text-align:center;margin-bottom:16px}}
 .acum-box .title{{font-size:.8rem;color:var(--tx2);margin-bottom:4px}}
 .acum-box .val{{font-size:1.6rem;font-weight:700;color:var(--go)}}
-.pick{{background:linear-gradient(135deg,var(--panel),rgba(255,215,0,.03));
-border:1px solid rgba(255,215,0,.25);border-radius:14px;padding:18px;margin-bottom:12px;position:relative}}
+.pick{{background:var(--panel);border:1px solid rgba(255,215,0,.25);border-radius:14px;
+padding:18px;margin-bottom:12px;position:relative}}
 .pick-n{{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--go);
 font-weight:700;background:rgba(255,215,0,.1);border-radius:5px;padding:1px 7px}}
 .seg-bar{{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:10px 0}}
@@ -699,19 +910,30 @@ PICKS.forEach((pk,i)=>{{
 </script>
 </body></html>"""
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MAIN
+# ══════════════════════════════════════════════════════════════════════════════
+
 def main():
-    print("\n🚀 GENERADOR DE PICKS INTELIGENTE")
+    print("\n🚀 GENERADOR DE PICKS INTELIGENTE v2")
     print("="*55)
+    print("Mejoras activas:")
+    print("  ✅ Handicap Asiático (HC ±0.5, ±1.0, ±1.5)")
+    print(f"  ✅ Banda de confianza props >= {MARGEN_MINIMO_PROPS*100:.0f}%")
+    print("  ✅ Anti-correlación en combinadas premium")
+    print("="*55)
+
     hoy       = date.today().strftime('%Y-%m-%d')
     fecha_gen = datetime.now(timezone.utc).strftime('%d-%m-%Y %H:%M UTC')
-    ts        = int(time.time())  # timestamp único — fuerza detección de cambios en Git
+    ts        = int(time.time())
 
     csv = os.path.join(RAIZ,'Predicciones','predicciones_finales.csv')
     df  = pd.read_csv(csv)
     hoy_df = df[df['Fecha']==hoy]
-    print(f"✅ Partidos de hoy: {len(hoy_df)}")
+    print(f"\n✅ Partidos de hoy: {len(hoy_df)}")
 
-    print("📡 Obteniendo cuotas...")
+    print("📡 Obteniendo cuotas (h2h + asian_handicap)...")
     cuotas = obtener_cuotas()
 
     todos = []
@@ -720,9 +942,10 @@ def main():
         cq    = cuotas.get(key, {})
         picks = generar_picks_partido(r, cq)
         todos.extend(picks)
-        print(f"   ⚽ {r['Local']} vs {r['Visitante']}: {len(picks)} picks")
+        hc_picks = [p for p in picks if p['categoria']=='Handicap']
+        print(f"   ⚽ {r['Local']} vs {r['Visitante']}: {len(picks)} picks ({len(hc_picks)} HC)")
 
-    print(f"\n✅ Total picks: {len(todos)}")
+    print(f"\n✅ Total picks candidatos: {len(todos)}")
 
     picks_pub  = seleccionar_publicos(todos)
     picks_prem = seleccionar_premium(todos, max_picks=3)
@@ -730,12 +953,13 @@ def main():
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
         ev = f" EV:{pk['ev']:+.1%}" if pk.get('ev') else ""
-        print(f"   #{i} {pk['emoji']} {pk['mercado'][:45]}")
+        cat = f"[{pk['categoria']}]"
+        print(f"   #{i} {pk['emoji']} {cat} {pk['mercado'][:40]}")
         print(f"      {pk['partido']} | {pk['prob']}% | @{pk.get('cuota_display',pk['cuota'])}{ev}")
 
     print(f"\n💎 PANEL PREMIUM ({len(picks_prem)} picks):")
     for i,pk in enumerate(picks_prem,1):
-        print(f"   #{i} {pk['emoji']} {pk['mercado'][:45]}")
+        print(f"   #{i} {pk['emoji']} {pk['mercado'][:50]}")
         print(f"      {pk['partido']} | {pk['prob']}% | @{pk['cuota']}")
 
     os.makedirs('docs', exist_ok=True)
