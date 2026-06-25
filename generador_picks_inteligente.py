@@ -616,14 +616,24 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             if len(resultado) >= max_picks: break
 
     # ── Último recurso final: individuales ──
+    # Recopila todos los mercados ya mostrados para no repetir
+    mercados_ya_mostrados = set()
+    for r in resultado:
+        if r.get('picks_combo'):
+            for p in r['picks_combo']:
+                mercados_ya_mostrados.add(p['partido'] + '|' + p['mercado'][:25])
+        else:
+            mercados_ya_mostrados.add(r.get('partido','') + '|' + r.get('mercado','')[:25])
+
     if len(resultado) < max_picks:
         for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
             if len(resultado) >= max_picks: break
             if pk['cuota'] >= 1.12 and pk['prob'] >= 70:
-                if pk['partido'] not in partidos_usados:
+                clave_pk = pk['partido'] + '|' + pk['mercado'][:25]
+                if clave_pk not in mercados_ya_mostrados:
                     pk['tipo'] = 'premium'
                     resultado.append(pk)
-                    partidos_usados.add(pk['partido'])
+                    mercados_ya_mostrados.add(clave_pk)
 
     return resultado[:max_picks]
 
