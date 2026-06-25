@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- ts:1782358682 -->
+<!-- ts:1782363055 -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks del Día — Mundial 2026</title>
@@ -29,6 +29,7 @@ padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr)
 .pick{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}
 .pick.alta{border-color:var(--v)}.pick.combo{border-color:var(--pu)}.pick.value{border-color:var(--go)}
+.pick.hc{border-color:var(--or)}
 .pick-n{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--tx2);
 font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}
 .ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
@@ -68,7 +69,7 @@ footer a{color:var(--ac);text-decoration:none}
   <header>
     <h1>🎯 Picks del Día — 2026-06-24</h1>
     <p>Selección inteligente con cuota mínima 1.50 — máximo 4 picks</p>
-    <span class="badge hoy">📅 25-06-2026 03:38 UTC</span>
+    <span class="badge hoy">📅 25-06-2026 04:50 UTC</span>
     <span class="badge">🤖 XGBoost + 25 casas + Razonamiento automático</span>
   </header>
   <a class="tg-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
@@ -83,7 +84,7 @@ footer a{color:var(--ac);text-decoration:none}
   </footer>
 </div>
 <script>
-const PICKS=[{"partido": "Marruecos vs Haití", "local": "Marruecos", "visitante": "Haití", "mercado": "Tiros a puerta +6.5", "prob": 63.5, "cuota": 1.5, "ev": -0.047, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.6 tiros esperados", "fuente": "real", "tipo": "individual", "cuota_display": 1.5}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "X2 — Empate o Canadá", "prob": 62.5, "cuota": 1.52, "ev": -0.05, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Canadá", "fuente": "real", "tipo": "individual", "cuota_display": 1.52}, {"partido": "Bosnia-Herzegovina vs Catar", "local": "Bosnia-Herzegovina", "visitante": "Catar", "mercado": "X2 — Empate o Catar", "prob": 62.1, "cuota": 1.53, "ev": -0.05, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Catar", "fuente": "real", "tipo": "individual", "cuota_display": 1.53}, {"partido": "Sudáfrica vs Corea del Sur", "local": "Sudáfrica", "visitante": "Corea del Sur", "mercado": "Menos de 2.5 goles", "prob": 60, "cuota": 1.58, "ev": -0.052, "emoji": "🔒", "categoria": "Goles", "descripcion": "xG bajo (2.3)", "fuente": "real", "tipo": "individual", "cuota_display": 1.58}];
+const PICKS=[{"partido": "Marruecos vs Haití", "local": "Marruecos", "visitante": "Haití", "mercado": "HC Marruecos +0.5", "prob": 90.0, "cuota": 1.75, "ev": 0.575, "emoji": "⚖️", "categoria": "Handicap", "descripcion": "Marruecos no pierde — xG 2.0-0.6", "fuente": "estimada", "tipo": "individual", "cuota_display": 1.75}, {"partido": "Escocia vs Brasil", "local": "Escocia", "visitante": "Brasil", "mercado": "HC Brasil +0.5", "prob": 83.2, "cuota": 1.75, "ev": 0.456, "emoji": "⚖️", "categoria": "Handicap", "descripcion": "Brasil no pierde — xG 0.9-2.0", "fuente": "estimada", "tipo": "individual", "cuota_display": 1.75}, {"partido": "República Checa vs México", "local": "República Checa", "visitante": "México", "mercado": "HC México +0.5", "prob": 74.7, "cuota": 1.75, "ev": 0.307, "emoji": "⚖️", "categoria": "Handicap", "descripcion": "México no pierde — xG 1.1-1.7", "fuente": "estimada", "tipo": "individual", "cuota_display": 1.75}, {"partido": "Suiza vs Canadá", "local": "Suiza", "visitante": "Canadá", "mercado": "HC Suiza +0.5", "prob": 72.9, "cuota": 1.75, "ev": 0.276, "emoji": "⚖️", "categoria": "Handicap", "descripcion": "Suiza no pierde — xG 1.7-1.2", "fuente": "estimada", "tipo": "individual", "cuota_display": 1.75}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
@@ -97,11 +98,12 @@ document.getElementById('res').innerHTML=`
 const cont=document.getElementById('picks');
 PICKS.forEach((pk,i)=>{
   const esC=pk.tipo==='combinada';
+  const esHC=pk.categoria==='Handicap';
   const esV=pk.ev&&pk.ev>0.10;
-  const cls=esC?'combo':esV?'value':'alta';
+  const cls=esC?'combo':esHC?'hc':esV?'value':'alta';
   const cuotaD=pk.cuota_display||pk.cuota;
   const fB=pk.fuente==='real'?'<span class="freal">real</span>':'<span class="fest">estimada</span>';
-  const evH=pk.ev!=null?`<span class="${pk.ev>0?'ev-pos':'ev-neg'}">${pk.ev>0?'+':''}${(pk.ev*100).toFixed(1)}%</span>`:'—';
+  const evH=pk.ev!=null?`<span class="${pk.ev>0?'ev-pos':'ev-neg'}">${pk.ev>0?'+':''}{'${(pk.ev*100).toFixed(1)}%'}</span>`:'—';
   let comboH='';
   if(esC&&pk.picks_combo){
     comboH='<div class="combo-box">'+pk.picks_combo.map((s,si)=>`
