@@ -1,0 +1,40 @@
+﻿Fecha,Local,Visitante,Goles_Real,Res_Real,Res_Predicho,Prob_Pred,Acierto_1X2,Marcador_Pred,Acierto_Marcador,xG_Total,Over25_Pred_xG,Over25_Real,Acierto_Over25,BTTS_Pred,BTTS_Real,Acierto_BTTS,DO_1X_Prob,Acierto_DO_1X,DO_X2_Prob,Acierto_DO_X2,Cor_Pred_O75,Cor_Pred_O85,Fal_Pred_O18,Tendencia_L,Tendencia_V
+2026-06-11,México,Sudáfrica,2-0,1,1,52.9,True,1-0,False,2.43,False,False,True,True,False,False,81.3,True,47.1,False,True,True,True,bajada,bajada
+2026-06-12,Corea del Sur,República Checa,2-1,1,X,40.0,False,2-1,True,2.68,True,True,True,True,True,True,74.7,True,65.3,False,True,True,True,bajada,bajada
+2026-06-12,Canadá,Bosnia-Herzegovina,1-1,X,1,38.4,False,1-0,False,2.47,False,False,True,True,True,True,73.1,True,61.5,True,True,True,True,estable,bajada
+2026-06-13,EE. UU.,Paraguay,4-1,1,1,41.4,True,1-0,False,2.48,False,True,False,True,True,True,75.3,True,58.6,False,True,True,True,bajada,estable
+2026-06-13,Catar,Suiza,1-1,X,2,53.8,False,1-2,False,3.04,True,False,False,True,True,True,46.2,True,81.8,True,True,True,True,estable,bajada
+2026-06-13,Brasil,Marruecos,1-1,X,1,46.6,False,2-1,False,2.65,True,False,False,True,True,True,78.9,True,53.3,True,True,True,True,estable,bajada
+2026-06-14,Haití,Escocia,0-1,2,2,52.5,True,0-2,False,2.86,True,False,False,True,False,False,47.5,False,81.4,True,True,True,True,estable,bajada
+2026-06-14,Australia,Turquía,2-0,1,X,38.7,False,1-2,False,2.72,True,False,False,True,False,False,65.9,True,72.8,False,True,True,True,subida,estable
+2026-06-14,Países Bajos,Japón,2-2,X,1,43.4,False,1-0,False,2.59,True,True,True,True,True,True,75.0,True,56.6,True,True,True,True,bajada,bajada
+2026-06-14,Costa de Marfil,Ecuador,1-0,1,1,40.7,True,1-0,True,2.45,False,False,True,True,False,False,78.3,True,59.3,False,True,True,True,estable,bajada
+2026-06-15,Suecia,Túnez,5-1,1,X,39.9,False,1-0,False,2.58,True,True,True,True,True,True,72.0,True,67.9,False,True,True,True,estable,bajada
+2026-06-15,Bélgica,Egipto,1-1,X,1,66.7,False,2-0,False,2.7,True,False,False,True,True,True,87.5,True,33.2,True,True,True,True,estable,bajada
+2026-06-15,Arabia Saudí,Uruguay,1-1,X,2,70.6,False,0-2,False,2.62,True,False,False,False,True,False,29.3,True,91.0,True,True,True,True,bajada,subida
+2026-06-16,Irán,Nueva Zelanda,2-2,X,1,57.0,False,2-0,False,2.85,True,True,True,True,True,True,85.8,True,43.0,True,True,True,True,bajada,estable
+2026-06-16,Francia,Senegal,3-1,1,1,51.1,True,2-1,False,2.62,True,True,True,True,True,True,79.8,True,48.9,False,True,True,True,estable,estable
+2026-06-16,Irak,Noruega,1-4,2,2,50.4,True,0-2,False,2.75,True,True,True,True,True,True,49.5,False,80.8,True,True,True,True,subida,bajada
+2026-06-17,Argentina,Argelia,3-0,1,1,48.8,True,1-0,False,2.53,True,True,True,True,False,False,78.8,True,51.2,False,True,True,True,estable,bajada
+2026-06-17,Austria,Jordania,3-1,1,1,73.2,True,2-0,False,2.84,True,True,True,True,True,True,92.3,True,26.8,False,True,True,True,bajada,bajada
+2026-06-17,Inglaterra,Croacia,4-2,1,X,41.3,False,1-1,False,3.02,True,True,True,True,True,True,77.0,True,64.4,False,True,True,True,bajada,estable
+2026-06-17,Ghana,Panamá,1-0,1,X,37.1,False,0-1,False,2.49,False,False,True,True,False,False,63.4,True,73.7,False,True,True,True,bajada,subida
+2026-06-18,Uzbekistán,Colombia,1-3,2,2,56.2,True,0-2,False,2.82,True,True,True,False,True,False,43.8,False,82.4,True,True,True,True,estable,estable
+2026-06-18,República Checa,Sudáfrica,1-1,X,X,43.3,True,1-0,False,2.46,False,False,True,True,True,True,73.5,True,69.8,True,True,True,True,bajada,bajada
+2026-06-18,Suiza,Bosnia-Herzegovina,4-1,1,1,40.3,True,2-1,False,2.99,True,True,True,True,True,True,74.8,True,59.7,False,True,True,True,bajada,bajada
+2026-06-18,Canadá,Catar,6-0,1,1,48.9,True,1-0,False,2.39,False,True,False,True,False,False,78.0,True,51.1,False,True,True,True,estable,estable
+2026-06-19,México,Corea del Sur,1-0,1,1,41.8,True,1-1,False,2.47,False,False,True,True,False,False,76.1,True,58.2,False,True,True,True,bajada,bajada
+2026-06-19,EE. UU.,Australia,2-0,1,X,44.9,False,1-0,False,2.32,False,False,True,True,False,False,72.4,True,72.5,False,True,True,True,bajada,subida
+2026-06-19,Escocia,Marruecos,0-1,2,2,47.2,True,1-2,False,2.88,True,False,False,True,False,False,52.8,False,80.9,True,True,True,True,bajada,bajada
+2026-06-20,Brasil,Haití,3-0,1,1,73.7,True,3-0,True,3.17,True,True,True,False,False,True,90.5,True,26.3,False,True,True,True,estable,estable
+2026-06-20,Turquía,Paraguay,0-1,2,1,47.9,False,1-0,False,2.56,True,False,False,True,False,False,78.2,False,52.2,True,True,True,True,estable,estable
+2026-06-20,Países Bajos,Suecia,5-1,1,1,56.4,True,2-1,False,3.24,True,True,True,True,True,True,81.3,True,43.6,False,True,True,True,bajada,estable
+2026-06-20,Alemania,Costa de Marfil,2-1,1,1,50.3,True,2-1,True,2.71,True,True,True,True,True,True,81.7,True,49.7,False,True,True,True,subida,estable
+2026-06-21,Túnez,Japón,0-4,2,2,44.4,True,0-1,False,2.3,False,True,False,True,False,False,55.6,False,78.6,True,True,True,True,bajada,bajada
+2026-06-21,España,Arabia Saudí,4-0,1,1,80.5,True,3-0,False,2.98,True,True,True,False,False,True,93.4,True,19.5,False,True,True,True,bajada,bajada
+2026-06-21,Bélgica,Irán,0-0,X,1,56.0,False,2-0,False,2.79,True,False,False,True,False,False,81.4,True,44.0,True,True,True,True,estable,bajada
+2026-06-22,Nueva Zelanda,Egipto,1-3,2,2,48.4,True,0-1,False,2.5,False,True,False,True,True,True,51.6,False,81.0,True,True,True,True,estable,bajada
+2026-06-22,Argentina,Austria,2-0,1,1,40.0,True,2-1,False,2.85,True,False,False,True,False,False,76.7,True,59.9,False,True,True,True,estable,bajada
+2026-06-22,Francia,Irak,3-0,1,1,75.5,True,3-0,True,3.19,True,True,True,False,False,True,94.0,True,24.6,False,True,True,True,estable,subida
+2026-06-23,Noruega,Senegal,3-2,1,2,42.1,False,1-2,False,2.91,True,True,True,True,True,True,57.9,True,77.2,False,True,True,True,bajada,estable
+2026-06-23,Jordania,Argelia,1-2,2,2,62.8,True,0-2,False,2.7,True,True,True,False,True,False,37.2,False,87.1,True,True,True,True,bajada,bajada
