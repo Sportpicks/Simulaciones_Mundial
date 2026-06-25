@@ -496,8 +496,8 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
     def score(pk):
         es_hc     = 0 if pk.get('categoria') == 'Handicap' else 1
         # Props y 1X2 tienen mas valor predictivo que Doble Op
-        cat_score = {'1X2':3, 'Goles':3, 'Props':3,
-                     'Tiros':2, 'Faltas':2, 'Tarjetas':2, 'Córners':2,
+        cat_score = {'1X2':4, 'Props':3, 'Faltas':3, 'Tiros':3,
+                     'Goles':2, 'Córners':2, 'Tarjetas':2,
                      'Doble Op.':1, 'Handicap':1}.get(pk.get('categoria',''), 1)
         return (es_hc, cat_score, pk['prob'])
 
@@ -505,13 +505,11 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
         # Con cuotas de API: filtro normal cuota>=1.50 y prob>=60
         candidatos = [pk for pk in todos
                       if pk['cuota'] >= cuota_min and pk['prob'] >= 60
-                      and pk.get('categoria') != 'Handicap' or
-                      (pk.get('categoria') == 'Handicap' and pk['prob'] >= 62)]
+                      and (pk.get('categoria') != 'Handicap'
+                           or pk['prob'] >= 62)]
     else:
-        # Sin cuotas de API: usar prob alta como criterio principal
-        # Picks con prob>=70% son altamente confiables aunque cuota sea baja
+        # Sin cuotas de API: prob>=70 como criterio principal, cuota>=1.15
         candidatos = [pk for pk in todos if pk['prob'] >= 70 and pk['cuota'] >= 1.15]
-        # Si no hay suficientes al 70%, bajar a 65%
         if len(set(pk['partido'] for pk in candidatos)) < max_picks:
             candidatos = [pk for pk in todos if pk['prob'] >= 65 and pk['cuota'] >= 1.15]
 
@@ -519,6 +517,7 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
 
     resultado = []
     partidos_usados = set()
+    mercados_usados = {}   # mercado_base -> count, max 2 del mismo mercado
     hc_count = 0
     for pk in candidatos:
         if pk['partido'] not in partidos_usados:
@@ -526,6 +525,12 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
                 if hc_count >= 1:
                     continue
                 hc_count += 1
+            # Limitar mercados repetidos: max 2 picks del mismo mercado base
+            # Ej: no poner 4 picks de "Mas de 1.5 goles" en distintos partidos
+            mercado_base = pk['mercado'][:20].strip()
+            if mercados_usados.get(mercado_base, 0) >= 2:
+                continue
+            mercados_usados[mercado_base] = mercados_usados.get(mercado_base, 0) + 1
             pk['tipo'] = 'individual'
             resultado.append(pk)
             partidos_usados.add(pk['partido'])
