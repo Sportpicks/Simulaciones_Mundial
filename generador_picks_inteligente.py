@@ -486,13 +486,29 @@ def generar_picks_partido(r, cuotas_p):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
-    individuales = [pk for pk in todos if pk['cuota'] >= cuota_min and pk['prob'] >= 60]
-    individuales.sort(key=lambda x: (x['prob'], x.get('ev',0)), reverse=True)
+    # Separar picks con cuota real vs estimada
+    # Prioridad: cuota real > cuota estimada, y máx 1 HC en el panel público
+    individuales = [pk for pk in todos if pk['cuota'] >= cuota_min and pk['prob'] >= 60
+                    and pk.get('ev', -1) > -0.08]  # descartar EV muy negativo
+
+    # Ordenar: primero cuota real, luego por prob y EV
+    def score(pk):
+        es_real = 1 if pk.get('fuente') == 'real' else 0
+        es_hc   = 0 if pk.get('categoria') == 'Handicap' else 1  # HC al final
+        return (es_hc, es_real, pk['prob'], pk.get('ev', 0))
+
+    individuales.sort(key=score, reverse=True)
 
     resultado = []
     partidos_usados = set()
+    hc_count = 0
     for pk in individuales:
         if pk['partido'] not in partidos_usados:
+            # Máx 1 HC en el panel público
+            if pk.get('categoria') == 'Handicap':
+                if hc_count >= 1:
+                    continue
+                hc_count += 1
             pk['tipo'] = 'individual'
             resultado.append(pk)
             partidos_usados.add(pk['partido'])
@@ -603,6 +619,12 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
             prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
             if cuota_c < 1.25 or prob_c < 55: continue
 
+            # Evitar combinadas con mercados idénticos
+            mercado_key = tuple(sorted([pk1['mercado'][:20], pk2['mercado'][:20]]))
+            if mercado_key in {tuple(sorted([p['picks_combo'][0]['mercado'][:20],
+                               p['picks_combo'][1]['mercado'][:20]]))
+                               for p in resultado if p.get('picks_combo') and len(p['picks_combo'])==2}:
+                continue
             resultado.append({
                 'partido': 'COMBINADA PREMIUM',
                 'local': f"{pk1['partido']} + {pk2['partido']}",
