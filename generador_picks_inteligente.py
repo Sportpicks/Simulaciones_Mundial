@@ -605,6 +605,13 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
                 if pk1['partido'] in partidos_usados and pk2['partido'] in partidos_usados: continue
                 compartidos = len({pk1['partido'], pk2['partido']} & partido_triple)
                 if compartidos == 2: continue
+                # No repetir mercados ya combinados
+                if pk1['mercado'][:20] == pk2['mercado'][:20]: continue
+                mk2 = tuple(sorted([
+                    pk1['partido'][:15] + pk1['mercado'][:15],
+                    pk2['partido'][:15] + pk2['mercado'][:15]
+                ]))
+                if mk2 in mercados_en_dobles: continue
                 cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
                 prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
                 if cuota_c < 1.20 or prob_c < 50: continue
