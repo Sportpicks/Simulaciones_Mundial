@@ -185,9 +185,14 @@ def generar_picks_handicap(local, visitante, xgl, xgv, p1, p2):
         if prob_w < 58:
             continue
 
-        # Cuota estimada conservadora para handicap
-        cuota_h = cuota_estimada(prob_w)
-        if cuota_h < 1.10:
+        # Cuota para handicap asiático: las casas siempre ofrecen ~1.85-1.95
+        # independientemente de la prob, porque el mercado es de dos lados.
+        # Usamos cuota real de la API si está disponible; si no, estimamos
+        # con el modelo de dos lados: cuota = 1 / prob * margen_casa (5%)
+        # Pero nunca menos de 1.75 ni más de 2.10 para HC estándar.
+        cuota_h_raw = round((100 / prob_w) * 0.95, 2) if prob_w > 0 else 1.90
+        cuota_h = max(1.75, min(2.10, cuota_h_raw)) if abs(handicap) <= 1.0 else cuota_estimada(prob_w)
+        if cuota_h < 1.50:
             continue
 
         eq_nombre = local if lado == 'local' else visitante
