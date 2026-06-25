@@ -486,25 +486,35 @@ def generar_picks_partido(r, cuotas_p):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
-    # Separar picks con cuota real vs estimada
-    # Prioridad: cuota real > cuota estimada, y máx 1 HC en el panel público
-    individuales = [pk for pk in todos if pk['cuota'] >= cuota_min and pk['prob'] >= 60
-                    and pk.get('ev', -1) > -0.08]  # descartar EV muy negativo
+    hay_cuotas_reales = any(pk.get('fuente') == 'real' for pk in todos)
 
-    # Ordenar: primero cuota real, luego por prob y EV
     def score(pk):
-        es_real = 1 if pk.get('fuente') == 'real' else 0
-        es_hc   = 0 if pk.get('categoria') == 'Handicap' else 1  # HC al final
-        return (es_hc, es_real, pk['prob'], pk.get('ev', 0))
+        es_real   = 2 if pk.get('fuente') == 'real' else 0
+        es_hc     = 0 if pk.get('categoria') == 'Handicap' else 1
+        cat_score = 2 if pk.get('categoria') in ('Goles', 'Props', '1X2') else 1
+        return (es_hc, cat_score, es_real, pk['prob'])
 
-    individuales.sort(key=score, reverse=True)
+    # Nivel 1: cuota real >= 1.50 y prob >= 60%
+    nivel1 = [pk for pk in todos
+              if pk.get('fuente') == 'real'
+              and pk['cuota'] >= cuota_min
+              and pk['prob'] >= 60]
+
+    # Nivel 2: estimados con prob >= 65% cuando no hay cuotas reales
+    prob_min_est = 65 if not hay_cuotas_reales else 68
+    nivel2 = [pk for pk in todos
+              if pk.get('fuente') != 'real'
+              and pk['prob'] >= prob_min_est
+              and pk['cuota'] >= 1.15]
+
+    candidatos = nivel1 + nivel2
+    candidatos.sort(key=score, reverse=True)
 
     resultado = []
     partidos_usados = set()
     hc_count = 0
-    for pk in individuales:
+    for pk in candidatos:
         if pk['partido'] not in partidos_usados:
-            # Máx 1 HC en el panel público
             if pk.get('categoria') == 'Handicap':
                 if hc_count >= 1:
                     continue
