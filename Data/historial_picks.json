@@ -1,5 +1,5 @@
 {
-  "bankroll": 100.0,
+  "bankroll": 101.08,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -40,8 +40,8 @@
           "cuota": 1.54,
           "prob": 61.6,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.08,
           "emoji": "🛡️",
           "categoria": "Doble Op.",
           "descripcion": "Cubre empate + victoria Suecia"
@@ -226,7 +226,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 1,
+        "perdidos": 0,
+        "pendientes": 6,
+        "porcentaje": 100.0,
+        "unidades": 1.08
+      }
     }
   ]
 }
