@@ -291,8 +291,8 @@ def auditar_dia(historial, fecha_str):
         return historial
 
     resultados_df = pd.read_csv(RESULTADOS_CSV)
-    resultados_hoy = resultados_df[resultados_df.get('Fecha', pd.Series()) == fecha_str] \
-        if 'Fecha' in resultados_df.columns else resultados_df
+    # Usar todos los resultados — partidos de un día pueden estar en fecha siguiente en UTC
+    resultados_hoy = resultados_df
 
     dia = next((d for d in historial['dias'] if d['fecha'] == fecha_str), None)
     if not dia:
