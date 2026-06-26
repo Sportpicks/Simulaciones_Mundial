@@ -160,6 +160,20 @@ def registrar_dia(historial, hoy_str):
 # AUDITORÍA AUTOMÁTICA
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Mapa de normalización de nombres — variantes entre CSV y picks
+_NORM_NOMBRES = {
+    'curaçao': 'curazao', 'cape verde islands': 'cabo verde',
+    'congo dr': 'rd congo', 'dr congo': 'rd congo',
+    'república checa': 'república checa', 'czechia': 'república checa',
+    'ee. uu.': 'ee. uu.', 'united states': 'ee. uu.',
+    'corea del sur': 'corea del sur', 'south korea': 'corea del sur',
+}
+
+def _normalizar(nombre):
+    n = nombre.lower().strip()
+    return _NORM_NOMBRES.get(n, n)
+
+
 def evaluar_pick(pick, resultados_df):
     """
     Evalúa si un pick ganó o perdió según resultados reales.
@@ -168,20 +182,39 @@ def evaluar_pick(pick, resultados_df):
     mercado = pick.get('mercado', '').lower()
     partido = pick.get('partido', '').lower()
 
-    # Buscar resultado del partido
+    # Buscar resultado del partido — con normalización de nombres
     fila = None
     for _, row in resultados_df.iterrows():
-        nombre_partido = f"{row.get('Local','')} vs {row.get('Visitante','')}".lower()
-        if any(eq.lower() in partido for eq in [row.get('Local',''), row.get('Visitante','')]):
+        local_csv  = _normalizar(str(row.get('Local', '')))
+        visit_csv  = _normalizar(str(row.get('Visitante', '')))
+        # Verificar si alguno de los equipos del CSV aparece en el pick
+        if local_csv in partido or visit_csv in partido:
+            fila = row
+            break
+        # También verificar al revés — palabras del pick en el CSV
+        palabras_partido = partido.replace(' vs ', ' ').split()
+        if any(p in local_csv or p in visit_csv for p in palabras_partido if len(p) > 3):
             fila = row
             break
 
     if fila is None:
         return 'Pendiente'
 
-    goles_l = int(fila.get('Goles_L', -1))
-    goles_v = int(fila.get('Goles_V', -1))
+    # Columnas reales del CSV: Goles_Local / Goles_Visitante
+    gl = fila.get('Goles_Local', fila.get('Goles_L', -1))
+    gv = fila.get('Goles_Visitante', fila.get('Goles_V', -1))
+    try:
+        goles_l = int(float(gl))
+        goles_v = int(float(gv))
+    except:
+        return 'Pendiente'
+
     if goles_l < 0 or goles_v < 0:
+        return 'Pendiente'
+
+    # Verificar que el partido ya terminó
+    estado = str(fila.get('Estado', fila.get('estado', 'FINISHED'))).upper()
+    if estado not in ('FINISHED', 'FT', 'FULL_TIME', 'AWARDED'):
         return 'Pendiente'
 
     total_goles = goles_l + goles_v
