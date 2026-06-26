@@ -15,7 +15,11 @@ Uso:
 """
 
 import os, sys, json, re, argparse
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone, timedelta
+
+# Hora Perú UTC-5
+PERU_TZ = timezone(timedelta(hours=-5))
+def hoy_peru(): return datetime.now(PERU_TZ).strftime('%Y-%m-%d')
 import pandas as pd
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
@@ -346,7 +350,7 @@ def auditar_dia(historial, fecha_str):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def generar_html(historial):
-    hoy = date.today().strftime('%Y-%m-%d')
+    hoy = hoy_peru()  # Hora Perú UTC-5
     ts = int(__import__('time').time())
 
     # Calcular estadísticas globales
@@ -608,7 +612,7 @@ def main():
     parser.add_argument('--fecha', default=None, help='Fecha a auditar (YYYY-MM-DD)')
     args = parser.parse_args()
 
-    hoy = args.fecha or date.today().strftime('%Y-%m-%d')
+    hoy = args.fecha or hoy_peru()  # Hora Perú UTC-5
 
     print(f"\n📊 REGISTRADOR DE PICKS — {hoy}")
     print("="*50)
