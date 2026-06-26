@@ -1,296 +1,224 @@
 <!DOCTYPE html>
 <html lang="es">
+<!-- ts:1782445888 -->
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mundial 2026 — Picks & Bankroll | Sportpicks</title>
-<meta name="description" content="Picks profesionales del Mundial 2026 con gestión de bankroll y seguimiento de resultados.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Historial & Bankroll — Sportpicks Mundial 2026</title>
 <style>
 :root{--bg:#0d1220;--panel:#161d31;--panel2:#1c2540;--tx:#eef1f8;--tx2:#9aa5c0;
---lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--or:#fb923c}
+--lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--or:#fb923c;--go:#ffd700}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:60px}
 .wrap{max-width:900px;margin:0 auto;padding:0 16px}
 nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12px 16px;
 position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;color:var(--ac);font-size:1rem}
-.nav-links{display:flex;gap:16px}
-.nav-links a{color:var(--tx2);text-decoration:none;font-size:.83rem;font-weight:600}
-.nav-links a:hover{color:var(--tx)}
+.logo{font-weight:700;color:var(--ac);font-size:.95rem}
+.nav-links a{color:var(--tx2);text-decoration:none;font-size:.82rem;margin-left:14px;font-weight:600}
 header{text-align:center;padding:28px 0 16px}
-header h1{font-size:1.5rem;font-weight:700}
-header p{color:var(--tx2);font-size:.85rem;margin-top:6px;max-width:600px;margin-inline:auto}
-.tg-btn{display:inline-block;background:var(--ac);color:#0d1220;border-radius:10px;
-padding:10px 24px;font-weight:700;text-decoration:none;margin-top:14px;font-size:.9rem}
-.tg-btn:hover{opacity:.9}
-.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
-@media(min-width:560px){.stats-row{grid-template-columns:repeat(4,1fr)}}
+header h1{font-size:1.45rem;font-weight:700}
+header p{color:var(--tx2);font-size:.84rem;margin-top:5px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+@media(min-width:560px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
 .stat{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:14px;text-align:center}
-.stat .val{font-size:1.5rem;font-weight:700}
-.stat .lbl{font-size:.74rem;color:var(--tx2);margin-top:2px}
-.green{color:var(--v)}.red{color:var(--d)}.yellow{color:var(--e)}.blue{color:var(--ac)}
-h2{font-size:1rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
-/* Gráfica */
-.chart-wrap{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:16px;margin-bottom:20px}
-/* Picks */
-.pick-card{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:16px;margin-bottom:10px}
-.pick-card.ganado{border-color:var(--v)}
-.pick-card.perdido{border-color:var(--d)}
-.pick-card.pendiente{border-color:var(--e)}
-.pick-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:6px}
-.pick-partido{font-weight:700;font-size:.95rem}
-.pick-fecha{font-size:.75rem;color:var(--tx2)}
-.pick-mercado{font-size:.82rem;color:var(--ac);margin-bottom:6px}
-.pick-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:.77rem;color:var(--tx2)}
-.pick-meta span{background:var(--panel2);border-radius:6px;padding:2px 8px}
-.pick-razon{font-size:.8rem;color:var(--tx2);margin-top:6px;font-style:italic}
-.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 10px;font-size:.77rem;font-weight:700}
-.badge-ganado{background:#0d2e1a;color:var(--v);border:1px solid var(--v)}
-.badge-perdido{background:#2e0d0d;color:var(--d);border:1px solid var(--d)}
-.badge-pendiente{background:#2e2a0d;color:var(--e);border:1px solid var(--e)}
-.badge-void{background:#1a1a2e;color:var(--pu);border:1px solid var(--pu)}
-.pg{font-size:.85rem;font-weight:700}
-.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.filtro{background:var(--panel);border:1px solid var(--lin);color:var(--tx2);
-border-radius:999px;padding:4px 14px;font-size:.79rem;cursor:pointer;font-weight:600;border:none}
-.filtro.active{background:var(--ac);color:#0d1220}
-.empty{text-align:center;color:var(--tx2);padding:32px;background:var(--panel);
-border-radius:12px;border:1px dashed var(--lin)}
-.racha{background:var(--panel2);border-radius:8px;padding:5px 14px;font-size:.82rem;display:inline-block;margin-bottom:12px}
-.stat-mercado{background:var(--panel);border:1px solid var(--lin);border-radius:10px;
-padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.loading{text-align:center;padding:40px;color:var(--tx2)}
-.error-box{background:#2e0d0d;border:1px solid var(--d);border-radius:10px;padding:16px;
-color:var(--d);font-size:.85rem;margin:20px 0}
+.stat .val{font-size:1.4rem;font-weight:700}
+.stat .lbl{font-size:.73rem;color:var(--tx2);margin-top:3px}
+.green{color:var(--v)}.red{color:var(--d)}.yellow{color:var(--e)}.blue{color:var(--ac)}.gold{color:var(--go)}
+.chart-box{background:var(--panel);border:1px solid var(--lin);border-radius:12px;padding:16px;margin-bottom:24px}
+.chart-title{font-size:.85rem;color:var(--tx2);margin-bottom:12px;font-weight:600}
+canvas{width:100%!important}
+.section-title{font-size:.85rem;font-weight:600;color:var(--tx2);letter-spacing:.05em;
+margin:24px 0 12px;padding-bottom:6px;border-bottom:.5px solid var(--lin)}
+.dia-card{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
+margin-bottom:16px;overflow:hidden}
+.dia-header{display:flex;justify-content:space-between;align-items:center;
+padding:12px 16px;cursor:pointer;user-select:none}
+.dia-fecha{font-weight:600;font-size:.95rem}
+.dia-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.badge{font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px}
+.b-g{background:rgba(52,211,153,.15);color:var(--v)}
+.b-p{background:rgba(251,113,133,.15);color:var(--d)}
+.b-e{background:rgba(251,191,36,.15);color:var(--e)}
+.b-u{background:rgba(96,165,250,.12);color:var(--ac)}
+.dia-resumen{font-size:.8rem;color:var(--tx2);padding:0 16px 10px}
+.dia-picks{padding:0 12px 12px;display:none}
+.dia-picks.open{display:block}
+.pick-row{background:var(--panel2);border-radius:10px;padding:10px 12px;margin-bottom:7px;
+border-left:3px solid var(--lin)}
+.pick-row.ganado{border-left-color:var(--v)}
+.pick-row.perdido{border-left-color:var(--d)}
+.pick-row.pendiente{border-left-color:var(--e)}
+.pick-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pick-info{flex:1}
+.pick-tipo{font-size:.7rem;color:var(--tx2);margin-bottom:2px;font-weight:600;letter-spacing:.04em}
+.pick-mercado{font-size:.88rem;font-weight:600;color:var(--tx)}
+.pick-partido{font-size:.78rem;color:var(--tx2);margin-top:2px}
+.pick-right{text-align:right;flex-shrink:0}
+.pick-cuota{font-size:.82rem;color:var(--go);font-weight:600}
+.pick-stake{font-size:.72rem;color:var(--tx2)}
+.pick-ganancia{font-size:.82rem;font-weight:600;margin-top:2px}
+.pick-estado{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:5px;display:inline-block;margin-top:4px}
+.e-g{background:rgba(52,211,153,.15);color:var(--v)}
+.e-p{background:rgba(251,113,133,.15);color:var(--d)}
+.e-pen{background:rgba(251,191,36,.15);color:var(--e)}
+.combo-legs{margin-top:6px;padding-top:6px;border-top:.5px solid var(--lin)}
+.combo-leg{font-size:.75rem;color:var(--tx2);padding:2px 0}
+.tg-btn{display:block;text-align:center;background:var(--ac);color:#0d1220;border-radius:10px;
+padding:11px;font-weight:700;text-decoration:none;margin:14px 0;font-size:.88rem}
+.empty{text-align:center;color:var(--tx2);font-size:.85rem;padding:32px;}
 </style>
 </head>
 <body>
 <nav>
   <span class="logo">⚽ Sportpicks — Mundial 2026</span>
   <div class="nav-links">
-    <a href="#picks">Picks</a>
-    <a href="#bankroll">Bankroll</a>
-    <a href="#stats">Stats</a>
+    <a href="index_final.html">🔮 Modelo</a>
+    <a href="picks_dia.html">🎯 Picks hoy</a>
+    <a href="picks_premium.html">💎 Premium</a>
   </div>
 </nav>
-
 <div class="wrap">
   <header>
-    <h1>⚽ Picks Profesionales — Mundial 2026</h1>
-    <p>Sistema híbrido: XGBoost + 25 casas de apuestas + Dixon-Coles + Valor de Mercado</p>
-    <a class="tg-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
+    <h1>📊 Historial & Bankroll</h1>
+    <p>Transparencia total — todos los picks públicos y premium con resultado real</p>
   </header>
+  <a class="tg-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
 
-  <div id="loading" class="loading">⏳ Cargando picks...</div>
-  <div id="contenido" style="display:none">
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat"><div class="val blue" id="s-total">—</div><div class="lbl">Picks totales</div></div>
-      <div class="stat"><div class="val green" id="s-acierto">—</div><div class="lbl">% Acierto</div></div>
-      <div class="stat"><div class="val" id="s-roi">—</div><div class="lbl">ROI</div></div>
-      <div class="stat"><div class="val" id="s-bank">—</div><div class="lbl">Bankroll actual</div></div>
-    </div>
-    <div style="text-align:center;margin-bottom:16px" id="s-racha"></div>
-
-    <!-- Gráfica -->
-    <h2 id="bankroll">📈 Evolución del Bankroll</h2>
-    <div class="chart-wrap"><canvas id="chart" height="180"></canvas></div>
-
-    <!-- Picks -->
-    <h2 id="picks">🎯 Historial de Picks</h2>
-    <div class="filtros" id="filtros"></div>
-    <div id="picks-list"></div>
-
-    <!-- Stats mercado -->
-    <h2 id="stats">📊 Rendimiento por mercado</h2>
-    <div id="stats-mercado"></div>
-
-    <p style="text-align:center;color:var(--tx2);font-size:.78rem;margin-top:24px">
-      Actualizado: <span id="s-actualizado">—</span> · 
-      <a href="index_final.html" style="color:var(--ac)">Ver predicciones del modelo</a>
-    </p>
+  <div class="stats-grid">
+    <div class="stat"><div class="val green">0</div><div class="lbl">Picks ganados</div></div>
+    <div class="stat"><div class="val red">0</div><div class="lbl">Picks perdidos</div></div>
+    <div class="stat"><div class="val yellow">0%</div><div class="lbl">Precisión global</div></div>
+    <div class="stat"><div class="val green">+0.0%</div><div class="lbl">ROI total</div></div>
+    <div class="stat"><div class="val blue">100.0u</div><div class="lbl">Bankroll actual</div></div>
+    <div class="stat"><div class="val green">+0.00u</div><div class="lbl">Unidades netas</div></div>
+    <div class="stat"><div class="val gold">1</div><div class="lbl">Días registrados</div></div>
+    <div class="stat"><div class="val">0</div><div class="lbl">Picks evaluados</div></div>
   </div>
 
-  <div id="error-div" class="error-box" style="display:none">
-    ❌ No se encontró el archivo picks.json. El admin debe publicar los picks primero.
+  <div class="chart-box">
+    <div class="chart-title">📈 Evolución del bankroll</div>
+    <canvas id="grafica" height="180"></canvas>
   </div>
+
+  <div class="section-title">HISTORIAL POR DÍA</div>
+  <div id="historial-container"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-let PICKS = [];
-let BANKROLL = {inicial:100, actual:100};
-let filtroActual = 'todos';
-let chart = null;
+const HIST = {"bankroll": 100.0, "dias": [{"fecha": "2026-06-25", "picks": [{"id": "2026-06-25_pub_0", "tipo": "Público", "partido": "Paraguay vs Australia", "mercado": "Menos de 2.5 goles", "cuota": 1.58, "prob": 60, "stake": 2.0, "estado": "Pendiente", "ganancia": 0, "emoji": "🔒", "categoria": "Goles", "descripcion": "xG bajo (2.3)"}, {"id": "2026-06-25_pub_1", "tipo": "Público", "partido": "Turquía vs EE. UU.", "mercado": "X2 — Empate o EE. UU.", "cuota": 1.52, "prob": 62.5, "stake": 2.0, "estado": "Pendiente", "ganancia": 0, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria EE. UU."}, {"id": "2026-06-25_pub_2", "tipo": "Público", "partido": "Japón vs Suecia", "mercado": "X2 — Empate o Suecia", "cuota": 1.54, "prob": 61.6, "stake": 2.0, "estado": "Pendiente", "ganancia": 0, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Suecia"}, {"id": "2026-06-25_pub_combo_3", "tipo": "Público Combinada", "partido": "Paraguay vs Australia + Turquía vs EE. UU.", "mercado": "🎯 Tiros a puerta +7.5 + 🛡️ 1X — Turquía o Empate", "cuota": 1.52, "prob": 59.8, "stake": 2.0, "estado": "Pendiente", "ganancia": 0, "picks_combo": [{"partido": "Paraguay vs Australia", "local": "Paraguay", "visitante": "Australia", "mercado": "Tiros a puerta +7.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🎯", "categoria": "Tiros", "descripcion": "10.6 tiros esperados (margen 41%)", "fuente": "real"}, {"partido": "Turquía vs EE. UU.", "local": "Turquía", "visitante": "EE. UU.", "mercado": "1X — Turquía o Empate", "prob": 72.1, "cuota": 1.32, "ev": -0.048, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre victoria Turquía + empate", "fuente": "real"}]}, {"id": "2026-06-25_prem_0", "tipo": "Premium", "partido": "Paraguay vs Australia + Ecuador vs Alemania + Túnez vs Países Bajos", "mercado": "🎯 Tiros a puerta +7.5 + 🦵 Faltas +22.5 + 🦵 Túnez faltas +10.5", "cuota": 1.52, "prob": 56.6, "stake": 1.0, "estado": "Pendiente", "ganancia": 0, "emoji": "💎", "categoria": "Triple Combinada", "descripcion": "3 picks seguros combinados — prob. 56.6% | cuota @1.52", "picks_combo": [{"partido": "Paraguay vs Australia", "local": "Paraguay", "visitante": "Australia", "mercado": "Tiros a puerta +7.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🎯", "categoria": "Tiros", "descripcion": "10.6 tiros esperados (margen 41%)", "fuente": "real"}, {"partido": "Ecuador vs Alemania", "local": "Ecuador", "visitante": "Alemania", "mercado": "Faltas +22.5", "prob": 82.9, "cuota": 1.15, "ev": -0.047, "emoji": "🦵", "categoria": "Faltas", "descripcion": "27.5 faltas esperadas (margen 22%)", "fuente": "real"}, {"partido": "Túnez vs Países Bajos", "local": "Túnez", "visitante": "Países Bajos", "mercado": "Túnez faltas +10.5", "prob": 82.4, "cuota": 1.15, "ev": -0.052, "emoji": "🦵", "categoria": "Faltas Túnez", "descripcion": "Túnez promedia 14.0 faltas/partido", "fuente": "real"}]}, {"id": "2026-06-25_prem_1", "tipo": "Premium", "partido": "Japón vs Suecia + Turquía vs EE. UU.", "mercado": "🦵 Faltas +20.5 + 🎯 Tiros a puerta +4.5", "cuota": 1.46, "prob": 61.9, "stake": 1.0, "estado": "Pendiente", "ganancia": 0, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 61.9% — máxima seguridad", "picks_combo": [{"partido": "Japón vs Suecia", "local": "Japón", "visitante": "Suecia", "mercado": "Faltas +20.5", "prob": 78.7, "cuota": 1.21, "ev": -0.048, "emoji": "🦵", "categoria": "Faltas", "descripcion": "24.5 faltas esperadas (margen 20%)", "fuente": "real"}, {"partido": "Turquía vs EE. UU.", "local": "Turquía", "visitante": "EE. UU.", "mercado": "Tiros a puerta +4.5", "prob": 78.7, "cuota": 1.21, "ev": -0.048, "emoji": "🎯", "categoria": "Tiros", "descripcion": "6.6 tiros esperados (margen 47%)", "fuente": "real"}]}, {"id": "2026-06-25_prem_2", "tipo": "Premium", "partido": "Turquía vs EE. UU. + Curazao vs Costa de Marfil", "mercado": "🎯 Tiros a puerta +4.5 + 🎯 Tiros a puerta +4.5", "cuota": 1.46, "prob": 61.9, "stake": 1.0, "estado": "Pendiente", "ganancia": 0, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 61.9% — máxima seguridad", "picks_combo": [{"partido": "Turquía vs EE. UU.", "local": "Turquía", "visitante": "EE. UU.", "mercado": "Tiros a puerta +4.5", "prob": 78.7, "cuota": 1.21, "ev": -0.048, "emoji": "🎯", "categoria": "Tiros", "descripcion": "6.6 tiros esperados (margen 47%)", "fuente": "real"}, {"partido": "Curazao vs Costa de Marfil", "local": "Curazao", "visitante": "Costa de Marfil", "mercado": "Tiros a puerta +4.5", "prob": 78.7, "cuota": 1.21, "ev": -0.048, "emoji": "🎯", "categoria": "Tiros", "descripcion": "6.6 tiros esperados (margen 47%)", "fuente": "real"}]}], "auditado": false, "resumen": null}]};
+const EVOLUCION = [100.0];
+const LABELS = ["Inicio"];
 
-// Cargar picks.json desde GitHub Pages
-async function cargarDatos(){
-  try {
-    const r = await fetch('picks.json?t='+Date.now());
-    if(!r.ok) throw new Error('No encontrado');
-    const data = await r.json();
-    PICKS    = data.picks || [];
-    BANKROLL = data.bankroll || {inicial:100, actual:100};
-    const act = data.actualizado ? new Date(data.actualizado).toLocaleString('es-PE') : '—';
-    document.getElementById('s-actualizado').textContent = act;
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('contenido').style.display = 'block';
-    renderTodo();
-  } catch(e) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error-div').style.display = 'block';
+// ── Gráfica ──
+const ctx = document.getElementById('grafica').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: LABELS,
+    datasets: [{
+      label: 'Bankroll',
+      data: EVOLUCION,
+      borderColor: '#60a5fa',
+      backgroundColor: 'rgba(96,165,250,0.08)',
+      pointBackgroundColor: EVOLUCION.map((v,i) => i===0?'#60a5fa':v>=EVOLUCION[i-1]?'#34d399':'#fb7185'),
+      pointRadius: 5,
+      tension: 0.3,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { callbacks: {
+      label: ctx => ctx.parsed.y.toFixed(2) + 'u'
+    } } },
+    scales: {
+      x: { grid: { color: '#2a3554' }, ticks: { color: '#9aa5c0', font: { size: 11 } } },
+      y: { grid: { color: '#2a3554' }, ticks: { color: '#9aa5c0', font: { size: 11 },
+        callback: v => v.toFixed(1) + 'u' } }
+    }
   }
+});
+
+// ── Historial ──
+const cont = document.getElementById('historial-container');
+const dias = [...HIST.dias].sort((a,b) => b.fecha.localeCompare(a.fecha));
+
+if (!dias.length) {
+  cont.innerHTML = '<div class="empty">No hay picks registrados aún.</div>';
 }
 
-function renderTodo(){
-  renderStats();
-  renderChart();
-  renderFiltros();
-  renderPicks();
-  renderStatsMercado();
-}
+dias.forEach(dia => {
+  const res = dia.resumen || {};
+  const g = res.ganados || 0, p = res.perdidos || 0, pen = res.pendientes || 0;
+  const u = res.unidades || 0;
+  const pct = res.porcentaje || 0;
 
-function renderStats(){
-  const resueltos = PICKS.filter(p=>p.estado==='ganado'||p.estado==='perdido');
-  const ganados   = PICKS.filter(p=>p.estado==='ganado');
-  const pct = resueltos.length ? Math.round(ganados.length/resueltos.length*100) : 0;
-  const roi = BANKROLL.inicial>0 ? ((BANKROLL.actual-BANKROLL.inicial)/BANKROLL.inicial*100).toFixed(1) : 0;
+  let badgesHtml = `
+    <span class="badge b-g">✅ ${g} G</span>
+    <span class="badge b-p">❌ ${p} P</span>
+  `;
+  if (pen > 0) badgesHtml += `<span class="badge b-e">⏳ ${pen}</span>`;
+  if (res.unidades !== undefined)
+    badgesHtml += `<span class="badge b-u">${u >= 0 ? '+' : ''}${u.toFixed(2)}u</span>`;
 
-  document.getElementById('s-total').textContent   = PICKS.length;
-  document.getElementById('s-acierto').textContent = pct+'%';
-  const roiEl = document.getElementById('s-roi');
-  roiEl.textContent = (roi>=0?'+':'')+roi+'%';
-  roiEl.className   = 'val '+(roi>=0?'green':'red');
-  document.getElementById('s-bank').textContent = '$'+BANKROLL.actual;
+  const picksHtml = dia.picks.map(pk => {
+    const esC = pk.picks_combo && pk.picks_combo.length > 0;
+    const estadoCls = pk.estado === 'Ganado' ? 'ganado' : pk.estado === 'Perdido' ? 'perdido' : 'pendiente';
+    const estadoBadge = pk.estado === 'Ganado'
+      ? '<span class="pick-estado e-g">✅ GANADO</span>'
+      : pk.estado === 'Perdido'
+      ? '<span class="pick-estado e-p">❌ PERDIDO</span>'
+      : '<span class="pick-estado e-pen">⏳ PENDIENTE</span>';
 
-  // Racha
-  let racha=0,tipo='';
-  for(const p of PICKS){
-    if(p.estado==='ganado'){ if(tipo==='ganado'||!tipo){racha++;tipo='ganado';}else break; }
-    else if(p.estado==='perdido'){ if(tipo==='perdido'||!tipo){racha++;tipo='perdido';}else break; }
-    else break;
-  }
-  if(racha>0){
-    document.getElementById('s-racha').innerHTML =
-      `<span class="racha" style="color:${tipo==='ganado'?'var(--v)':'var(--d)'}">
-       ${tipo==='ganado'?'🔥':'❄️'} Racha: ${racha} ${tipo==='ganado'?'ganados':'perdidos'} consecutivos</span>`;
-  }
-}
+    const gananciaStr = pk.ganancia !== 0
+      ? `<div class="pick-ganancia ${pk.ganancia > 0 ? 'green' : 'red'}">${pk.ganancia > 0 ? '+' : ''}${pk.ganancia.toFixed(2)}u</div>`
+      : '';
 
-function renderChart(){
-  const picks = [...PICKS].reverse();
-  let bank = BANKROLL.inicial;
-  const labels = ['Inicio'], data = [bank];
-  picks.forEach(p=>{
-    if(p.estado==='ganado'){ bank+=bank*(p.pct/100)*(p.cuota-1); }
-    else if(p.estado==='perdido'){ bank-=bank*(p.pct/100); }
-    else return;
-    labels.push(p.partido.split(' vs ')[0]);
-    data.push(Math.round(bank*100)/100);
-  });
-  const ctx = document.getElementById('chart').getContext('2d');
-  if(chart) chart.destroy();
-  chart = new Chart(ctx,{
-    type:'line',
-    data:{labels, datasets:[{
-      label:'Bankroll ($)', data,
-      borderColor:'#60a5fa', backgroundColor:'rgba(96,165,250,0.1)',
-      fill:true, tension:0.3, pointRadius:4,
-      pointBackgroundColor: data.map((v,i)=>i===0?'#60a5fa':v>=data[i-1]?'#34d399':'#fb7185'),
-    }]},
-    options:{responsive:true, plugins:{legend:{display:false},
-      tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toFixed(2)}}},
-      scales:{x:{ticks:{color:'#9aa5c0',font:{size:10}},grid:{color:'#2a3554'}},
-              y:{ticks:{color:'#9aa5c0',callback:v=>'$'+v},grid:{color:'#2a3554'}}}}
-  });
-}
+    let comboLegs = '';
+    if (esC && pk.picks_combo) {
+      comboLegs = '<div class="combo-legs">' +
+        pk.picks_combo.map(l => `<div class="combo-leg">⚡ ${l.partido || ''} · ${l.mercado || ''}</div>`).join('') +
+        '</div>';
+    }
 
-function renderFiltros(){
-  const cont = document.getElementById('filtros');
-  const opciones = [
-    ['todos','Todos'], ['pendiente','⏳ Pendientes'],
-    ['ganado','✅ Ganados'], ['perdido','❌ Perdidos'],
-    ['muy-alta','🟢 Muy Alta'], ['alta','🟡 Alta']
-  ];
-  cont.innerHTML = opciones.map(([val,lbl])=>
-    `<button class="filtro ${val===filtroActual?'active':''}" onclick="filtrar('${val}',this)">${lbl}</button>`
-  ).join('');
-}
+    const tipoLabel = pk.tipo === 'Premium' ? '💎 PREMIUM' : pk.tipo === 'Público Combinada' ? '🔗 COMBINADA' : '🎯 PÚBLICO';
 
-function filtrar(tipo, btn){
-  filtroActual = tipo;
-  document.querySelectorAll('.filtro').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPicks();
-}
-
-function renderPicks(){
-  let bank = BANKROLL.inicial;
-  const pgMap = {};
-  [...PICKS].reverse().forEach(p=>{
-    let pg=0;
-    if(p.estado==='ganado'){pg=bank*(p.pct/100)*(p.cuota-1);bank+=pg;}
-    else if(p.estado==='perdido'){pg=-bank*(p.pct/100);bank+=pg;}
-    pgMap[p.id]=pg;
-  });
-
-  let lista = PICKS;
-  if(['pendiente','ganado','perdido','void'].includes(filtroActual)) lista=PICKS.filter(p=>p.estado===filtroActual);
-  else if(['muy-alta','alta','media'].includes(filtroActual)) lista=PICKS.filter(p=>p.confianza===filtroActual);
-
-  const cont = document.getElementById('picks-list');
-  if(!lista.length){ cont.innerHTML='<div class="empty">No hay picks en esta categoría</div>'; return; }
-
-  cont.innerHTML = lista.map(p=>{
-    const badge = p.estado==='ganado'?'<span class="badge badge-ganado">✅ Ganado</span>'
-      :p.estado==='perdido'?'<span class="badge badge-perdido">❌ Perdido</span>'
-      :p.estado==='void'?'<span class="badge badge-void">🔄 Void</span>'
-      :'<span class="badge badge-pendiente">⏳ Pendiente</span>';
-    const conf = p.confianza==='muy-alta'?'🟢 Muy Alta':p.confianza==='alta'?'🟡 Alta':'⚠️ Media';
-    const pg = pgMap[p.id]||0;
-    const pgStr = pg===0?'':`<span class="pg ${pg>0?'green':'red'}">${pg>0?'+':''}$${Math.abs(pg).toFixed(2)}</span>`;
-    return `<div class="pick-card ${p.estado}">
-      <div class="pick-header">
-        <div><div class="pick-partido">${p.partido}</div><div class="pick-fecha">${p.fecha}</div></div>
-        <div style="display:flex;gap:6px;align-items:center">${pgStr}${badge}</div>
+    return `<div class="pick-row ${estadoCls}">
+      <div class="pick-top">
+        <div class="pick-info">
+          <div class="pick-tipo">${tipoLabel}</div>
+          <div class="pick-mercado">${pk.mercado}</div>
+          <div class="pick-partido">${pk.partido}</div>
+          ${estadoBadge}
+          ${comboLegs}
+        </div>
+        <div class="pick-right">
+          <div class="pick-cuota">@${pk.cuota}</div>
+          <div class="pick-stake">Stake: ${pk.stake}u</div>
+          ${gananciaStr}
+        </div>
       </div>
-      <div class="pick-mercado">📌 ${p.mercado}</div>
-      <div class="pick-meta">
-        <span>💵 Cuota: <b>${p.cuota}</b></span>
-        <span>💰 ${p.pct}% del bank</span>
-        <span>${conf}</span>
-      </div>
-      ${p.razon?`<div class="pick-razon">📊 ${p.razon}</div>`:''}
     </div>`;
   }).join('');
-}
 
-function renderStatsMercado(){
-  const picks = PICKS.filter(p=>p.estado==='ganado'||p.estado==='perdido');
-  const mapa = {};
-  picks.forEach(p=>{
-    const cat = p.mercado.includes('—') ? p.mercado.split('—')[0].trim() : p.mercado.split(' ')[0];
-    if(!mapa[cat]) mapa[cat]={g:0,p:0};
-    if(p.estado==='ganado') mapa[cat].g++; else mapa[cat].p++;
-  });
-  const cont = document.getElementById('stats-mercado');
-  if(!Object.keys(mapa).length){ cont.innerHTML='<div class="empty">Sin datos suficientes aún</div>'; return; }
-  cont.innerHTML = Object.entries(mapa).map(([cat,v])=>{
-    const total=v.g+v.p, pct=Math.round(v.g/total*100);
-    return `<div class="stat-mercado">
-      <span>${cat}</span>
-      <span style="display:flex;gap:14px;font-size:.82rem">
-        <span class="green">✅ ${v.g}</span>
-        <span class="red">❌ ${v.p}</span>
-        <span class="${pct>=55?'green':pct>=45?'yellow':'red'}">${pct}% acierto</span>
-      </span>
-    </div>`;
-  }).join('');
-}
-
-cargarDatos();
+  const card = document.createElement('div');
+  card.className = 'dia-card';
+  card.innerHTML = `
+    <div class="dia-header" onclick="this.nextElementSibling.nextElementSibling.classList.toggle('open')">
+      <div>
+        <div class="dia-fecha">📅 ${dia.fecha}</div>
+        <div class="dia-badges" style="margin-top:4px">${badgesHtml}</div>
+      </div>
+      <span style="color:var(--tx2);font-size:.8rem">${pct}% · ${dia.picks.length} picks ▾</span>
+    </div>
+    <div class="dia-resumen">
+      ${dia.auditado ? '✅ Auditado' : '⏳ Pendiente de auditoría'} ·
+      ${g} ganados · ${p} perdidos · ${pen} pendientes
+    </div>
+    <div class="dia-picks">${picksHtml}</div>
+  `;
+  cont.appendChild(card);
+});
 </script>
-</body>
-</html>
+</body></html>
