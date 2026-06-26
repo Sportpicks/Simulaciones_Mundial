@@ -170,15 +170,22 @@ def actualizar_stats_csv():
 
     # Verificar requests disponibles
     status = api_get("status")
+    requests_usadas = 0
+    limite_dia = 100
     if status and status.get('response'):
         requests_hoy = status['response'].get('requests', {})
-        used = requests_hoy.get('current', 0)
-        limit = requests_hoy.get('limit_day', 100)
-        print(f"   API requests: {used}/{limit} usadas hoy")
-        disponibles = limit - used
-        if disponibles < 5:
-            print("   ⚠️ Pocas requests disponibles — procesando solo las más recientes")
-            sin_stats = sin_stats.tail(min(disponibles//2, 5))
+        requests_usadas = requests_hoy.get('current', 0)
+        limite_dia = requests_hoy.get('limit_day', 100)
+        print(f"   API requests: {requests_usadas}/{limite_dia} usadas hoy")
+    
+    # Procesar solo los últimos N partidos para no agotar requests
+    # Cada partido usa 1 request para stats
+    disponibles = limite_dia - requests_usadas - 5  # 5 de margen
+    max_procesar = min(disponibles, 10)  # máx 10 por ejecución
+    if len(sin_stats) > max_procesar:
+        print(f"   ℹ️  Procesando los {max_procesar} más recientes (de {len(sin_stats)} sin stats)")
+        sin_stats = sin_stats.tail(max_procesar)
+    time.sleep(1)  # Pausa tras status
 
     actualizados = 0
     errores = 0
@@ -190,15 +197,15 @@ def actualizar_stats_csv():
 
         print(f"   📡 {local} vs {visitante} ({fecha})...")
 
-        # Buscar fixture_id si no lo tenemos
-        fixture_id = row.get('Fixture_ID')
-        if pd.isna(fixture_id) or fixture_id == 0:
-            # Intentar desde el ID_Partido que ya tenemos
-            fixture_id = row.get('ID_Partido')
-
+        # Usar ID_Partido del CSV directamente como fixture_id
+        fixture_id = row.get("ID_Partido")
         if pd.isna(fixture_id) or not fixture_id:
             fixture_id = buscar_fixture_id(local, visitante, fecha)
-            time.sleep(0.5)
+            time.sleep(7)
+
+
+            fixture_id = buscar_fixture_id(local, visitante, fecha)
+            time.sleep(7)  # Rate limit: max 10 req/min
 
         if not fixture_id:
             print(f"      ⚠️ No se encontró fixture_id")
@@ -207,7 +214,7 @@ def actualizar_stats_csv():
 
         # Obtener stats
         stats = obtener_stats_fixture(int(fixture_id))
-        time.sleep(0.3)  # Rate limiting
+        time.sleep(7)  # Rate limit: max 10 req/min
 
         if not stats:
             print(f"      ⚠️ Sin stats disponibles")
