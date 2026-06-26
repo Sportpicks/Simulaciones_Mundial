@@ -228,6 +228,23 @@ def push_github():
     ok("Push exitoso — web pública actualizada en ~2 minutos")
     return True
 
+def sync_remoto():
+    """Sincroniza con GitHub antes de empezar — evita conflictos de push."""
+    titulo("SYNC", "Sincronizando con GitHub")
+    # Stash de cambios locales sin commitear
+    subprocess.run('git stash', shell=True, capture_output=True)
+    # Pull rebase para traer cambios remotos
+    r = subprocess.run('git pull --rebase origin main',
+                       shell=True, capture_output=True, text=True)
+    if r.returncode == 0:
+        ok("Sincronizado con GitHub")
+    else:
+        warn(f"Pull con advertencia: {r.stderr.strip()[:100]}")
+        subprocess.run('git rebase --abort', shell=True, capture_output=True)
+    # Restaurar cambios locales
+    subprocess.run('git stash pop', shell=True, capture_output=True)
+
+
 def main():
     inicio = time.time()
     fecha  = datetime.now(timezone.utc).strftime('%d-%m-%Y %H:%M UTC')
@@ -236,6 +253,9 @@ def main():
     print(f"{NEG}  🚀 PIPELINE FINAL — MUNDIAL 2026{RESET}")
     print(f"{NEG}  📅 {fecha}{RESET}")
     print(f"{NEG}{'='*60}{RESET}")
+
+    # Sincronizar con remoto PRIMERO — evita rejected en el push final
+    sync_remoto()
 
     titulo("0", "Verificando archivos")
     if not verificar():
@@ -334,7 +354,27 @@ def main():
         print(f"  {AZUL}https://sportpicks.github.io/Simulaciones_Mundial/picks_publicos_v2.html{RESET}")
         os.system(f'start "" "{os.path.join(RAIZ,"docs","index_final.html")}"')
 
+    # Paso 9 — Historial de picks
+    registrar_historial()
+
     print(f"\n{NEG}{'='*60}{RESET}\n")
+
+# ── PASO 9: Registro automático de picks en historial ──
+def registrar_historial():
+    titulo("9", "Registrar picks en historial")
+    script_hist = os.path.join(RAIZ, 'registrar_picks_historial.py')
+    if not os.path.exists(script_hist):
+        warn("registrar_picks_historial.py no encontrado — omitiendo")
+        return
+    ejecutar('python registrar_picks_historial.py',
+             'Historial actualizado', timeout=60)
+    subprocess.run('git add -f Data/historial_picks.json docs/picks_publicos_v2.html',
+                   shell=True, capture_output=True)
+    hoy = datetime.now(timezone.utc).strftime('%d-%m-%Y')
+    subprocess.run(f'git commit --allow-empty -m "Historial {hoy}"',
+                   shell=True, capture_output=True)
+    subprocess.run('git push origin main', shell=True, capture_output=True)
+    ok("Historial picks subido a GitHub")
 
 if __name__ == '__main__':
     main()
