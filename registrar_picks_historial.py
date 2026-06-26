@@ -78,8 +78,15 @@ def registrar_dia(historial, hoy_str):
     # Verificar si el día ya existe
     dias_existentes = [d['fecha'] for d in historial['dias']]
     if hoy_str in dias_existentes:
-        print(f"   ℹ️  Día {hoy_str} ya registrado.")
-        return historial
+        dia_existente = next(d for d in historial['dias'] if d['fecha'] == hoy_str)
+        publicos_existentes = len([p for p in dia_existente['picks'] if 'Público' in p.get('tipo','')])
+        # Si no hay públicos registrados, permitir re-registro (picks nuevos disponibles)
+        if publicos_existentes > 0:
+            print(f"   ℹ️  Día {hoy_str} ya registrado ({len(dia_existente['picks'])} picks).")
+            return historial
+        else:
+            print(f"   🔄 Re-registrando {hoy_str} — faltan picks públicos...")
+            historial['dias'] = [d for d in historial['dias'] if d['fecha'] != hoy_str]
 
     picks_pub  = extraer_picks_de_html(PICKS_DIA_HTML)
     picks_prem = extraer_picks_de_html(PICKS_PREM_HTML)
