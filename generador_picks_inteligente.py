@@ -15,8 +15,12 @@ Uso: python generador_picks_inteligente.py
 """
 
 import os, sys, json, math, requests, time
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
 import pandas as pd
+
+# Hora Peru UTC-5
+PERU_TZ = timezone(timedelta(hours=-5))
+def hoy_peru(): return datetime.now(PERU_TZ).strftime("%Y-%m-%d")
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
 os.chdir(RAIZ)
@@ -1012,7 +1016,7 @@ def main():
     print("  ✅ Anti-correlación en combinadas premium")
     print("="*55)
 
-    hoy       = date.today().strftime('%Y-%m-%d')
+    hoy       = hoy_peru()  # Hora Peru UTC-5
     fecha_gen = datetime.now(timezone.utc).strftime('%d-%m-%Y %H:%M UTC')
     ts        = int(time.time())
 
