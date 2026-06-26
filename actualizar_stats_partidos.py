@@ -21,7 +21,7 @@ RAIZ = os.path.dirname(os.path.abspath(__file__))
 os.chdir(RAIZ)
 
 API_KEY  = "410fe96d3a7185456e7146c6b83720aa96f45071f3a5def83a3adf03a4c21b69"
-API_URL  = "https://allsportsapi.com/api/football"
+API_URL  = "https://apiv2.allsportsapi.com/football/"
 
 RESULTADOS_CSV = os.path.join(RAIZ, 'Data', 'resultados_mundial.csv')
 
@@ -65,11 +65,11 @@ def api_get(params):
 
 def buscar_evento_id(local, visitante, fecha):
     """Busca el evento_id en AllSports por fecha."""
-    data = api_get({'action': 'get_events', 'from': fecha, 'to': fecha,
-                    'league_id': WC_LEAGUE_ID})
+    # AllSports v2: met=Fixtures
+    data = api_get({'met': 'Fixtures', 'from': fecha, 'to': fecha,
+                    'leagueId': WC_LEAGUE_ID})
     if not data or not data.get('result'):
-        # Intentar sin filtro de liga
-        data = api_get({'action': 'get_events', 'from': fecha, 'to': fecha})
+        data = api_get({'met': 'Fixtures', 'from': fecha, 'to': fecha})
         if not data or not data.get('result'):
             return None
 
@@ -88,7 +88,8 @@ def buscar_evento_id(local, visitante, fecha):
 
 def obtener_stats_evento(evento_id):
     """Descarga las estadísticas de un partido."""
-    data = api_get({'action': 'get_statistics', 'matchId': evento_id})
+    # AllSports v2: met=Statistics
+    data = api_get({'met': 'Statistics', 'matchId': evento_id})
     if not data:
         return None
 
