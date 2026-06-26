@@ -21,7 +21,11 @@ Uso: python actualizar_todo_final.py
 """
 
 import os, sys, time, subprocess, pandas as pd
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
+
+# Hora Perú UTC-5
+PERU_TZ = timezone(timedelta(hours=-5))
+def hoy_peru(): return datetime.now(PERU_TZ).strftime('%Y-%m-%d')
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
 os.chdir(RAIZ)
