@@ -1,5 +1,5 @@
 {
-  "bankroll": 103.02,
+  "bankroll": 107.45,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -245,8 +245,8 @@
           "cuota": 1.57,
           "prob": 60.7,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.14,
           "emoji": "🥅",
           "categoria": "Goles",
           "descripcion": "xG total 3.1"
@@ -259,8 +259,8 @@
           "cuota": 1.58,
           "prob": 60,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.16,
           "emoji": "🔒",
           "categoria": "Goles",
           "descripcion": "xG bajo (2.3)"
@@ -273,8 +273,8 @@
           "cuota": 1.5,
           "prob": 63.2,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.0,
           "emoji": "🛡️",
           "categoria": "Doble Op.",
           "descripcion": "Cubre victoria Egipto + empate"
@@ -287,8 +287,8 @@
           "cuota": 1.75,
           "prob": 68.6,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.5,
           "emoji": "⚖️",
           "categoria": "Handicap",
           "descripcion": "Senegal gana — xG 2.0-0.7"
@@ -301,8 +301,8 @@
           "cuota": 1.55,
           "prob": 55.7,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -1.0,
           "emoji": "💎",
           "categoria": "Triple Combinada",
           "descripcion": "3 picks seguros combinados — prob. 55.7% | cuota @1.55",
@@ -356,8 +356,8 @@
           "cuota": 1.51,
           "prob": 59.8,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 0.51,
           "emoji": "💎",
           "categoria": "Combinada Premium",
           "descripcion": "Prob. combinada: 59.8% — máxima seguridad",
@@ -398,8 +398,8 @@
           "cuota": 1.12,
           "prob": 85.1,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 0.12,
           "emoji": "🛡️",
           "categoria": "Doble Op.",
           "descripcion": "Cualquier equipo gana",
@@ -407,7 +407,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 6,
+        "perdidos": 1,
+        "pendientes": 0,
+        "porcentaje": 85.7,
+        "unidades": 4.43
+      }
     },
     {
       "fecha": "2026-06-27",
