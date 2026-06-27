@@ -366,6 +366,14 @@ def main():
 # ── PASO 9: Registro automático de picks en historial ──
 def registrar_historial():
     titulo("9", "Registrar picks en historial")
+    # Paso 9a: Generar picks inteligentes primero
+    script_gen = os.path.join(RAIZ, 'generador_picks_inteligente.py')
+    if os.path.exists(script_gen):
+        ejecutar('python generador_picks_inteligente.py',
+                 'Picks inteligentes generados', timeout=120)
+    else:
+        warn("generador_picks_inteligente.py no encontrado")
+    # Paso 9b: Registrar en historial
     script_hist = os.path.join(RAIZ, 'registrar_picks_historial.py')
     if not os.path.exists(script_hist):
         warn("registrar_picks_historial.py no encontrado — omitiendo")
