@@ -1,5 +1,5 @@
 {
-  "bankroll": 102.72,
+  "bankroll": 103.02,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -408,6 +408,187 @@
       ],
       "auditado": false,
       "resumen": null
+    },
+    {
+      "fecha": "2026-06-27",
+      "picks": [
+        {
+          "id": "2026-06-27_pub_0",
+          "tipo": "Público",
+          "partido": "Noruega vs Francia",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.57,
+          "prob": 60.7,
+          "stake": 2.0,
+          "estado": "Ganado",
+          "ganancia": 1.14,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "xG total 3.1"
+        },
+        {
+          "id": "2026-06-27_pub_1",
+          "tipo": "Público",
+          "partido": "Cabo Verde vs Arabia Saudí",
+          "mercado": "Menos de 2.5 goles",
+          "cuota": 1.58,
+          "prob": 60,
+          "stake": 2.0,
+          "estado": "Ganado",
+          "ganancia": 1.16,
+          "emoji": "🔒",
+          "categoria": "Goles",
+          "descripcion": "xG bajo (2.3)"
+        },
+        {
+          "id": "2026-06-27_pub_2",
+          "tipo": "Público",
+          "partido": "Egipto vs Irán",
+          "mercado": "1X — Egipto o Empate",
+          "cuota": 1.5,
+          "prob": 63.2,
+          "stake": 2.0,
+          "estado": "Ganado",
+          "ganancia": 1.0,
+          "emoji": "🛡️",
+          "categoria": "Doble Op.",
+          "descripcion": "Cubre victoria Egipto + empate"
+        },
+        {
+          "id": "2026-06-27_pub_3",
+          "tipo": "Público",
+          "partido": "Senegal vs Irak",
+          "mercado": "HC Senegal -0.5",
+          "cuota": 1.75,
+          "prob": 68.6,
+          "stake": 2.0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
+          "emoji": "⚖️",
+          "categoria": "Handicap",
+          "descripcion": "Senegal gana — xG 2.0-0.7"
+        },
+        {
+          "id": "2026-06-27_prem_0",
+          "tipo": "Premium",
+          "partido": "Uruguay vs España + Noruega vs Francia + Senegal vs Irak",
+          "mercado": "🎯 Tiros a puerta +4.5 + 🥅 Más de 1.5 goles + 🦵 Faltas +18.5",
+          "cuota": 1.55,
+          "prob": 55.7,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "💎",
+          "categoria": "Triple Combinada",
+          "descripcion": "3 picks seguros combinados — prob. 55.7% | cuota @1.55",
+          "picks_combo": [
+            {
+              "partido": "Uruguay vs España",
+              "local": "Uruguay",
+              "visitante": "España",
+              "mercado": "Tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros",
+              "descripcion": "7.0 tiros esperados (margen 56%)",
+              "fuente": "real"
+            },
+            {
+              "partido": "Noruega vs Francia",
+              "local": "Noruega",
+              "visitante": "Francia",
+              "mercado": "Más de 1.5 goles",
+              "prob": 82.1,
+              "cuota": 1.16,
+              "ev": -0.048,
+              "emoji": "🥅",
+              "categoria": "Goles",
+              "descripcion": "xG total 3.1",
+              "fuente": "real"
+            },
+            {
+              "partido": "Senegal vs Irak",
+              "local": "Senegal",
+              "visitante": "Irak",
+              "mercado": "Faltas +18.5",
+              "prob": 82.0,
+              "cuota": 1.16,
+              "ev": -0.049,
+              "emoji": "🦵",
+              "categoria": "Faltas",
+              "descripcion": "22.9 faltas esperadas (margen 24%)",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-27_prem_1",
+          "tipo": "Premium",
+          "partido": "Egipto vs Irán + Cabo Verde vs Arabia Saudí",
+          "mercado": "🦵 Faltas +18.5 + 🛡️ 1X — Cabo Verde o Empate",
+          "cuota": 1.51,
+          "prob": 59.8,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "💎",
+          "categoria": "Combinada Premium",
+          "descripcion": "Prob. combinada: 59.8% — máxima seguridad",
+          "picks_combo": [
+            {
+              "partido": "Egipto vs Irán",
+              "local": "Egipto",
+              "visitante": "Irán",
+              "mercado": "Faltas +18.5",
+              "prob": 79.8,
+              "cuota": 1.19,
+              "ev": -0.05,
+              "emoji": "🦵",
+              "categoria": "Faltas",
+              "descripcion": "22.5 faltas esperadas (margen 22%)",
+              "fuente": "real"
+            },
+            {
+              "partido": "Cabo Verde vs Arabia Saudí",
+              "local": "Cabo Verde",
+              "visitante": "Arabia Saudí",
+              "mercado": "1X — Cabo Verde o Empate",
+              "prob": 75.0,
+              "cuota": 1.27,
+              "ev": -0.047,
+              "emoji": "🛡️",
+              "categoria": "Doble Op.",
+              "descripcion": "Cubre victoria Cabo Verde + empate",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-27_prem_2",
+          "tipo": "Premium",
+          "partido": "Nueva Zelanda",
+          "mercado": "Sin empate (1 o 2)",
+          "cuota": 1.12,
+          "prob": 85.1,
+          "stake": 1.0,
+          "estado": "Perdido",
+          "ganancia": -1.0,
+          "emoji": "🛡️",
+          "categoria": "Doble Op.",
+          "descripcion": "Cualquier equipo gana",
+          "picks_combo": []
+        }
+      ],
+      "auditado": false,
+      "resumen": {
+        "ganados": 3,
+        "perdidos": 2,
+        "pendientes": 2,
+        "porcentaje": 60.0,
+        "unidades": 0.3
+      }
     }
   ]
 }
