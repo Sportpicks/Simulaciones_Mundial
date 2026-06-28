@@ -322,6 +322,31 @@ def main():
         ejecutar('python calibracion_selectiva.py', 'Calibracion selectiva', timeout=30)
 
     # PASO 7
+    # ── PASO 6b — Cargar partidos de fase eliminatoria ──
+    titulo("6b", "Cargando partidos eliminatorias")
+    script_oct = os.path.join(RAIZ, 'cargar_octavos.py')
+    if os.path.exists(script_oct):
+        ejecutar('python cargar_octavos.py', 'Octavos cargados', timeout=60)
+        # Rellenar NaN en octavos para que el modelo no falle
+        import pandas as pd
+        csv_pred = os.path.join(RAIZ, 'Predicciones', 'predicciones_finales.csv')
+        if os.path.exists(csv_pred):
+            df = pd.read_csv(csv_pred)
+            cols_default = {
+                'xG_L': 1.2, 'xG_V': 1.0, 'tiros_esp': 7.0,
+                'faltas_esp': 22.0, 'cor': 9.0, 'tar': 4.0,
+                'Prob_1_Final': 40.0, 'Prob_X_Final': 25.0, 'Prob_2_Final': 35.0,
+            }
+            for col, val in cols_default.items():
+                if col in df.columns:
+                    df[col] = df[col].fillna(val)
+            for col in df.select_dtypes(include='float').columns:
+                df[col] = df[col].fillna(0)
+            df.to_csv(csv_pred, index=False)
+            ok(f"NaN rellenados en predicciones — {len(df)} partidos")
+    else:
+        warn("cargar_octavos.py no encontrado — omitiendo")
+
     titulo("7", "Generando web final v6")
     res['web'] = ejecutar('python generar_web_v6.py', 'Web v6', timeout=120)
     ejecutar('python generar_panel_picks.py', 'Panel picks del dia', timeout=60)
