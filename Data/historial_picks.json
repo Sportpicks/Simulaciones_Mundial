@@ -674,6 +674,42 @@
         "porcentaje": 28.6,
         "unidades": -4.38
       }
+    },
+    {
+      "fecha": "2026-06-28",
+      "picks": [
+        {
+          "id": "2026-06-28_pub_0",
+          "tipo": "Público",
+          "partido": "Canadá vs Sudáfrica",
+          "mercado": "Menos de 2.5 goles",
+          "cuota": 1.53,
+          "prob": 62,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🔒",
+          "categoria": "Goles",
+          "descripcion": "xG bajo (2.2)"
+        },
+        {
+          "id": "2026-06-28_prem_0",
+          "tipo": "Premium",
+          "partido": "Canadá",
+          "mercado": "Tiros a puerta +4.5",
+          "cuota": 1.15,
+          "prob": 82.7,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Tiros",
+          "descripcion": "7.0 tiros esperados (margen 56%)",
+          "picks_combo": []
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }

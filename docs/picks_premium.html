@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- ts:1782575129 -->
+<!-- ts:1782626451 -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks Premium 💎 — Mundial 2026</title>
@@ -60,15 +60,15 @@ footer a{color:var(--ac);text-decoration:none}
 </nav>
 <div class="wrap">
   <header>
-    <h1>💎 Picks Premium — 2026-06-27</h1>
+    <h1>💎 Picks Premium — 2026-06-28</h1>
     <p>Los 3 picks con mayor probabilidad de acierto del día</p>
-    <span class="badge">📅 27-06-2026 15:45 UTC</span>
+    <span class="badge">📅 28-06-2026 06:00 UTC</span>
     <span class="badge">🔐 Acceso exclusivo suscriptores</span>
   </header>
   <div class="resumen" id="res"></div>
   <div class="acum-box">
     <div class="title">📈 Cuota acumulador (combinados)</div>
-    <div class="val">@3.15</div>
+    <div class="val">@1.15</div>
   </div>
   <div id="picks"></div>
   <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
@@ -80,7 +80,7 @@ footer a{color:var(--ac);text-decoration:none}
   </footer>
 </div>
 <script>
-const PICKS=[{"partido": "COMBINADA PREMIUM", "local": "Argelia vs Austria + Jordania vs Argentina + RD Congo vs Uzbekistán", "visitante": "", "mercado": "🦵 Faltas +18.5 + 🥅 Más de 1.5 goles + 🦵 Faltas +18.5", "prob": 55.6, "cuota": 1.55, "cuota_display": 1.55, "ev": -0.138, "emoji": "💎", "categoria": "Triple Combinada", "descripcion": "3 picks seguros combinados — prob. 55.6% | cuota @1.55", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Argelia vs Austria", "local": "Argelia", "visitante": "Austria", "mercado": "Faltas +18.5", "prob": 82.5, "cuota": 1.15, "ev": -0.051, "emoji": "🦵", "categoria": "Faltas", "descripcion": "23.0 faltas esperadas (margen 24%)", "fuente": "real"}, {"partido": "Jordania vs Argentina", "local": "Jordania", "visitante": "Argentina", "mercado": "Más de 1.5 goles", "prob": 82.2, "cuota": 1.16, "ev": -0.046, "emoji": "🥅", "categoria": "Goles", "descripcion": "xG total 3.2", "fuente": "real"}, {"partido": "RD Congo vs Uzbekistán", "local": "RD Congo", "visitante": "Uzbekistán", "mercado": "Faltas +18.5", "prob": 82.0, "cuota": 1.16, "ev": -0.049, "emoji": "🦵", "categoria": "Faltas", "descripcion": "22.9 faltas esperadas (margen 24%)", "fuente": "real"}]}, {"partido": "COMBINADA PREMIUM", "local": "Colombia vs Portugal + Panamá vs Inglaterra", "visitante": "", "mercado": "⛳ Portugal córners +5.5 + 🎯 Tiros a puerta +6.5", "prob": 64.2, "cuota": 1.4, "cuota_display": 1.4, "ev": -0.101, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 64.2% — máxima seguridad", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Colombia vs Portugal", "local": "Colombia", "visitante": "Portugal", "mercado": "Portugal córners +5.5", "prob": 80.9, "cuota": 1.17, "ev": -0.053, "emoji": "⛳", "categoria": "Córners Portugal", "descripcion": "Portugal promedia 8.0 córners/partido", "fuente": "real"}, {"partido": "Panamá vs Inglaterra", "local": "Panamá", "visitante": "Inglaterra", "mercado": "Tiros a puerta +6.5", "prob": 79.3, "cuota": 1.2, "ev": -0.048, "emoji": "🎯", "categoria": "Tiros", "descripcion": "9.0 tiros esperados (margen 38%)", "fuente": "real"}]}, {"partido": "COMBINADA PREMIUM", "local": "Colombia vs Portugal + Croacia vs Ghana", "visitante": "", "mercado": "⛳ Portugal córners +5.5 + 🦵 Faltas +18.5", "prob": 62.1, "cuota": 1.45, "cuota_display": 1.45, "ev": -0.1, "emoji": "💎", "categoria": "Combinada Premium", "descripcion": "Prob. combinada: 62.1% — máxima seguridad", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Colombia vs Portugal", "local": "Colombia", "visitante": "Portugal", "mercado": "Portugal córners +5.5", "prob": 80.9, "cuota": 1.17, "ev": -0.053, "emoji": "⛳", "categoria": "Córners Portugal", "descripcion": "Portugal promedia 8.0 córners/partido", "fuente": "real"}, {"partido": "Croacia vs Ghana", "local": "Croacia", "visitante": "Ghana", "mercado": "Faltas +18.5", "prob": 76.8, "cuota": 1.24, "ev": -0.048, "emoji": "🦵", "categoria": "Faltas", "descripcion": "22.0 faltas esperadas (margen 19%)", "fuente": "real"}]}];
+const PICKS=[{"partido": "Canadá vs Sudáfrica", "local": "Canadá", "visitante": "Sudáfrica", "mercado": "Tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros", "descripcion": "7.0 tiros esperados (margen 56%)", "fuente": "real", "tipo": "premium"}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
