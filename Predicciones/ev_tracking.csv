@@ -1,73 +1,73 @@
 ﻿Fecha,Local,Visitante,Prob_1,Prob_X,Prob_2,Cuota_Pinnacle_1,Cuota_Pinnacle_X,Cuota_Pinnacle_2,EV_1,EV_X,EV_2,Mejor_resultado,Mejor_EV,EV_Etiqueta,EV_Categoria,CLV_1,Tiene_Pinnacle
-2026-06-11,México,Sudáfrica,53.9,27.0,19.1,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-11,Corea del Sur,República Checa,39.6,31.6,28.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-12,Canadá,Bosnia-Herzegovina,41.7,29.2,29.1,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-12,EE. UU.,Paraguay,42.8,31.7,25.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-13,Catar,Suiza,18.7,26.3,55.1,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-13,Australia,Turquía,31.8,28.3,39.9,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-13,Brasil,Marruecos,48.8,29.2,22.0,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-13,Haití,Escocia,18.9,27.5,53.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-14,Suecia,Túnez,37.3,30.1,32.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-14,Países Bajos,Japón,45.0,29.1,25.9,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-14,Costa de Marfil,Ecuador,44.0,32.5,23.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-14,Alemania,Curazao,76.9,16.2,6.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-15,Arabia Saudí,Uruguay,8.9,20.4,70.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-15,España,Cabo Verde,67.2,19.2,13.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-15,Irán,Nueva Zelanda,58.2,27.3,14.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-15,Bélgica,Egipto,66.7,20.8,12.4,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-16,Irak,Noruega,19.1,30.4,50.4,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-16,Austria,Jordania,73.2,19.1,7.7,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-16,Francia,Senegal,51.1,28.7,20.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-16,Argentina,Argelia,48.8,30.0,21.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-17,Portugal,RD Congo,50.9,33.7,15.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-17,Uzbekistán,Colombia,17.7,25.7,56.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-17,Inglaterra,Croacia,38.2,37.1,24.7,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-17,Ghana,Panamá,28.6,31.5,39.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-18,Canadá,Catar,50.1,27.3,22.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-18,República Checa,Sudáfrica,36.3,31.9,31.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-18,México,Corea del Sur,44.2,30.5,25.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-18,Suiza,Bosnia-Herzegovina,42.6,30.8,26.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-19,EE. UU.,Australia,32.5,35.0,32.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-19,Escocia,Marruecos,20.2,30.0,49.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-19,Turquía,Paraguay,50.4,26.5,23.0,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-19,Brasil,Haití,73.7,16.8,9.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-20,Ecuador,Curazao,49.0,31.6,19.4,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-20,Alemania,Costa de Marfil,51.8,29.4,18.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-20,Países Bajos,Suecia,57.2,23.8,19.0,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-20,Túnez,Japón,22.0,32.4,45.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-21,Bélgica,Irán,56.0,25.4,18.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-21,Nueva Zelanda,Egipto,19.8,29.9,50.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-21,España,Arabia Saudí,80.5,12.9,6.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-21,Uruguay,Cabo Verde,46.0,31.0,23.0,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-22,Noruega,Senegal,24.2,31.1,44.7,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-22,Francia,Irak,75.5,18.5,6.1,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-22,Argentina,Austria,42.6,32.7,24.7,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-22,Jordania,Argelia,13.2,22.9,63.9,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-23,Colombia,RD Congo,43.5,35.1,21.4,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-23,Panamá,Croacia,13.3,26.1,60.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-23,Inglaterra,Ghana,69.7,19.7,10.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-23,Portugal,Uzbekistán,57.3,29.6,13.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,Suiza,Canadá,37.5,33.2,29.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,Marruecos,Haití,62.9,25.3,11.8,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,Bosnia-Herzegovina,Catar,37.9,31.5,30.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,Escocia,Brasil,14.1,26.5,59.4,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,Sudáfrica,Corea del Sur,24.6,33.2,42.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-24,República Checa,México,20.9,29.9,49.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Japón,Suecia,40.8,32.9,26.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Túnez,Países Bajos,15.7,26.7,57.6,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Turquía,EE. UU.,40.7,29.0,30.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Paraguay,Australia,23.0,33.1,43.9,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Ecuador,Alemania,11.4,27.5,61.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-25,Curazao,Costa de Marfil,12.7,28.0,59.3,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Senegal,Irak,57.4,29.1,13.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Noruega,Francia,11.8,22.6,65.5,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Egipto,Irán,21.7,32.6,45.7,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Uruguay,España,15.6,31.4,53.0,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Cabo Verde,Arabia Saudí,49.4,25.7,24.9,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-26,Nueva Zelanda,Bélgica,8.6,15.2,76.2,0.0,0.0,0.0,,,,—,,—,sin_datos,,False
-2026-06-27,Panamá,Inglaterra,11.0,24.4,64.6,17.0,9.1,1.16,0.87,1.2204,-0.2506,X,1.2204,🔥 ALTO VALUE,alto,5.1,True
-2026-06-27,Colombia,Portugal,22.1,30.3,47.6,3.68,3.99,2.0,-0.1867,0.209,-0.048,X,0.209,🔥 ALTO VALUE,alto,-5.1,True
-2026-06-27,RD Congo,Uzbekistán,46.0,28.4,25.6,1.74,3.94,5.08,-0.1996,0.119,0.3005,2,0.3005,🔥 ALTO VALUE,alto,-11.5,True
-2026-06-27,Argelia,Austria,27.0,34.5,38.5,3.83,2.12,3.39,0.0341,-0.2686,0.3052,2,0.3052,🔥 ALTO VALUE,alto,0.9,True
-2026-06-27,Jordania,Argentina,5.6,10.6,83.8,18.5,8.75,1.16,0.036,-0.0725,-0.0279,1,0.036,⚠️ VALUE LEVE,leve,0.2,True
-2026-06-27,Croacia,Ghana,61.6,24.4,14.0,1.93,3.11,5.47,0.1889,-0.2412,-0.2342,1,0.1889,🔥 ALTO VALUE,alto,9.8,True
+2026-06-11,México,Sudáfrica,53.9,27.0,19.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-11,Corea del Sur,República Checa,39.6,31.6,28.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-12,Canadá,Bosnia-Herzegovina,41.7,29.2,29.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-12,EE. UU.,Paraguay,42.8,31.7,25.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-13,Catar,Suiza,18.7,26.3,55.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-13,Australia,Turquía,31.8,28.3,39.9,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-13,Brasil,Marruecos,48.8,29.2,22.0,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-13,Haití,Escocia,18.9,27.5,53.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-14,Suecia,Túnez,37.3,30.1,32.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-14,Países Bajos,Japón,45.0,29.1,25.9,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-14,Costa de Marfil,Ecuador,44.0,32.5,23.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-14,Alemania,Curazao,76.9,16.2,6.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-15,Arabia Saudí,Uruguay,8.9,20.4,70.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-15,España,Cabo Verde,67.2,19.2,13.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-15,Irán,Nueva Zelanda,58.2,27.3,14.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-15,Bélgica,Egipto,66.7,20.8,12.4,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-16,Irak,Noruega,19.1,30.4,50.4,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-16,Austria,Jordania,73.2,19.1,7.7,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-16,Francia,Senegal,51.1,28.7,20.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-16,Argentina,Argelia,48.8,30.0,21.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-17,Portugal,RD Congo,50.9,33.7,15.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-17,Uzbekistán,Colombia,17.7,25.7,56.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-17,Inglaterra,Croacia,38.2,37.1,24.7,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-17,Ghana,Panamá,28.6,31.5,39.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-18,Canadá,Catar,50.1,27.3,22.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-18,República Checa,Sudáfrica,36.3,31.9,31.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-18,México,Corea del Sur,44.2,30.5,25.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-18,Suiza,Bosnia-Herzegovina,42.6,30.8,26.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-19,EE. UU.,Australia,32.5,35.0,32.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-19,Escocia,Marruecos,20.2,30.0,49.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-19,Turquía,Paraguay,50.4,26.5,23.0,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-19,Brasil,Haití,73.7,16.8,9.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-20,Ecuador,Curazao,49.0,31.6,19.4,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-20,Alemania,Costa de Marfil,51.8,29.4,18.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-20,Países Bajos,Suecia,57.2,23.8,19.0,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-20,Túnez,Japón,22.0,32.4,45.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-21,Bélgica,Irán,56.0,25.4,18.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-21,Nueva Zelanda,Egipto,19.8,29.9,50.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-21,España,Arabia Saudí,80.5,12.9,6.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-21,Uruguay,Cabo Verde,46.0,31.0,23.0,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-22,Noruega,Senegal,24.2,31.1,44.7,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-22,Francia,Irak,75.5,18.5,6.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-22,Argentina,Austria,42.6,32.7,24.7,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-22,Jordania,Argelia,13.2,22.9,63.9,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-23,Colombia,RD Congo,43.5,35.1,21.4,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-23,Panamá,Croacia,13.3,26.1,60.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-23,Inglaterra,Ghana,69.7,19.7,10.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-23,Portugal,Uzbekistán,57.3,29.6,13.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,Suiza,Canadá,37.5,33.2,29.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,Marruecos,Haití,62.9,25.3,11.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,Bosnia-Herzegovina,Catar,37.9,31.5,30.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,Escocia,Brasil,14.1,26.5,59.4,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,Sudáfrica,Corea del Sur,24.6,33.2,42.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-24,República Checa,México,20.9,29.9,49.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Japón,Suecia,40.8,32.9,26.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Túnez,Países Bajos,15.7,26.7,57.6,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Turquía,EE. UU.,40.7,29.0,30.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Paraguay,Australia,23.0,33.1,43.9,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Ecuador,Alemania,11.4,27.5,61.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-25,Curazao,Costa de Marfil,12.7,28.0,59.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Senegal,Irak,57.4,29.1,13.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Noruega,Francia,11.8,22.6,65.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Egipto,Irán,21.7,32.6,45.7,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Uruguay,España,15.6,31.4,53.0,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Cabo Verde,Arabia Saudí,49.4,25.7,24.9,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-26,Nueva Zelanda,Bélgica,8.6,15.2,76.2,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,Panamá,Inglaterra,11.7,25.8,62.5,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,Colombia,Portugal,21.2,30.7,48.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,RD Congo,Uzbekistán,43.6,29.6,26.8,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,Argelia,Austria,27.9,31.8,40.3,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,Jordania,Argentina,5.6,11.3,83.1,0,0,0,,,,—,,—,sin_datos,,False
+2026-06-27,Croacia,Ghana,63.9,23.1,13.1,0,0,0,,,,—,,—,sin_datos,,False
