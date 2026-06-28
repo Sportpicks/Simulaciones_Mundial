@@ -1,5 +1,5 @@
 {
-  "bankroll": 102.77,
+  "bankroll": 103.98,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -686,8 +686,8 @@
           "cuota": 1.53,
           "prob": 62,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.06,
           "emoji": "🔒",
           "categoria": "Goles",
           "descripcion": "xG bajo (2.2)"
@@ -700,8 +700,8 @@
           "cuota": 1.15,
           "prob": 82.7,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 0.15,
           "emoji": "🎯",
           "categoria": "Tiros",
           "descripcion": "7.0 tiros esperados (margen 56%)",
@@ -709,7 +709,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 2,
+        "perdidos": 0,
+        "pendientes": 0,
+        "porcentaje": 100.0,
+        "unidades": 1.21
+      }
     }
   ]
 }
