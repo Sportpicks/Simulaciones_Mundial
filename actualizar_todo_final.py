@@ -327,6 +327,11 @@ def main():
     script_oct = os.path.join(RAIZ, 'cargar_octavos.py')
     if os.path.exists(script_oct):
         ejecutar('python cargar_octavos.py', 'Octavos cargados', timeout=60)
+        # Actualizar cruces reales en predicciones_eliminatorias.csv
+        script_elim = os.path.join(RAIZ, 'actualizar_eliminatorias.py')
+        if os.path.exists(script_elim):
+            ejecutar('python actualizar_eliminatorias.py',
+                     'Eliminatorias actualizadas', timeout=60)
         # Rellenar NaN en octavos para que el modelo no falle
         import pandas as pd
         csv_pred = os.path.join(RAIZ, 'Predicciones', 'predicciones_finales.csv')
