@@ -716,6 +716,224 @@
         "porcentaje": 100.0,
         "unidades": 1.21
       }
+    },
+    {
+      "fecha": "2026-06-29",
+      "picks": [
+        {
+          "id": "2026-06-29_pub_combo_0",
+          "tipo": "Público Combinada",
+          "partido": "Brasil vs Japón + Países Bajos vs Marruecos",
+          "mercado": "🎯 Brasil tiros a puerta +4.5 + 🥅 Más de 2.5 goles",
+          "cuota": 1.51,
+          "prob": 60.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "picks_combo": [
+            {
+              "partido": "Brasil vs Japón",
+              "local": "Brasil",
+              "visitante": "Japón",
+              "mercado": "Brasil tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Brasil",
+              "descripcion": "Brasil promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Países Bajos vs Marruecos",
+              "local": "Países Bajos",
+              "visitante": "Marruecos",
+              "mercado": "Más de 2.5 goles",
+              "prob": 72.6,
+              "cuota": 1.31,
+              "ev": -0.049,
+              "emoji": "🥅",
+              "categoria": "Goles",
+              "descripcion": "xG total 3.8",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-29_pub_combo_1",
+          "tipo": "Público Combinada",
+          "partido": "Brasil vs Japón + Alemania vs Paraguay",
+          "mercado": "🎯 Brasil tiros a puerta +4.5 + ⛳ Córners +7.5",
+          "cuota": 1.62,
+          "prob": 55.9,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "picks_combo": [
+            {
+              "partido": "Brasil vs Japón",
+              "local": "Brasil",
+              "visitante": "Japón",
+              "mercado": "Brasil tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Brasil",
+              "descripcion": "Brasil promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Alemania vs Paraguay",
+              "local": "Alemania",
+              "visitante": "Paraguay",
+              "mercado": "Córners +7.5",
+              "prob": 67.6,
+              "cuota": 1.41,
+              "ev": -0.047,
+              "emoji": "⛳",
+              "categoria": "Córners",
+              "descripcion": "9.0 córners esperados (margen 20%)",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-29_pub_combo_2",
+          "tipo": "Público Combinada",
+          "partido": "Brasil vs Japón + Países Bajos vs Marruecos",
+          "mercado": "🎯 Brasil tiros a puerta +4.5 + ⛳ Córners +7.5",
+          "cuota": 1.62,
+          "prob": 55.9,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "picks_combo": [
+            {
+              "partido": "Brasil vs Japón",
+              "local": "Brasil",
+              "visitante": "Japón",
+              "mercado": "Brasil tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Brasil",
+              "descripcion": "Brasil promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Países Bajos vs Marruecos",
+              "local": "Países Bajos",
+              "visitante": "Marruecos",
+              "mercado": "Córners +7.5",
+              "prob": 67.6,
+              "cuota": 1.41,
+              "ev": -0.047,
+              "emoji": "⛳",
+              "categoria": "Córners",
+              "descripcion": "9.0 córners esperados (margen 20%)",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-29_pub_combo_3",
+          "tipo": "Público Combinada",
+          "partido": "Alemania vs Paraguay + Países Bajos vs Marruecos",
+          "mercado": "🎯 Paraguay tiros a puerta +4.5 + 🥅 Más de 2.5 goles",
+          "cuota": 1.51,
+          "prob": 60.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "picks_combo": [
+            {
+              "partido": "Alemania vs Paraguay",
+              "local": "Alemania",
+              "visitante": "Paraguay",
+              "mercado": "Paraguay tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Paraguay",
+              "descripcion": "Paraguay promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Países Bajos vs Marruecos",
+              "local": "Países Bajos",
+              "visitante": "Marruecos",
+              "mercado": "Más de 2.5 goles",
+              "prob": 72.6,
+              "cuota": 1.31,
+              "ev": -0.049,
+              "emoji": "🥅",
+              "categoria": "Goles",
+              "descripcion": "xG total 3.8",
+              "fuente": "real"
+            }
+          ]
+        },
+        {
+          "id": "2026-06-29_prem_0",
+          "tipo": "Premium",
+          "partido": "Brasil vs Japón + Alemania vs Paraguay + Países Bajos vs Marruecos",
+          "mercado": "🎯 Brasil tiros a puert + 🎯 Paraguay tiros a pue + 🛡️ 1X — Países Bajos o ",
+          "cuota": 1.63,
+          "prob": 52.9,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "💎",
+          "categoria": "Triple Combinada",
+          "descripcion": "3 picks seguros combinados — prob. 52.9% | cuota @1.63",
+          "picks_combo": [
+            {
+              "partido": "Brasil vs Japón",
+              "local": "Brasil",
+              "visitante": "Japón",
+              "mercado": "Brasil tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Brasil",
+              "descripcion": "Brasil promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Alemania vs Paraguay",
+              "local": "Alemania",
+              "visitante": "Paraguay",
+              "mercado": "Paraguay tiros a puerta +4.5",
+              "prob": 82.7,
+              "cuota": 1.15,
+              "ev": -0.049,
+              "emoji": "🎯",
+              "categoria": "Tiros Paraguay",
+              "descripcion": "Paraguay promedia 7.0 tiros/partido",
+              "fuente": "real"
+            },
+            {
+              "partido": "Países Bajos vs Marruecos",
+              "local": "Países Bajos",
+              "visitante": "Marruecos",
+              "mercado": "1X — Países Bajos o Empate",
+              "prob": 77.3,
+              "cuota": 1.23,
+              "ev": -0.049,
+              "emoji": "🛡️",
+              "categoria": "Doble Op.",
+              "descripcion": "Cubre victoria Países Bajos + empate",
+              "fuente": "real"
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
