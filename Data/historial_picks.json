@@ -1,5 +1,5 @@
 {
-  "bankroll": 103.98,
+  "bankroll": 101.46,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -728,8 +728,8 @@
           "cuota": 1.51,
           "prob": 60.0,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
           "picks_combo": [
             {
               "partido": "Brasil vs Japón",
@@ -767,8 +767,8 @@
           "cuota": 1.62,
           "prob": 55.9,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.24,
           "picks_combo": [
             {
               "partido": "Brasil vs Japón",
@@ -806,8 +806,8 @@
           "cuota": 1.62,
           "prob": 55.9,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.24,
           "picks_combo": [
             {
               "partido": "Brasil vs Japón",
@@ -845,8 +845,8 @@
           "cuota": 1.51,
           "prob": 60.0,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
           "picks_combo": [
             {
               "partido": "Alemania vs Paraguay",
@@ -884,8 +884,8 @@
           "cuota": 1.63,
           "prob": 52.9,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -1.0,
           "emoji": "💎",
           "categoria": "Triple Combinada",
           "descripcion": "3 picks seguros combinados — prob. 52.9% | cuota @1.63",
@@ -933,7 +933,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 2,
+        "perdidos": 3,
+        "pendientes": 0,
+        "porcentaje": 40.0,
+        "unidades": -2.52
+      }
     },
     {
       "fecha": "2026-06-30",

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- ts:1782710055 -->
+<!-- ts:1782826627 -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks Premium 💎 — Mundial 2026</title>
@@ -60,15 +60,15 @@ footer a{color:var(--ac);text-decoration:none}
 </nav>
 <div class="wrap">
   <header>
-    <h1>💎 Picks Premium — 2026-06-29</h1>
+    <h1>💎 Picks Premium — 2026-06-30</h1>
     <p>Los 3 picks con mayor probabilidad de acierto del día</p>
-    <span class="badge">📅 29-06-2026 05:14 UTC</span>
+    <span class="badge">📅 30-06-2026 13:37 UTC</span>
     <span class="badge">🔐 Acceso exclusivo suscriptores</span>
   </header>
   <div class="resumen" id="res"></div>
   <div class="acum-box">
     <div class="title">📈 Cuota acumulador (combinados)</div>
-    <div class="val">@1.63</div>
+    <div class="val">@1.71</div>
   </div>
   <div id="picks"></div>
   <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
@@ -80,7 +80,7 @@ footer a{color:var(--ac);text-decoration:none}
   </footer>
 </div>
 <script>
-const PICKS=[{"partido": "COMBINADA PREMIUM", "local": "Brasil vs Japón + Alemania vs Paraguay + Países Bajos vs Marruecos", "visitante": "", "mercado": "🎯 Brasil tiros a puert + 🎯 Paraguay tiros a pue + 🛡️ 1X — Países Bajos o ", "prob": 52.9, "cuota": 1.63, "cuota_display": 1.63, "ev": -0.138, "emoji": "💎", "categoria": "Triple Combinada", "descripcion": "3 picks seguros combinados — prob. 52.9% | cuota @1.63", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Brasil vs Japón", "local": "Brasil", "visitante": "Japón", "mercado": "Brasil tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros Brasil", "descripcion": "Brasil promedia 7.0 tiros/partido", "fuente": "real"}, {"partido": "Alemania vs Paraguay", "local": "Alemania", "visitante": "Paraguay", "mercado": "Paraguay tiros a puerta +4.5", "prob": 82.7, "cuota": 1.15, "ev": -0.049, "emoji": "🎯", "categoria": "Tiros Paraguay", "descripcion": "Paraguay promedia 7.0 tiros/partido", "fuente": "real"}, {"partido": "Países Bajos vs Marruecos", "local": "Países Bajos", "visitante": "Marruecos", "mercado": "1X — Países Bajos o Empate", "prob": 77.3, "cuota": 1.23, "ev": -0.049, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre victoria Países Bajos + empate", "fuente": "real"}]}];
+const PICKS=[{"partido": "COMBINADA PREMIUM", "local": "Costa de Marfil vs Noruega + México vs Ecuador + Francia vs Suecia", "visitante": "", "mercado": "🛡️ X2 — Empate o Norueg + 🎯 México tiros a puert + 🎯 Tiros a puerta +7.5", "prob": 50.1, "cuota": 1.71, "cuota_display": 1.71, "ev": -0.143, "emoji": "💎", "categoria": "Triple Combinada", "descripcion": "3 picks seguros combinados — prob. 50.1% | cuota @1.71", "fuente": "calculada", "tipo": "combinada", "picks_combo": [{"partido": "Costa de Marfil vs Noruega", "local": "Costa de Marfil", "visitante": "Noruega", "mercado": "X2 — Empate o Noruega", "prob": 80.5, "cuota": 1.18, "ev": -0.05, "emoji": "🛡️", "categoria": "Doble Op.", "descripcion": "Cubre empate + victoria Noruega", "fuente": "real"}, {"partido": "México vs Ecuador", "local": "México", "visitante": "Ecuador", "mercado": "México tiros a puerta +3.5", "prob": 79.8, "cuota": 1.19, "ev": -0.05, "emoji": "🎯", "categoria": "Tiros México", "descripcion": "México promedia 5.5 tiros/partido", "fuente": "real"}, {"partido": "Francia vs Suecia", "local": "Francia", "visitante": "Suecia", "mercado": "Tiros a puerta +7.5", "prob": 78.0, "cuota": 1.22, "ev": -0.048, "emoji": "🎯", "categoria": "Tiros", "descripcion": "10.0 tiros esperados (margen 33%)", "fuente": "real"}]}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
 const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
 const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
