@@ -661,9 +661,17 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
     candidatos.sort(key=score, reverse=True)
 
     resultado = []
+<<<<<<< Updated upstream
     partidos_usados = set()
     categorias_usadas = {}
     hc_count = 0
+=======
+    partidos_count = {}  # partido -> cuantas veces usado
+    categorias_usadas = {}
+    hc_count = 0
+    n_partidos = len(set(pk['partido'] for pk in todos))
+    max_por_partido = 2 if n_partidos <= 3 else 1
+>>>>>>> Stashed changes
 
     for pk in candidatos:
         if len(resultado) >= max_picks:
@@ -671,8 +679,18 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
         partido = pk['partido']
         cat = pk.get('categoria', '')
 
+<<<<<<< Updated upstream
         if partido in partidos_usados:
             continue
+=======
+        if partidos_count.get(partido, 0) >= max_por_partido:
+            continue
+        # Si el partido ya tiene 1 pick, exigir categoria diferente
+        if partidos_count.get(partido, 0) >= 1:
+            cats_usadas_partido = [p.get('categoria') for p in resultado if p['partido'] == partido]
+            if cat in cats_usadas_partido:
+                continue
+>>>>>>> Stashed changes
         if cat == 'Handicap':
             if hc_count >= 1:
                 continue
@@ -682,7 +700,11 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
 
         pk['tipo'] = 'individual'
         resultado.append(pk)
+<<<<<<< Updated upstream
         partidos_usados.add(partido)
+=======
+        partidos_count[partido] = partidos_count.get(partido, 0) + 1
+>>>>>>> Stashed changes
         categorias_usadas[cat] = categorias_usadas.get(cat, 0) + 1
 
     for pk in resultado:
