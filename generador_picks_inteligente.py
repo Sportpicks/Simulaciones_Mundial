@@ -496,16 +496,15 @@ def generar_picks_partido(r, cuotas_p):
 
 def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
     """
-    Panel público MEJORADO:
+    Panel publico v3:
     - Max 3 picks INDIVIDUALES solidos (sin combinadas)
-    - Umbral prob >= 65% con cuotas reales, >= 70% sin cuotas reales
-    - Prioridad: mercados variados (no repetir categoria)
-    - Scoring mejorado: penaliza picks de misma categoria
-    - Si no hay 3 picks solidos, mejor mostrar menos que forzar combinadas
+    - Con cuotas reales: prob >= 60%, cuota >= 1.50
+    - Sin cuotas reales: prob >= 62%, cuota >= 1.10 O prob >= 80%
+    - Diversidad de mercado — max 2 picks de misma categoria
+    - Si no hay suficientes, mejor menos que forzar combinadas
     """
     hay_cuotas_reales = any(pk.get('fuente') == 'real' for pk in todos)
 
-    # Prioridad de categorias — diversidad de mercado
     CAT_PRIORIDAD = {
         '1X2': 10, 'Handicap': 9, 'Goles': 8,
         'Doble Op.': 7, 'Córners': 6, 'Faltas': 5,
@@ -514,29 +513,29 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
     }
 
     def score(pk):
-        cat_p  = CAT_PRIORIDAD.get(pk.get('categoria',''), 1)
+        cat_p   = CAT_PRIORIDAD.get(pk.get('categoria',''), 1)
         es_real = 3 if pk.get('fuente') == 'real' else 0
         return (es_real, cat_p, pk['prob'])
 
-    # Umbral de prob según disponibilidad de cuotas
-    prob_min = 65 if hay_cuotas_reales else 70
-    cuota_min_est = 1.15  # para picks sin cuota real
+    prob_min = 60 if hay_cuotas_reales else 62
 
-    # Candidatos individuales unicamente
-    candidatos = [
-        pk for pk in todos
-        if pk.get('tipo','individual') == 'individual'
-        and pk['prob'] >= prob_min
-        and (
-            (pk.get('fuente') == 'real' and pk['cuota'] >= cuota_min) or
-            (pk.get('fuente') != 'real' and pk['cuota'] >= cuota_min_est)
-        )
-    ]
+    candidatos = []
+    for pk in todos:
+        if pk['prob'] < prob_min:
+            continue
+        if pk.get('fuente') == 'real':
+            if pk['cuota'] >= cuota_min:
+                candidatos.append(pk)
+        else:
+            # Sin cuota real: aceptar si cuota >= 1.10 O prob muy alta (pick seguro)
+            if pk['cuota'] >= 1.10 or pk['prob'] >= 80:
+                candidatos.append(pk)
+
     candidatos.sort(key=score, reverse=True)
 
     resultado = []
     partidos_usados = set()
-    categorias_usadas = {}  # cat -> count
+    categorias_usadas = {}
     hc_count = 0
 
     for pk in candidatos:
@@ -545,17 +544,12 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
         partido = pk['partido']
         cat = pk.get('categoria', '')
 
-        # Max 1 pick por partido
         if partido in partidos_usados:
             continue
-
-        # Max 1 HC por panel
         if cat == 'Handicap':
             if hc_count >= 1:
                 continue
             hc_count += 1
-
-        # Max 2 picks de la misma categoria (diversidad)
         if categorias_usadas.get(cat, 0) >= 2:
             continue
 
@@ -569,11 +563,6 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
         if 'tipo' not in pk: pk['tipo'] = 'individual'
 
     return resultado[:max_picks]
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SELECCIÓN PICKS PREMIUM — CON ANTI-CORRELACIÓN
-# ══════════════════════════════════════════════════════════════════════════════
 
 def seleccionar_premium(todos, max_picks=1, prob_min=78):
     """
