@@ -241,9 +241,11 @@ def generar_picks_handicap(local, visitante, xgl, xgv, p1, p2):
 def obtener_cuotas():
     cuotas = {}
     try:
+        # Llamada 1: h2h + asian_handicap
         r = requests.get(
             "https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds/",
-            params={"apiKey":API_KEY_ODDS,"regions":"eu","markets":"h2h,asian_handicap",
+            params={"apiKey":API_KEY_ODDS,"regions":"eu",
+                    "markets":"h2h,asian_handicap,totals,btts",
                     "oddsFormat":"decimal"},
             timeout=15
         )
@@ -255,6 +257,9 @@ def obtener_cuotas():
                 visit_es = NOMBRES_API.get(visit_en, visit_en)
                 c1s,cxs,c2s = [],[],[]
                 hc_cuotas = {}
+                totals = {}   # over/under goles: {'over_1.5': [cuotas], 'under_2.5': [...]}
+                btts_si = []  # ambos anotan SI
+                btts_no = []  # ambos anotan NO
                 for bk in partido.get("bookmakers",[]):
                     for mkt in bk.get("markets",[]):
                         if mkt["key"]=="h2h":
@@ -268,36 +273,69 @@ def obtener_cuotas():
                                 if hc_key not in hc_cuotas:
                                     hc_cuotas[hc_key] = []
                                 hc_cuotas[hc_key].append(o["price"])
+                        elif mkt["key"]=="totals":
+                            for o in mkt["outcomes"]:
+                                linea = o.get("point","")
+                                nombre = o.get("name","").lower()
+                                key = f"{nombre}_{linea}"
+                                if key not in totals:
+                                    totals[key] = []
+                                totals[key].append(o["price"])
+                        elif mkt["key"]=="btts":
+                            for o in mkt["outcomes"]:
+                                nombre = o.get("name","").lower()
+                                if nombre in ("yes","sí","si","ambos anotan"):
+                                    btts_si.append(o["price"])
+                                elif nombre in ("no","no anotan"):
+                                    btts_no.append(o["price"])
+
                 cuotas[(local_es,visit_es)] = {
                     'c1': round(sum(c1s)/len(c1s),2) if c1s else 0,
                     'cx': round(sum(cxs)/len(cxs),2) if cxs else 0,
                     'c2': round(sum(c2s)/len(c2s),2) if c2s else 0,
                     'hc': {k: round(sum(v)/len(v),2) for k,v in hc_cuotas.items()},
+                    'totals': {k: round(sum(v)/len(v),2) for k,v in totals.items()},
+                    'btts_si': round(sum(btts_si)/len(btts_si),2) if btts_si else 0,
+                    'btts_no': round(sum(btts_no)/len(btts_no),2) if btts_no else 0,
                 }
     except Exception as e:
         print(f"   ⚠️ Error cuotas: {e}")
     # ── Cuotas reales manuales de respaldo (Oddschecker/Betano) ──
     # Se usan cuando la API no devuelve datos para estos partidos
     cuotas_manuales = {
-        ('Inglaterra',  'RD Congo'):           {'c1':1.31,'cx':5.60,'c2':15.0, 'hc':{}},
-        ('Bélgica',     'Senegal'):             {'c1':2.21,'cx':3.56,'c2':3.90, 'hc':{}},
-        ('EE. UU.',     'Bosnia-Herzegovina'): {'c1':1.42,'cx':5.19,'c2':9.50, 'hc':{}},
-        ('España',      'Austria'):             {'c1':1.37,'cx':5.70,'c2':12.0, 'hc':{}},
-        ('Portugal',    'Croacia'):             {'c1':1.82,'cx':3.65,'c2':5.20, 'hc':{}},
-        ('Suiza',       'Argelia'):             {'c1':2.15,'cx':3.41,'c2':4.10, 'hc':{}},
-        ('Australia',   'Egipto'):              {'c1':3.48,'cx':3.06,'c2':2.58, 'hc':{}},
-        ('Argentina',   'Cabo Verde'):          {'c1':1.20,'cx':7.55,'c2':22.0, 'hc':{}},
-        ('Colombia',    'Ghana'):               {'c1':1.57,'cx':3.80,'c2':5.50, 'hc':{}},
-        ('Canadá',      'Sudáfrica'):           {'c1':1.55,'cx':3.90,'c2':6.00, 'hc':{}},
-        ('Brasil',      'Japón'):               {'c1':1.80,'cx':3.60,'c2':4.50, 'hc':{}},
-        ('Alemania',    'Paraguay'):            {'c1':1.65,'cx':4.00,'c2':5.50, 'hc':{}},
-        ('Países Bajos','Marruecos'):           {'c1':1.90,'cx':3.50,'c2':4.20, 'hc':{}},
-        ('Costa de Marfil','Noruega'):          {'c1':2.20,'cx':3.40,'c2':3.30, 'hc':{}},
-        ('Francia',     'Suecia'):              {'c1':1.55,'cx':4.00,'c2':5.50, 'hc':{}},
-        ('México',      'Ecuador'):             {'c1':2.10,'cx':3.30,'c2':3.50, 'hc':{}},
-        ('Inglaterra',  'RD Congo'):            {'c1':1.31,'cx':5.60,'c2':15.0, 'hc':{}},
-        ('Bélgica',     'Senegal'):             {'c1':2.21,'cx':3.56,'c2':3.90, 'hc':{}},
-        ('EE. UU.',     'Bosnia-Herzegovina'): {'c1':1.42,'cx':5.19,'c2':9.50, 'hc':{}},
+        # Cuotas 1X2 + totals + btts reales de Betano/Oddschecker
+        ('Inglaterra',  'RD Congo'):           {'c1':1.31,'cx':5.60,'c2':15.0,'hc':{},
+            'totals':{'over_1.5':1.22,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':3.50},'btts_si':3.20,'btts_no':1.30},
+        ('Bélgica',     'Senegal'):             {'c1':2.21,'cx':3.56,'c2':3.90,'hc':{},
+            'totals':{'over_1.5':1.40,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.80},'btts_si':2.50,'btts_no':1.50},
+        ('EE. UU.',     'Bosnia-Herzegovina'): {'c1':1.42,'cx':5.19,'c2':9.50,'hc':{},
+            'totals':{'over_1.5':1.35,'over_2.5':1.95,'under_2.5':1.85,'over_3.5':3.60},'btts_si':2.80,'btts_no':1.40},
+        ('España',      'Austria'):             {'c1':1.37,'cx':5.70,'c2':12.0,'hc':{},
+            'totals':{'over_1.5':1.25,'over_2.5':1.90,'under_2.5':1.90,'over_3.5':3.40},'btts_si':3.00,'btts_no':1.33},
+        ('Portugal',    'Croacia'):             {'c1':1.82,'cx':3.65,'c2':5.20,'hc':{},
+            'totals':{'over_1.5':1.35,'over_2.5':1.85,'under_2.5':1.95,'over_3.5':3.50},'btts_si':2.40,'btts_no':1.55},
+        ('Suiza',       'Argelia'):             {'c1':2.15,'cx':3.41,'c2':4.10,'hc':{},
+            'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},'btts_si':2.60,'btts_no':1.45},
+        ('Australia',   'Egipto'):              {'c1':3.48,'cx':3.06,'c2':2.58,'hc':{},
+            'totals':{'over_1.5':1.45,'over_2.5':2.20,'under_2.5':1.65,'over_3.5':4.20},'btts_si':2.70,'btts_no':1.42},
+        ('Argentina',   'Cabo Verde'):          {'c1':1.20,'cx':7.55,'c2':22.0,'hc':{},
+            'totals':{'over_1.5':1.18,'over_2.5':1.65,'under_2.5':2.20,'over_3.5':2.80},'btts_si':4.50,'btts_no':1.18},
+        ('Colombia',    'Ghana'):               {'c1':1.57,'cx':3.80,'c2':5.50,'hc':{},
+            'totals':{'over_1.5':1.38,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.70},'btts_si':2.60,'btts_no':1.45},
+        ('Canadá',      'Sudáfrica'):           {'c1':1.55,'cx':3.90,'c2':6.00,'hc':{},
+            'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},'btts_si':3.00,'btts_no':1.33},
+        ('Brasil',      'Japón'):               {'c1':1.80,'cx':3.60,'c2':4.50,'hc':{},
+            'totals':{'over_1.5':1.30,'over_2.5':1.90,'under_2.5':1.90,'over_3.5':3.50},'btts_si':2.50,'btts_no':1.50},
+        ('Alemania',    'Paraguay'):            {'c1':1.65,'cx':4.00,'c2':5.50,'hc':{},
+            'totals':{'over_1.5':1.28,'over_2.5':1.85,'under_2.5':1.95,'over_3.5':3.40},'btts_si':2.80,'btts_no':1.40},
+        ('Países Bajos','Marruecos'):           {'c1':1.90,'cx':3.50,'c2':4.20,'hc':{},
+            'totals':{'over_1.5':1.35,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.80},'btts_si':2.60,'btts_no':1.45},
+        ('Costa de Marfil','Noruega'):          {'c1':2.20,'cx':3.40,'c2':3.30,'hc':{},
+            'totals':{'over_1.5':1.38,'over_2.5':1.95,'under_2.5':1.85,'over_3.5':3.60},'btts_si':2.40,'btts_no':1.52},
+        ('Francia',     'Suecia'):              {'c1':1.55,'cx':4.00,'c2':5.50,'hc':{},
+            'totals':{'over_1.5':1.25,'over_2.5':1.80,'under_2.5':2.00,'over_3.5':3.30},'btts_si':3.10,'btts_no':1.30},
+        ('México',      'Ecuador'):             {'c1':2.10,'cx':3.30,'c2':3.50,'hc':{},
+            'totals':{'over_1.5':1.40,'over_2.5':2.05,'under_2.5':1.75,'over_3.5':3.90},'btts_si':2.50,'btts_no':1.50},
     }
     for key, vals in cuotas_manuales.items():
         if key not in cuotas:
@@ -332,6 +370,9 @@ def generar_picks_partido(r, cuotas_p):
     c1 = cuotas_p.get('c1',0)
     cx = cuotas_p.get('cx',0)
     c2 = cuotas_p.get('c2',0)
+    totals_r  = cuotas_p.get('totals', {})   # over/under reales
+    btts_si_r = cuotas_p.get('btts_si', 0)   # ambos anotan SI real
+    btts_no_r = cuotas_p.get('btts_no', 0)   # ambos anotan NO real
     picks = []
 
     def add(mercado, prob, cuota, emoji, cat, desc=""):
@@ -399,6 +440,35 @@ def generar_picks_partido(r, cuotas_p):
     cu_u = cuota_estimada(pr_u)
     if cu_u >= 1.15:
         add("Menos de 2.5 goles", pr_u, cu_u, '🔒','Goles', f"xG bajo ({round(xg_t,1)})")
+
+    # ── Goles Over/Under con cuotas REALES de la API ──
+    for key_r, cuota_r in totals_r.items():
+        if cuota_r < 1.30: continue
+        partes = key_r.split('_')
+        if len(partes) < 2: continue
+        tipo = partes[0]   # 'over' o 'under'
+        try: linea_r = float(partes[1])
+        except: continue
+        pr_r = round(p_poisson(xg_t, linea_r)*100, 1)
+        if tipo == 'under':
+            pr_r = round(100 - p_poisson(xg_t, linea_r)*100, 1)
+        if pr_r >= 55:
+            emoji_r = '🥅' if tipo == 'over' else '🔒'
+            label_r = f"Más de {linea_r} goles" if tipo == 'over' else f"Menos de {linea_r} goles"
+            add(label_r, pr_r, cuota_r, emoji_r, 'Goles',
+                f"xG total {round(xg_t,1)} — cuota real @{cuota_r}")
+
+    # ── Ambos anotan (BTTS) con cuotas reales ──
+    if btts_si_r >= 1.40:
+        pr_btts = round((1 - math.exp(-xgl)) * (1 - math.exp(-xgv)) * 100, 1)
+        if pr_btts >= 45:
+            add("Ambos anotan - Sí", pr_btts, btts_si_r, '⚽', 'Goles',
+                f"xG local {xgl} · xG visitante {xgv}")
+    if btts_no_r >= 1.40:
+        pr_btts_no = round(100 - (1 - math.exp(-xgl)) * (1 - math.exp(-xgv)) * 100, 1)
+        if pr_btts_no >= 45:
+            add("Ambos anotan - No", pr_btts_no, btts_no_r, '🔒', 'Goles',
+                f"xG local {xgl} · xG visitante {xgv}")
 
     # ── Córners — con banda de confianza ──
     for lin in [7.5, 8.5, 9.5, 10.5]:
