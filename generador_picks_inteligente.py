@@ -442,17 +442,45 @@ def generar_picks_partido(r, cuotas_p):
     if cu_u >= 1.15:
         add("Menos de 2.5 goles", pr_u, cu_u, '🔒','Goles', f"xG bajo ({round(xg_t,1)})")
 
-    # ── Goles Over/Under con cuotas REALES de la API ──
+    # ── Mercados con cuotas REALES (goles, corners, tarjetas) ──
     for key_r, cuota_r in totals_r.items():
         if cuota_r < 1.30: continue
         partes = key_r.split('_')
         if len(partes) < 2: continue
-        tipo = partes[0]   # 'over' o 'under'
+        tipo = partes[0]  # 'over' o 'under'
+
+        # ── Corners reales ──
+        if 'corner' in key_r:
+            try: linea_r = float(partes[1])
+            except: continue
+            pr_impl  = round((1/cuota_r)*100*0.95, 1)
+            pr_model = round(p_poisson(lam_cor, linea_r)*100, 1)
+            pr_r = max(pr_impl, pr_model)
+            if tipo == 'over' and pr_r >= 48:
+                add(f"Córners totales +{linea_r}", pr_r, cuota_r, '⛳', 'Córners',
+                    f"{round(lam_cor,1)} córners esperados — cuota real @{cuota_r}")
+            continue
+
+        # ── Tarjetas reales ──
+        if 'card' in key_r:
+            try: linea_r = float(partes[1])
+            except: continue
+            pr_impl  = round((1/cuota_r)*100*0.95, 1)
+            pr_model = round(p_poisson(lam_tar, linea_r)*100, 1)
+            pr_r = max(pr_impl, pr_model)
+            if tipo == 'over' and pr_r >= 48:
+                add(f"Tarjetas +{linea_r}", pr_r, cuota_r, '🟨', 'Tarjetas',
+                    f"{round(lam_tar,1)} tarjetas esperadas — cuota real @{cuota_r}")
+            continue
+
+        # ── Goles over/under reales ──
         try: linea_r = float(partes[1])
         except: continue
-        pr_r = round(p_poisson(xg_t, linea_r)*100, 1)
+        pr_impl  = round((1/cuota_r)*100*0.95, 1)
+        pr_model = round(p_poisson(xg_t, linea_r)*100, 1)
         if tipo == 'under':
-            pr_r = round(100 - p_poisson(xg_t, linea_r)*100, 1)
+            pr_model = round(100 - p_poisson(xg_t, linea_r)*100, 1)
+        pr_r = max(pr_impl, pr_model)
         if pr_r >= 50:
             emoji_r = '🥅' if tipo == 'over' else '🔒'
             label_r = f"Más de {linea_r} goles" if tipo == 'over' else f"Menos de {linea_r} goles"
