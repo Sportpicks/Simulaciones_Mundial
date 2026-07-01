@@ -292,6 +292,11 @@ def generar_picks_partido(r, cuotas_p):
     p2     = float(r['Prob_2_Final'])
     xgl    = float(r.get('xG_L',0))
     xgv    = float(r.get('xG_V',0))
+    # Factor eliminatoria: reducir xG 15% en octavos/cuartos (partidos mas conservadores)
+    fase = str(r.get('Grupo',''))
+    if fase in ('R16','R8','R4','FINAL','SF'):
+        xgl  = round(xgl * 0.85, 2)
+        xgv  = round(xgv * 0.85, 2)
     xg_t   = xgl + xgv
     lam_cor   = float(r.get('cor',9.0))
     lam_tar   = float(r.get('tar',4.0))
@@ -489,74 +494,80 @@ def generar_picks_partido(r, cuotas_p):
 # SELECCIÓN PICKS PÚBLICOS
 # ══════════════════════════════════════════════════════════════════════════════
 
-def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
+def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
+    """
+    Panel público MEJORADO:
+    - Max 3 picks INDIVIDUALES solidos (sin combinadas)
+    - Umbral prob >= 65% con cuotas reales, >= 70% sin cuotas reales
+    - Prioridad: mercados variados (no repetir categoria)
+    - Scoring mejorado: penaliza picks de misma categoria
+    - Si no hay 3 picks solidos, mejor mostrar menos que forzar combinadas
+    """
     hay_cuotas_reales = any(pk.get('fuente') == 'real' for pk in todos)
 
+    # Prioridad de categorias — diversidad de mercado
+    CAT_PRIORIDAD = {
+        '1X2': 10, 'Handicap': 9, 'Goles': 8,
+        'Doble Op.': 7, 'Córners': 6, 'Faltas': 5,
+        'Tiros': 4, 'Tarjetas': 3, 'Paradas': 3,
+        'Remates': 4, 'Ocasiones': 3, 'Saques Banda': 2,
+    }
+
     def score(pk):
-        es_real   = 2 if pk.get('fuente') == 'real' else 0
-        es_hc     = 0 if pk.get('categoria') == 'Handicap' else 1
-        cat_score = 2 if pk.get('categoria') in ('Goles', 'Props', '1X2') else 1
-        return (es_hc, cat_score, es_real, pk['prob'])
+        cat_p  = CAT_PRIORIDAD.get(pk.get('categoria',''), 1)
+        es_real = 3 if pk.get('fuente') == 'real' else 0
+        return (es_real, cat_p, pk['prob'])
 
-    # Nivel 1: cuota real >= 1.50 y prob >= 60%
-    nivel1 = [pk for pk in todos
-              if pk.get('fuente') == 'real'
-              and pk['cuota'] >= cuota_min
-              and pk['prob'] >= 60]
+    # Umbral de prob según disponibilidad de cuotas
+    prob_min = 65 if hay_cuotas_reales else 70
+    cuota_min_est = 1.15  # para picks sin cuota real
 
-    # Nivel 2: estimados con prob >= 65% cuando no hay cuotas reales
-    prob_min_est = 65 if not hay_cuotas_reales else 68
-    nivel2 = [pk for pk in todos
-              if pk.get('fuente') != 'real'
-              and pk['prob'] >= prob_min_est
-              and pk['cuota'] >= 1.15]
-
-    candidatos = nivel1 + nivel2
+    # Candidatos individuales unicamente
+    candidatos = [
+        pk for pk in todos
+        if pk.get('tipo','individual') == 'individual'
+        and pk['prob'] >= prob_min
+        and (
+            (pk.get('fuente') == 'real' and pk['cuota'] >= cuota_min) or
+            (pk.get('fuente') != 'real' and pk['cuota'] >= cuota_min_est)
+        )
+    ]
     candidatos.sort(key=score, reverse=True)
 
     resultado = []
     partidos_usados = set()
+    categorias_usadas = {}  # cat -> count
     hc_count = 0
+
     for pk in candidatos:
-        if pk['partido'] not in partidos_usados:
-            if pk.get('categoria') == 'Handicap':
-                if hc_count >= 1:
-                    continue
-                hc_count += 1
-            pk['tipo'] = 'individual'
-            resultado.append(pk)
-            partidos_usados.add(pk['partido'])
         if len(resultado) >= max_picks:
             break
+        partido = pk['partido']
+        cat = pk.get('categoria', '')
 
-    if len(resultado) < max_picks:
-        seguros = [pk for pk in todos if pk['prob'] >= 65 and pk['cuota'] >= 1.15]
-        seguros.sort(key=lambda x: x['prob'], reverse=True)
-        for i in range(len(seguros)):
-            for j in range(i+1, len(seguros)):
-                pk1, pk2 = seguros[i], seguros[j]
-                if pk1['partido'] == pk2['partido']: continue
-                cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
-                prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-                if cuota_c < cuota_min or prob_c < 55: continue
-                combo = {
-                    'partido': 'COMBINADA',
-                    'local': f"{pk1['partido']} + {pk2['partido']}",
-                    'visitante': '',
-                    'mercado': f"{pk1['emoji']} {pk1['mercado'][:30]} + {pk2['emoji']} {pk2['mercado'][:30]}",
-                    'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
-                    'ev': round((prob_c/100)*cuota_c - 1, 3),
-                    'emoji': '🔗', 'categoria': 'Combinada',
-                    'descripcion': f"Prob. combinada: {prob_c}% | {pk1['partido']} + {pk2['partido']}",
-                    'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
-                }
-                resultado.append(combo)
-                if len(resultado) >= max_picks: break
-            if len(resultado) >= max_picks: break
+        # Max 1 pick por partido
+        if partido in partidos_usados:
+            continue
+
+        # Max 1 HC por panel
+        if cat == 'Handicap':
+            if hc_count >= 1:
+                continue
+            hc_count += 1
+
+        # Max 2 picks de la misma categoria (diversidad)
+        if categorias_usadas.get(cat, 0) >= 2:
+            continue
+
+        pk['tipo'] = 'individual'
+        resultado.append(pk)
+        partidos_usados.add(partido)
+        categorias_usadas[cat] = categorias_usadas.get(cat, 0) + 1
 
     for pk in resultado:
         if 'cuota_display' not in pk: pk['cuota_display'] = pk['cuota']
         if 'tipo' not in pk: pk['tipo'] = 'individual'
+
     return resultado[:max_picks]
 
 
@@ -564,15 +575,21 @@ def seleccionar_publicos(todos, max_picks=4, cuota_min=1.50):
 # SELECCIÓN PICKS PREMIUM — CON ANTI-CORRELACIÓN
 # ══════════════════════════════════════════════════════════════════════════════
 
-def seleccionar_premium(todos, max_picks=3, prob_min=75):
+def seleccionar_premium(todos, max_picks=1, prob_min=78):
     """
-    3 picks premium — máx 1 por partido.
-    MEJORA: Anti-correlación — ningún partido puede anclar más de 1 combinada.
-    Si un partido ya ancla la combinada triple, las combinadas dobles deben
-    usar partidos distintos entre sí.
+    Panel premium MEJORADO:
+    - 1 solo pick — el MAS solido del dia
+    - Preferencia: pick individual con prob >= 78% y cuota >= 1.20
+    - Si no hay individual solido, 1 combinada doble con prob >= 68% y cuota >= 1.40
+    - Nunca triple combinada en premium
+    - Prioridad: diversidad de mercado respecto al panel publico
     """
-    candidatos = [pk for pk in todos if pk['prob'] >= prob_min and pk['cuota'] >= 1.15]
-    candidatos.sort(key=lambda x: x['prob'], reverse=True)
+    # Candidatos individuales con prob alta
+    candidatos = [pk for pk in todos
+                  if pk.get('tipo','individual') == 'individual'
+                  and pk['prob'] >= prob_min
+                  and pk['cuota'] >= 1.15]
+    candidatos.sort(key=lambda x: (x['prob'], x['cuota']), reverse=True)
 
     # Mejor pick por partido
     mejores_por_partido = {}
@@ -583,135 +600,41 @@ def seleccionar_premium(todos, max_picks=3, prob_min=75):
 
     resultado = []
 
-    # Si hay suficientes individuales con cuota >= 1.30 → mostrar directamente
-    buenos = [pk for pk in base if pk['cuota'] >= 1.30]
-    if len(buenos) >= max_picks:
-        for pk in buenos[:max_picks]:
-            pk['tipo'] = 'premium'
-            resultado.append(pk)
-        return resultado
-
-    # ── Combinada triple ──
-    partido_triple = set()
-    if len(base) >= 3:
-        pk1, pk2, pk3 = base[0], base[1], base[2]
-        cuota_3 = round(pk1['cuota'] * pk2['cuota'] * pk3['cuota'], 2)
-        prob_3  = round(pk1['prob']/100 * pk2['prob']/100 * pk3['prob']/100 * 100, 1)
-        if cuota_3 >= 1.40 and prob_3 >= 50:
-            partido_triple = {pk1['partido'], pk2['partido'], pk3['partido']}
-            resultado.append({
-                'partido': 'COMBINADA PREMIUM',
-                'local': f"{pk1['partido']} + {pk2['partido']} + {pk3['partido']}",
-                'visitante': '',
-                'mercado': f"{pk1['emoji']} {pk1['mercado'][:20]} + {pk2['emoji']} {pk2['mercado'][:20]} + {pk3['emoji']} {pk3['mercado'][:20]}",
-                'prob': prob_3, 'cuota': cuota_3, 'cuota_display': cuota_3,
-                'ev': round((prob_3/100)*cuota_3 - 1, 3),
-                'emoji': '💎', 'categoria': 'Triple Combinada',
-                'descripcion': f"3 picks seguros combinados — prob. {prob_3}% | cuota @{cuota_3}",
-                'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2, pk3],
-            })
-
-    # ── Combinadas dobles — ANTI-CORRELACIÓN ESTRICTA ──
-    # Regla: si un partido ya está en la triple, NO puede anclar ninguna doble.
-    # Las dobles deben usar partidos completamente distintos al triple.
-    partidos_ya_en_dobles = set()  # partidos usados en combinadas dobles previas
-
-    for i in range(len(base)):
-        for j in range(i+1, len(base)):
-            if len(resultado) >= max_picks: break
-            pk1, pk2 = base[i], base[j]
-
-            # ANTI-CORRELACIÓN: ningún partido del triple puede aparecer en dobles
-            if pk1['partido'] in partido_triple or pk2['partido'] in partido_triple:
-                continue
-
-            # Tampoco repetir partidos ya usados en otra doble
-            if pk1['partido'] in partidos_ya_en_dobles and pk2['partido'] in partidos_ya_en_dobles:
-                continue
-
-            cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
-            prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-            if cuota_c < 1.25 or prob_c < 55: continue
-
-            # Evitar combinadas con mercados idénticos
-            mercado_key = tuple(sorted([pk1['mercado'][:20], pk2['mercado'][:20]]))
-            if mercado_key in {tuple(sorted([p['picks_combo'][0]['mercado'][:20],
-                               p['picks_combo'][1]['mercado'][:20]]))
-                               for p in resultado if p.get('picks_combo') and len(p['picks_combo'])==2}:
-                continue
-            resultado.append({
-                'partido': 'COMBINADA PREMIUM',
-                'local': f"{pk1['partido']} + {pk2['partido']}",
-                'visitante': '',
-                'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
-                'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
-                'ev': round((prob_c/100)*cuota_c - 1, 3),
-                'emoji': '💎', 'categoria': 'Combinada Premium',
-                'descripcion': f"Prob. combinada: {prob_c}% — máxima seguridad",
-                'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
-            })
-            # Registrar ambos partidos para evitar repetición en siguiente doble
-            partidos_ya_en_dobles.add(pk1['partido'])
-            partidos_ya_en_dobles.add(pk2['partido'])
-
-        if len(resultado) >= max_picks: break
-
-    # Completar con individuales si faltan
-    # Nota: si no hay suficientes partidos fuera del triple para dobles,
-    # se permite 1 partido del triple en una doble (el de menor prob) como último recurso
-    partidos_usados = set()
-    for r in resultado:
-        if r.get('picks_combo'):
-            for p in r['picks_combo']: partidos_usados.add(p['partido'])
-        else:
-            partidos_usados.add(r.get('partido',''))
-
-    # Intento 1: individuales fuera del triple
+    # Opcion 1: pick individual solido (prob >= 78% cuota >= 1.20)
     for pk in base:
-        if len(resultado) >= max_picks: break
-        if pk['partido'] not in partidos_usados:
+        if pk['prob'] >= 78 and pk['cuota'] >= 1.20:
             pk['tipo'] = 'premium'
             resultado.append(pk)
-            partidos_usados.add(pk['partido'])
+            break
 
-    # Intento 2: doble con 1 partido del triple (último recurso, avisa en descripción)
-    if len(resultado) < max_picks:
+    # Opcion 2: si no hay individual solido, combinada doble (prob >= 68% cuota >= 1.40)
+    if not resultado and len(base) >= 2:
         for i in range(len(base)):
             for j in range(i+1, len(base)):
-                if len(resultado) >= max_picks: break
                 pk1, pk2 = base[i], base[j]
-                if pk1['partido'] in partidos_usados and pk2['partido'] in partidos_usados:
-                    continue
-                # Solo 1 del triple permitido aquí
-                compartidos = len({pk1['partido'], pk2['partido']} & partido_triple)
-                if compartidos == 2: continue
+                if pk1['partido'] == pk2['partido']: continue
                 cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
                 prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-                if cuota_c < 1.20 or prob_c < 50: continue
-                resultado.append({
-                    'partido': 'COMBINADA PREMIUM',
-                    'local': f"{pk1['partido']} + {pk2['partido']}",
-                    'visitante': '',
-                    'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
-                    'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
-                    'ev': round((prob_c/100)*cuota_c - 1, 3),
-                    'emoji': '💎', 'categoria': 'Combinada Premium',
-                    'descripcion': f"Prob. combinada: {prob_c}% (comparte partido con triple)",
-                    'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
-                })
-                partidos_usados.add(pk1['partido'])
-                partidos_usados.add(pk2['partido'])
-            if len(resultado) >= max_picks: break
+                if cuota_c >= 1.40 and prob_c >= 68:
+                    resultado.append({
+                        'partido': 'COMBINADA PREMIUM',
+                        'local': f"{pk1['partido']} + {pk2['partido']}",
+                        'visitante': '',
+                        'mercado': f"{pk1['emoji']} {pk1['mercado'][:28]} + {pk2['emoji']} {pk2['mercado'][:28]}",
+                        'prob': prob_c, 'cuota': cuota_c, 'cuota_display': cuota_c,
+                        'ev': round((prob_c/100)*cuota_c - 1, 3),
+                        'emoji': '💎', 'categoria': 'Combinada Premium',
+                        'descripcion': f"Doble premium — prob. {prob_c}% | cuota @{cuota_c}",
+                        'fuente': 'calculada', 'tipo': 'combinada', 'picks_combo': [pk1, pk2],
+                    })
+                    break
+            if resultado: break
 
-    # Intento 3: individuales de cualquier partido
-    if len(resultado) < max_picks:
-        for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
-            if len(resultado) >= max_picks: break
-            if pk['cuota'] >= 1.12 and pk['prob'] >= 70:
-                if pk['partido'] not in partidos_usados:
-                    pk['tipo'] = 'premium'
-                    resultado.append(pk)
-                    partidos_usados.add(pk['partido'])
+    # Opcion 3: el mejor individual disponible aunque prob sea menor
+    if not resultado and base:
+        pk = base[0]
+        pk['tipo'] = 'premium'
+        resultado.append(pk)
 
     return resultado[:max_picks]
 
