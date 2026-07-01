@@ -305,9 +305,10 @@ def obtener_cuotas():
     cuotas_manuales = {
         # Cuotas 1X2 + totals + btts reales de Betano/Oddschecker
         ('Inglaterra',  'RD Congo'):           {'c1':1.31,'cx':5.60,'c2':15.0,'hc':{},
-            'totals':{'over_1.5':1.22,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':3.50},'btts_si':3.20,'btts_no':1.30},
+            'totals':{'over_1.5':1.22,'over_2.5':2.10,'under_2.5':1.72,'under_3.5':1.22,'over_3.5':3.50},'btts_si':3.20,'btts_no':1.30},
         ('Bélgica',     'Senegal'):             {'c1':2.21,'cx':3.56,'c2':3.90,'hc':{},
-            'totals':{'over_1.5':1.40,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.80},'btts_si':2.50,'btts_no':1.50},
+            'totals':{'over_1.5':1.40,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.80,
+                      'over_8.5_corners':1.67,'over_9.5_corners':2.10,'over_2.5_cards':1.55},'btts_si':1.76,'btts_no':2.06},
         ('EE. UU.',     'Bosnia-Herzegovina'): {'c1':1.42,'cx':5.19,'c2':9.50,'hc':{},
             'totals':{'over_1.5':1.35,'over_2.5':1.95,'under_2.5':1.85,'over_3.5':3.60},'btts_si':2.80,'btts_no':1.40},
         ('España',      'Austria'):             {'c1':1.37,'cx':5.70,'c2':12.0,'hc':{},
@@ -452,7 +453,7 @@ def generar_picks_partido(r, cuotas_p):
         pr_r = round(p_poisson(xg_t, linea_r)*100, 1)
         if tipo == 'under':
             pr_r = round(100 - p_poisson(xg_t, linea_r)*100, 1)
-        if pr_r >= 55:
+        if pr_r >= 50:
             emoji_r = '🥅' if tipo == 'over' else '🔒'
             label_r = f"Más de {linea_r} goles" if tipo == 'over' else f"Menos de {linea_r} goles"
             add(label_r, pr_r, cuota_r, emoji_r, 'Goles',
