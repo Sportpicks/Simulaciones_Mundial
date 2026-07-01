@@ -555,7 +555,8 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
                 candidatos.append(pk)
         else:
             # Sin cuota real: aceptar si cuota >= 1.10 O prob muy alta (pick seguro)
-            if pk['cuota'] >= 1.10 or pk['prob'] >= 80:
+            # Sin cuota real: aceptar si cuota >= 1.15 O prob muy alta (>85%) CON cuota >= 1.10
+            if pk['cuota'] >= 1.15 or (pk['prob'] >= 85 and pk['cuota'] >= 1.10):
                 candidatos.append(pk)
 
     candidatos.sort(key=score, reverse=True)
