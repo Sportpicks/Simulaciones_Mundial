@@ -422,15 +422,20 @@ def obtener_cuotas():
         ('España',      'Austria'):             {'c1':1.37,'cx':5.70,'c2':12.0,'hc':{},
             'totals':{'over_1.5':1.25,'over_2.5':1.90,'under_2.5':1.90,'over_3.5':3.40},'btts_si':3.00,'btts_no':1.33},
         ('Portugal',    'Croacia'):             {'c1':1.82,'cx':3.65,'c2':5.20,'hc':{},
-            'totals':{'over_1.5':1.35,'over_2.5':1.85,'under_2.5':1.95,'over_3.5':3.50},'btts_si':2.40,'btts_no':1.55},
+            'totals':{'over_1.5':1.35,'over_2.5':1.85,'under_2.5':1.95,'over_3.5':3.50},
+            'btts_si':1.90,'btts_no':1.85},  # BTTS real Betano — H2H 100% en 6 partidos
         ('Suiza',       'Argelia'):             {'c1':2.15,'cx':3.41,'c2':4.10,'hc':{},
-            'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},'btts_si':2.60,'btts_no':1.45},
+            'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},
+            'btts_si':1.90,'btts_no':1.88},  # BTTS real — Suiza encajó en 3/3, Argelia marcó en 2/3
         ('Australia',   'Egipto'):              {'c1':3.48,'cx':3.06,'c2':2.58,'hc':{},
-            'totals':{'over_1.5':1.45,'over_2.5':2.20,'under_2.5':1.65,'over_3.5':4.20},'btts_si':2.70,'btts_no':1.42},
+            'totals':{'over_1.5':1.45,'over_2.5':2.20,'under_2.5':1.65,'over_3.5':4.20},
+            'btts_si':2.40,'btts_no':1.55},
         ('Argentina',   'Cabo Verde'):          {'c1':1.20,'cx':7.55,'c2':22.0,'hc':{},
-            'totals':{'over_1.5':1.18,'over_2.5':1.65,'under_2.5':2.20,'over_3.5':2.80},'btts_si':4.50,'btts_no':1.18},
+            'totals':{'over_1.5':1.18,'over_2.5':1.65,'under_2.5':2.20,'over_3.5':2.80},
+            'btts_si':5.50,'btts_no':1.12},  # Cabo Verde no anota facil vs Argentina
         ('Colombia',    'Ghana'):               {'c1':1.57,'cx':3.80,'c2':5.50,'hc':{},
-            'totals':{'over_1.5':1.38,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.70},'btts_si':2.60,'btts_no':1.45},
+            'totals':{'over_1.5':1.38,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.70},
+            'btts_si':2.30,'btts_no':1.60},
         ('Canadá',      'Sudáfrica'):           {'c1':1.55,'cx':3.90,'c2':6.00,'hc':{},
             'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},'btts_si':3.00,'btts_no':1.33},
         ('Brasil',      'Japón'):               {'c1':1.80,'cx':3.60,'c2':4.50,'hc':{},
@@ -610,8 +615,11 @@ def generar_picks_partido(r, cuotas_p):
     if btts_si_r >= 1.40:
         pr_btts = round((1 - math.exp(-xgl)) * (1 - math.exp(-xgv)) * 100, 1)
         pr_btts = ajustar_prob_con_h2h(pr_btts, h2h, 'btts')
+        # Si cuota real < 2.0, la casa ya la ve probable — usar prob implicita si es mayor
+        pr_impl_btts = round((1/btts_si_r)*100*0.95, 1) if btts_si_r > 0 else 0
+        pr_btts = max(pr_btts, pr_impl_btts)
         h2h_info = f" · H2H {h2h['btts_pct']}% en {h2h['n_partidos']} partidos" if h2h['n_partidos'] >= 5 else ""
-        if pr_btts >= 45:
+        if pr_btts >= 42:
             add("Ambos anotan - Sí", pr_btts, btts_si_r, '⚽', 'Goles',
                 f"xG local {xgl} · xG visitante {xgv}{h2h_info}")
     if btts_no_r >= 1.40:
