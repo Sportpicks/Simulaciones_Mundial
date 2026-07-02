@@ -1284,58 +1284,31 @@
         {
           "id": "2026-07-02_pub_1",
           "tipo": "Público",
-          "partido": "Suiza vs Argelia",
-          "mercado": "Ambos anotan - Sí",
-          "cuota": 2.6,
-          "prob": 62.4,
+          "partido": "España vs Austria",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.9,
+          "prob": 62.0,
           "stake": 2.0,
           "estado": "Pendiente",
           "ganancia": 0,
-          "emoji": "⚽",
+          "emoji": "🥅",
           "categoria": "Goles",
-          "descripcion": "xG local 1.44 · xG visitante 1.7"
+          "descripcion": "xG total 3.2 — cuota real @1.9"
         },
         {
           "id": "2026-07-02_prem_0",
           "tipo": "Premium",
-          "partido": "Suiza vs Argelia",
-          "mercado": "🥅 Más de 1.5 goles + 🛡️ X2 — Empate o Argelia",
-          "cuota": 1.69,
-          "prob": 64.6,
+          "partido": "Portugal",
+          "mercado": "Ambos anotan - Sí",
+          "cuota": 1.9,
+          "prob": 71.1,
           "stake": 1.0,
           "estado": "Pendiente",
           "ganancia": 0,
-          "emoji": "💎",
-          "categoria": "Combinada Premium",
-          "descripcion": "Doble mismo partido — Suiza vs Argelia | prob. 64.6% @1.69",
-          "picks_combo": [
-            {
-              "partido": "Suiza vs Argelia",
-              "local": "Suiza",
-              "visitante": "Argelia",
-              "mercado": "Más de 1.5 goles",
-              "prob": 82.1,
-              "cuota": 1.4,
-              "ev": 0.149,
-              "emoji": "🥅",
-              "categoria": "Goles",
-              "descripcion": "xG total 3.1 — cuota real @1.4",
-              "fuente": "real"
-            },
-            {
-              "partido": "Suiza vs Argelia",
-              "local": "Suiza",
-              "visitante": "Argelia",
-              "mercado": "X2 — Empate o Argelia",
-              "prob": 78.7,
-              "cuota": 1.21,
-              "ev": -0.048,
-              "emoji": "🛡️",
-              "categoria": "Doble Op.",
-              "descripcion": "Cubre empate + victoria Argelia",
-              "fuente": "real"
-            }
-          ]
+          "emoji": "⚽",
+          "categoria": "Goles",
+          "descripcion": "xG local 2.0 · xG visitante 1.73",
+          "picks_combo": []
         }
       ],
       "auditado": false,
