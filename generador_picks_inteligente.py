@@ -1221,7 +1221,7 @@ def main():
 
     print(f"\n✅ Total picks candidatos: {len(todos)}")
 
-    picks_pub  = seleccionar_premium(todos)  # Premium PRIMERO
+    picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
     # Excluir del público los picks ya en premium
     mercados_premium = set(pk.get('mercado','') for pk in picks_prem)
