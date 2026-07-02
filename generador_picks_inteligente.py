@@ -27,7 +27,9 @@ os.chdir(RAIZ)
 sys.path.insert(0, os.path.join(RAIZ, '04_Prediccion'))
 from razonador_mercados import cargar_stats
 
-API_KEY_ODDS = "622b4b772a4d155e032de1c17a83e41a"
+API_KEY_ODDS   = "622b4b772a4d155e032de1c17a83e41a"
+API_KEY_FDORG  = "cce6c60e411047abb142e005de2d957a"   # football-data.org
+API_KEY_APIF   = "2ef79c28645eb3c1041bd8768da83e65"   # API-Football
 
 # ── Parámetro de banda de confianza para props ──────────────────────────────
 # El valor esperado debe superar el umbral de la línea al menos un 15%
@@ -235,6 +237,112 @@ def generar_picks_handicap(local, visitante, xgl, xgv, p1, p2):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# HISTORIAL H2H — Head to Head entre equipos
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Cache para no repetir llamadas
+_H2H_CACHE = {}
+
+# Mapa de nombres español → ID football-data.org
+FDORG_IDS = {
+    'Portugal': 765, 'Croacia': 799, 'España': 760, 'Austria': 775,
+    'Suiza': 788, 'Argelia': 1780, 'Francia': 773, 'Suecia': 784,
+    'Brasil': 764, 'Japón': 827, 'Alemania': 759, 'Paraguay': 833,
+    'Países Bajos': 779, 'Marruecos': 1819, 'Costa de Marfil': 1825,
+    'Noruega': 779, 'México': 764, 'Ecuador': 839, 'Inglaterra': 770,
+    'RD Congo': 1879, 'Bélgica': 805, 'Senegal': 1825, 'EE. UU.': 762,
+    'Bosnia-Herzegovina': 1658, 'Argentina': 762, 'Cabo Verde': 1891,
+    'Colombia': 826, 'Ghana': 1832, 'Australia': 825, 'Egipto': 1818,
+    'Canadá': 769, 'Sudáfrica': 1835,
+}
+
+def obtener_h2h(local, visitante, n=10):
+    """
+    Obtiene historial H2H entre dos equipos.
+    Devuelve dict con:
+      - btts_pct: % partidos donde ambos anotaron
+      - over25_pct: % partidos con más de 2.5 goles
+      - avg_goles: promedio de goles por partido
+      - n_partidos: partidos analizados
+    """
+    key = tuple(sorted([local, visitante]))
+    if key in _H2H_CACHE:
+        return _H2H_CACHE[key]
+
+    resultado = {'btts_pct': None, 'over25_pct': None, 'avg_goles': None, 'n_partidos': 0}
+
+    try:
+        id_l = FDORG_IDS.get(local)
+        id_v = FDORG_IDS.get(visitante)
+        if not id_l or not id_v:
+            return resultado
+
+        r = requests.get(
+            f"https://api.football-data.org/v4/teams/{id_l}/matches",
+            headers={"X-Auth-Token": API_KEY_FDORG},
+            params={"status": "FINISHED", "limit": 30},
+            timeout=10
+        )
+        if r.status_code != 200:
+            return resultado
+
+        partidos = r.json().get('matches', [])
+        h2h = []
+        for p in partidos:
+            ht = p.get('homeTeam',{}).get('id')
+            at = p.get('awayTeam',{}).get('id')
+            if id_v in (ht, at):
+                score = p.get('score',{}).get('fullTime',{})
+                gl = score.get('home') or 0
+                gv = score.get('away') or 0
+                h2h.append({'gl': gl, 'gv': gv})
+
+        if len(h2h) >= 3:
+            n_real = min(len(h2h), n)
+            h2h = h2h[:n_real]
+            btts = sum(1 for p in h2h if p['gl'] > 0 and p['gv'] > 0)
+            over = sum(1 for p in h2h if p['gl'] + p['gv'] > 2.5)
+            total_g = sum(p['gl'] + p['gv'] for p in h2h)
+            resultado = {
+                'btts_pct':   round(btts/n_real*100, 1),
+                'over25_pct': round(over/n_real*100, 1),
+                'avg_goles':  round(total_g/n_real, 2),
+                'n_partidos': n_real,
+            }
+    except Exception as e:
+        pass
+
+    _H2H_CACHE[key] = resultado
+    return resultado
+
+
+def ajustar_prob_con_h2h(prob_base, h2h, mercado):
+    """
+    Ajusta la probabilidad del modelo con el historial H2H.
+    Solo ajusta si hay >= 5 partidos de H2H.
+    Ajuste máximo: ±12 puntos porcentuales.
+    """
+    if not h2h or h2h['n_partidos'] < 5:
+        return prob_base
+
+    if mercado == 'btts':
+        hist = h2h['btts_pct']
+    elif mercado == 'over25':
+        hist = h2h['over25_pct']
+    else:
+        return prob_base
+
+    if hist is None:
+        return prob_base
+
+    # Peso del historial: 30% historial, 70% modelo
+    ajustada = round(prob_base * 0.70 + hist * 0.30, 1)
+    # Limitar el ajuste a ±12 puntos
+    ajustada = max(prob_base - 12, min(prob_base + 12, ajustada))
+    return ajustada
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # CUOTAS REALES
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -376,6 +484,11 @@ def generar_picks_partido(r, cuotas_p):
     btts_no_r = cuotas_p.get('btts_no', 0)   # ambos anotan NO real
     picks = []
 
+    # ── Obtener historial H2H para ajustar probabilidades ──
+    h2h = obtener_h2h(local, visit)
+    if h2h['n_partidos'] >= 5:
+        pass  # disponible para ajustes abajo
+
     def add(mercado, prob, cuota, emoji, cat, desc=""):
         if prob < 52 or cuota < 1.05: return
         ev = round((prob/100)*cuota - 1, 3)
@@ -434,9 +547,15 @@ def generar_picks_partido(r, cuotas_p):
     # ── Goles ──
     for lin, lab in [(1.5,'1.5'),(2.5,'2.5'),(3.5,'3.5')]:
         pr = round(p_poisson(xg_t, lin)*100, 1)
+        # Ajustar Over 2.5 con H2H
+        if lin == 2.5:
+            pr = ajustar_prob_con_h2h(pr, h2h, 'over25')
+            h2h_g = f" · H2H {h2h['over25_pct']}% +2.5 en {h2h['n_partidos']}p" if h2h['n_partidos'] >= 5 else ""
+        else:
+            h2h_g = ""
         cu = cuota_estimada(pr)
         if cu >= 1.15 and margen_ok(xg_t, lin):
-            add(f"Más de {lab} goles", pr, cu, '🥅','Goles', f"xG total {round(xg_t,1)}")
+            add(f"Más de {lab} goles", pr, cu, '🥅','Goles', f"xG total {round(xg_t,1)}{h2h_g}")
     pr_u = 100 - round(p_poisson(xg_t,2.5)*100)
     cu_u = cuota_estimada(pr_u)
     if cu_u >= 1.15:
@@ -487,12 +606,14 @@ def generar_picks_partido(r, cuotas_p):
             add(label_r, pr_r, cuota_r, emoji_r, 'Goles',
                 f"xG total {round(xg_t,1)} — cuota real @{cuota_r}")
 
-    # ── Ambos anotan (BTTS) con cuotas reales ──
+    # ── Ambos anotan (BTTS) con cuotas reales + ajuste H2H ──
     if btts_si_r >= 1.40:
         pr_btts = round((1 - math.exp(-xgl)) * (1 - math.exp(-xgv)) * 100, 1)
+        pr_btts = ajustar_prob_con_h2h(pr_btts, h2h, 'btts')
+        h2h_info = f" · H2H {h2h['btts_pct']}% en {h2h['n_partidos']} partidos" if h2h['n_partidos'] >= 5 else ""
         if pr_btts >= 45:
             add("Ambos anotan - Sí", pr_btts, btts_si_r, '⚽', 'Goles',
-                f"xG local {xgl} · xG visitante {xgv}")
+                f"xG local {xgl} · xG visitante {xgv}{h2h_info}")
     if btts_no_r >= 1.40:
         pr_btts_no = round(100 - (1 - math.exp(-xgl)) * (1 - math.exp(-xgv)) * 100, 1)
         if pr_btts_no >= 45:
@@ -713,6 +834,20 @@ def seleccionar_premium(todos, max_picks=1, prob_min=70):
         por_partido[p].append(pk)
 
     resultado = []
+
+    # ── Pre-selección: priorizar picks con H2H fuerte ──
+    # Si hay picks con descripcion que incluye H2H >= 70%, elevar su score
+    for pk in todos:
+        desc = pk.get('descripcion','')
+        if 'H2H' in desc:
+            try:
+                pct_str = desc.split('H2H')[1].strip().split('%')[0].strip()
+                pct = float(pct_str)
+                if pct >= 70:
+                    pk['h2h_boost'] = True
+                    pk['prob'] = min(pk['prob'] + 5, 99)  # boost leve de prob
+            except:
+                pass
 
     # ── Opcion 1: combinada del MISMO partido (mercados complementarios) ──
     # Busca pares de mercados no correlacionados del mismo partido
