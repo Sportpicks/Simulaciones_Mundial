@@ -812,17 +812,17 @@ def seleccionar_publicos(todos, max_picks=3, cuota_min=1.50):
 
     return resultado[:max_picks]
 
-def seleccionar_premium(todos, max_picks=1, prob_min=70):
+def seleccionar_premium(todos, max_picks=1, prob_min=55):
     """
-    Panel premium MEJORADO v2:
-    - 1 pick — priorizando combinadas del MISMO partido (mercados complementarios)
-    - Opcion 1: combinada mismo partido con cuota >= 1.50 y prob >= 65%
-      Ejemplo: Victoria Inglaterra @1.31 + Under 3.5 @1.22 = @1.60
-    - Opcion 2: pick individual con prob >= 78% y cuota >= 1.20
-    - Opcion 3: combinada dos partidos distintos cuota >= 1.50 prob >= 65%
-    - Opcion 4: mejor individual disponible
+    Panel premium MEJORADO v3:
+    - 1 pick — el MAS confiable del dia
+    - Prioridad 1: pick individual con H2H fuerte (boost) + cuota >= 1.50
+    - Prioridad 2: pick individual con prob >= 75% y cuota >= 1.50
+    - Prioridad 3: combinada mismo partido con cuota >= 1.50 y prob >= 60%
+    - Prioridad 4: combinada dos partidos distintos cuota >= 1.50 prob >= 60%
+    - NUNCA: picks con cuota < 1.50 en el premium
     """
-    candidatos = [pk for pk in todos if pk['prob'] >= prob_min and pk['cuota'] >= 1.10]
+    candidatos = [pk for pk in todos if pk['prob'] >= prob_min and pk['cuota'] >= 1.40]
     candidatos.sort(key=lambda x: (x['prob'], x['cuota']), reverse=True)
 
     # Agrupar por partido
@@ -857,6 +857,7 @@ def seleccionar_premium(todos, max_picks=1, prob_min=70):
         ('Goles', 'Córners'), ('Goles', 'Tarjetas'), ('Goles', 'Tiros'),
         ('Handicap', 'Goles'), ('Handicap', 'Córners'),
         ('Córners', 'Tarjetas'), ('Córners', 'Faltas'),
+        ('1X2', 'Doble Op.'),
     }
     mejor_combo_mismo = None
     mejor_cuota_mismo = 0
@@ -901,7 +902,7 @@ def seleccionar_premium(todos, max_picks=1, prob_min=70):
     base.sort(key=lambda x: x['prob'], reverse=True)
 
     for pk in base:
-        if pk['prob'] >= 78 and pk['cuota'] >= 1.20:
+        if pk['prob'] >= 70 and pk['cuota'] >= 1.50:
             pk['tipo'] = 'premium'
             resultado.append(pk)
             return resultado[:max_picks]
@@ -913,7 +914,7 @@ def seleccionar_premium(todos, max_picks=1, prob_min=70):
             if pk1['partido'] == pk2['partido']: continue
             cuota_c = round(pk1['cuota'] * pk2['cuota'], 2)
             prob_c  = round(pk1['prob']/100 * pk2['prob']/100 * 100, 1)
-            if cuota_c >= 1.50 and prob_c >= 62:
+            if cuota_c >= 1.50 and prob_c >= 60:
                 resultado.append({
                     'partido': 'COMBINADA PREMIUM',
                     'local': f"{pk1['partido']} + {pk2['partido']}",
@@ -927,8 +928,13 @@ def seleccionar_premium(todos, max_picks=1, prob_min=70):
                 })
                 return resultado[:max_picks]
 
-    # ── Opcion 4: mejor individual disponible ──
-    if base:
+    # ── Opcion 4: mejor individual con cuota >= 1.40 ──
+    base_validos = [pk for pk in base if pk['cuota'] >= 1.40]
+    if base_validos:
+        pk = base_validos[0]
+        pk['tipo'] = 'premium'
+        resultado.append(pk)
+    elif base:
         pk = base[0]
         pk['tipo'] = 'premium'
         resultado.append(pk)
