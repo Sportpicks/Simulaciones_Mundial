@@ -1266,7 +1266,45 @@ def main():
     print(f"\n✅ Total picks candidatos: {len(todos)}")
 
     picks_pub  = seleccionar_publicos(todos)
-    picks_prem = seleccionar_premium(todos, max_picks=3)
+
+    # ── Premium inteligente: excluir picks ya en público y buscar el mejor diferente ──
+    mercados_publicos = set(pk.get('mercado','')[:30] for pk in picks_pub)
+    partidos_publicos = set(pk.get('partido','') for pk in picks_pub)
+
+    # Candidatos premium: diferentes al público, cuota >= 1.50
+    candidatos_prem = [
+        pk for pk in todos
+        if pk['cuota'] >= 1.50
+        and pk['prob'] >= 55
+        and pk.get('mercado','')[:30] not in mercados_publicos
+    ]
+
+    # Bonus H2H: si descripcion menciona H2H >= 60%, subir prob
+    for pk in candidatos_prem:
+        desc = pk.get('descripcion','')
+        if 'H2H' in desc:
+            try:
+                pct = float(desc.split('H2H')[1].strip().split('%')[0])
+                if pct >= 60:
+                    pk['prob'] = min(pk['prob'] + 8, 99)
+                    pk['h2h_boost'] = True
+            except: pass
+
+    # Seleccionar el mejor: mayor prob con cuota >= 1.50
+    candidatos_prem.sort(key=lambda x: (x.get('h2h_boost',False), x['prob'], x['cuota']), reverse=True)
+
+    picks_prem = []
+    vistos_prem = set()
+    for pk in candidatos_prem:
+        if pk['partido'] not in vistos_prem:
+            pk['tipo'] = 'premium'
+            picks_prem.append(pk)
+            vistos_prem.add(pk['partido'])
+            break  # solo 1 pick premium
+
+    # Si no hay candidato diferente, usar seleccionar_premium normal
+    if not picks_prem:
+        picks_prem = seleccionar_premium(todos, max_picks=1)
 
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
