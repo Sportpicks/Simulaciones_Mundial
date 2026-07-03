@@ -1221,6 +1221,25 @@ def main():
 
     print(f"\n✅ Total picks candidatos: {len(todos)}")
 
+    # ── Picks manuales basados en análisis del mercado ──
+    picks_manuales = []
+
+    # Argentina vs Cabo Verde — HC -1.5 si existe el partido hoy
+    if any('argentina' in pk.get('partido','').lower() and 'cabo' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({
+            'partido': 'Argentina vs Cabo Verde',
+            'local': 'Argentina', 'visitante': 'Cabo Verde',
+            'mercado': 'HC Argentina -1.5',
+            'prob': 72.0, 'cuota': 1.80, 'cuota_display': 1.80,
+            'ev': round((0.72 * 1.80) - 1, 3),
+            'emoji': '⚖️', 'categoria': 'Handicap',
+            'descripcion': 'Argentina gana por 2+ goles — Messi 6 goles en el torneo',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+    todos = todos + picks_manuales
+
     picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
     # Excluir del público los picks ya en premium
