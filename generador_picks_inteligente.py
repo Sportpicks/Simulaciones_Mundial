@@ -1240,23 +1240,21 @@ def main():
             'fuente': 'real', 'tipo': 'individual',
         })
 
-    todos = todos + picks_manuales
-
-    # ── Filtros finales de calidad ──
-    # 1. Eliminar picks con EV negativo mayor a -15% (sin valor real)
+    # ── Filtros finales ANTES de agregar picks manuales ──
+    # 1. Eliminar picks con EV muy negativo (sin valor real)
     todos = [pk for pk in todos if pk.get('ev', 0) > -0.15 or pk.get('fuente') != 'real']
     # 2. Eliminar Under 2.5 Argentina cuando hay HC -1.5 (contradictorios)
-    tiene_hc_arg = any('hc argentina' in pk.get('mercado','').lower() for pk in todos)
-    if tiene_hc_arg:
-        todos = [pk for pk in todos if not (
-            'argentina' in pk.get('partido','').lower() and
-            'menos de 2.5' in pk.get('mercado','').lower()
-        )]
-    # 3. Recalcular EV con prob implicita correcta para picks reales
+    todos = [pk for pk in todos if not (
+        'argentina' in pk.get('partido','').lower() and
+        'menos de 2.5' in pk.get('mercado','').lower()
+    )]
+    # 3. Recalcular EV correctamente para picks reales
     for pk in todos:
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
-            prob_impl = 1 / pk['cuota']
-            pk['ev'] = round((pk['prob']/100) - prob_impl, 3)
+            pk['ev'] = round((pk['prob']/100) - (1/pk['cuota']), 3)
+
+    # ── Agregar picks manuales DESPUES de filtros ──
+    todos = todos + picks_manuales
 
     picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
