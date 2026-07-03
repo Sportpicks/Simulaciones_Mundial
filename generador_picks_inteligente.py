@@ -427,8 +427,8 @@ def obtener_cuotas():
         ('Suiza',       'Argelia'):             {'c1':2.15,'cx':3.41,'c2':4.10,'hc':{},
             'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},
             'btts_si':1.90,'btts_no':1.88},  # BTTS real — Suiza encajó en 3/3, Argelia marcó en 2/3
-        ('Australia',   'Egipto'):              {'c1':3.48,'cx':3.06,'c2':2.58,'hc':{},
-            'totals':{'over_1.5':1.45,'over_2.5':2.20,'under_2.5':1.65,'over_3.5':4.20},
+        ('Australia',   'Egipto'):              {'c1':3.40,'cx':2.88,'c2':2.50,'hc':{},
+            'totals':{'over_1.5':1.61,'over_2.5':2.19,'under_2.5':1.65,'over_3.5':4.20},
             'btts_si':2.40,'btts_no':1.55},
         ('Argentina',   'Cabo Verde'):          {'c1':1.20,'cx':7.55,'c2':22.0,'hc':{},
             'totals':{'over_1.5':1.18,'over_2.5':1.65,'under_2.5':2.20,'over_3.5':2.80},
@@ -782,7 +782,9 @@ def seleccionar_publicos(todos, publicos_excluidos=None, max_picks=3):
         mercado_key = pk.get('mercado','')
         if mercado_key in publicos_excluidos:
             continue
-        if pk['prob'] < prob_min:
+        # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 52%
+        prob_min_pk = 52 if pk.get('cuota', 0) >= 2.0 else prob_min
+        if pk['prob'] < prob_min_pk:
             continue
         if pk.get('fuente') == 'real':
             if 1.60 <= pk['cuota'] <= 2.50:
@@ -1239,6 +1241,22 @@ def main():
         })
 
     todos = todos + picks_manuales
+
+    # ── Filtros finales de calidad ──
+    # 1. Eliminar picks con EV negativo mayor a -15% (sin valor real)
+    todos = [pk for pk in todos if pk.get('ev', 0) > -0.15 or pk.get('fuente') != 'real']
+    # 2. Eliminar Under 2.5 Argentina cuando hay HC -1.5 (contradictorios)
+    tiene_hc_arg = any('hc argentina' in pk.get('mercado','').lower() for pk in todos)
+    if tiene_hc_arg:
+        todos = [pk for pk in todos if not (
+            'argentina' in pk.get('partido','').lower() and
+            'menos de 2.5' in pk.get('mercado','').lower()
+        )]
+    # 3. Recalcular EV con prob implicita correcta para picks reales
+    for pk in todos:
+        if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
+            prob_impl = 1 / pk['cuota']
+            pk['ev'] = round((pk['prob']/100) - prob_impl, 3)
 
     picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
