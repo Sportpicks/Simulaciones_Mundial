@@ -1,52 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- ts:1783190215 -->
+<!-- ts:1783193260 -->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Picks Premium 💎 — Mundial 2026</title>
 <style>
 :root{--bg:#0d1220;--panel:#161d31;--panel2:#1c2540;--tx:#eef1f8;--tx2:#9aa5c0;
---lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--go:#ffd700}
+--lin:#2a3554;--v:#34d399;--e:#fbbf24;--d:#fb7185;--ac:#60a5fa;--pu:#a78bfa;--or:#fb923c;--go:#ffd700}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px}
-.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,sans-serif;padding-bottom:48px;
+  min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px;flex:1}
 nav{background:rgba(13,18,32,.95);border-bottom:1px solid var(--lin);padding:12px 16px;
 position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;color:var(--go);font-size:.95rem}
+.logo{font-weight:700;color:var(--pu);font-size:.95rem}
 .nav-links a{color:var(--tx2);text-decoration:none;font-size:.82rem;margin-left:12px;font-weight:600}
-header{text-align:center;padding:26px 0 16px;border-bottom:1px solid rgba(255,215,0,.15);margin-bottom:18px}
-header h1{font-size:1.45rem;font-weight:700;color:var(--go)}
+
+/* ── PANTALLA DE ACCESO ── */
+.acceso-wrap{display:flex;align-items:center;justify-content:center;
+  min-height:70vh;padding:24px 16px}
+.acceso-card{background:var(--panel);border:2px solid var(--pu);border-radius:20px;
+  padding:36px 32px;max-width:420px;width:100%;text-align:center}
+.acceso-logo{font-size:3rem;margin-bottom:8px}
+.acceso-titulo{font-size:1.4rem;font-weight:700;color:var(--pu);margin-bottom:6px}
+.acceso-sub{font-size:.85rem;color:var(--tx2);margin-bottom:28px;line-height:1.6}
+.acceso-input{width:100%;background:var(--panel2);border:1.5px solid var(--lin);
+  border-radius:10px;padding:13px 16px;font-size:1.1rem;color:var(--tx);
+  text-align:center;letter-spacing:.15em;font-weight:700;margin-bottom:14px;
+  outline:none;transition:border-color .2s}
+.acceso-input:focus{border-color:var(--pu)}
+.acceso-input.error{border-color:var(--d);animation:shake .3s}
+.acceso-btn{width:100%;background:var(--pu);color:#0d1220;border:none;
+  border-radius:10px;padding:13px;font-size:1rem;font-weight:700;cursor:pointer;
+  margin-bottom:20px;transition:opacity .2s}
+.acceso-btn:hover{opacity:.88}
+.acceso-error{color:var(--d);font-size:.82rem;margin-bottom:12px;display:none}
+.acceso-sep{border:none;border-top:1px solid var(--lin);margin:16px 0}
+.acceso-comprar{font-size:.82rem;color:var(--tx2);margin-bottom:10px}
+.acceso-precio{font-size:1.3rem;font-weight:700;color:var(--go);margin-bottom:16px}
+.btn-yape{display:block;background:#1a3d2a;border:1.5px solid var(--v);color:var(--v);
+  border-radius:10px;padding:11px;font-weight:700;font-size:.85rem;
+  text-decoration:none;margin-bottom:8px}
+.btn-wa{display:block;background:#1a2f1a;border:1.5px solid #25d366;color:#25d366;
+  border-radius:10px;padding:11px;font-weight:700;font-size:.85rem;text-decoration:none}
+
+/* ── CONTENIDO PREMIUM (oculto hasta ingresar codigo) ── */
+#contenido-premium{display:none}
+header{text-align:center;padding:26px 0 16px}
+header h1{font-size:1.45rem;font-weight:700}
 header p{color:var(--tx2);font-size:.84rem;margin-top:5px}
-.badge{display:inline-block;border:1px solid var(--go);border-radius:999px;
-padding:2px 11px;font-size:.75rem;color:var(--go);margin:3px 2px}
-.resumen{background:var(--panel);border:1px solid rgba(255,215,0,.2);border-radius:12px;
+.badge{display:inline-block;border:1px solid var(--lin);border-radius:999px;
+padding:2px 11px;font-size:.75rem;color:var(--tx2);margin:3px 2px}
+.badge.hoy{border-color:var(--pu);color:var(--pu)}
+.resumen-p{background:var(--panel);border:1px solid var(--pu);border-radius:12px;
 padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.rs-v{font-size:1.25rem;font-weight:700;color:var(--go)}
+.rs-v{font-size:1.25rem;font-weight:700;color:var(--pu)}
 .rs-l{font-size:.7rem;color:var(--tx2)}
-.acum-box{background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);border-radius:10px;
-padding:12px 16px;text-align:center;margin-bottom:16px}
-.acum-box .title{font-size:.8rem;color:var(--tx2);margin-bottom:4px}
-.acum-box .val{font-size:1.6rem;font-weight:700;color:var(--go)}
-.pick{background:var(--panel);border:1px solid rgba(255,215,0,.25);border-radius:14px;
+.acum{background:var(--panel);border:1px solid var(--go);border-radius:12px;
+padding:12px;text-align:center;margin-bottom:16px}
+.acum-v{font-size:1.6rem;font-weight:700;color:var(--go)}
+.acum-l{font-size:.75rem;color:var(--tx2);margin-top:2px}
+.pick{background:var(--panel);border:1px solid var(--pu);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}
-.pick-n{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--go);
-font-weight:700;background:rgba(255,215,0,.1);border-radius:5px;padding:1px 7px}
-.seg-bar{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:10px 0}
-.seg-inner{height:100%;background:linear-gradient(90deg,var(--v),var(--go));border-radius:4px}
-.ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.pick-n{position:absolute;top:10px;right:12px;font-size:.72rem;color:var(--pu);
+font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}
+.ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
 .ph-em{font-size:1.7rem;flex-shrink:0;line-height:1}
 .ph-info .sub{font-size:.75rem;color:var(--tx2);margin-bottom:2px}
-.ph-info .merc{font-size:.95rem;font-weight:700}
+.ph-info .merc{font-size:.95rem;font-weight:700;line-height:1.3}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
 .sb{background:var(--panel2);border-radius:9px;padding:9px;text-align:center}
 .sb .v{font-size:1.2rem;font-weight:700}
 .sb .l{font-size:.69rem;color:var(--tx2);margin-top:2px}
 .desc{font-size:.79rem;color:var(--tx2);margin-top:8px;padding:7px 10px;
-background:rgba(255,215,0,.05);border-radius:7px;border-left:3px solid var(--go)}
-.aviso{background:var(--panel);border-left:4px solid var(--go);border-radius:0 10px 10px 0;
-padding:11px 13px;font-size:.79rem;color:var(--tx2);margin-top:18px}
+background:var(--panel2);border-radius:7px;border-left:3px solid var(--pu)}
+.freal{font-size:.65rem;background:#1a2f1a;color:var(--v);border-radius:4px;padding:1px 5px;margin-left:4px}
+.fest{font-size:.65rem;background:#2a2010;color:var(--e);border-radius:4px;padding:1px 5px;margin-left:4px}
+.ev-pos{color:var(--v);font-size:.8rem}.ev-neg{color:var(--d);font-size:.8rem}
+.combo-patas{margin-top:10px;border-top:1px solid var(--lin);padding-top:8px}
+.combo-pata{display:flex;justify-content:space-between;align-items:center;
+padding:4px 0;font-size:.78rem;color:var(--tx2)}
 footer{text-align:center;color:var(--tx2);font-size:.75rem;margin-top:22px}
 footer a{color:var(--ac);text-decoration:none}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
 </head>
 <body>
@@ -58,72 +94,139 @@ footer a{color:var(--ac);text-decoration:none}
     <a href="picks_publicos_v2.html">📊 Historial</a>
   </div>
 </nav>
+
 <div class="wrap">
-  <header>
-    <h1>💎 Picks Premium — 2026-07-04</h1>
-    <p>Los 3 picks con mayor probabilidad de acierto del día</p>
-    <span class="badge">📅 04-07-2026 18:36 UTC</span>
-    <span class="badge">🔐 Acceso exclusivo suscriptores</span>
-  </header>
-  <div class="resumen" id="res"></div>
-  <div class="acum-box">
-    <div class="title">📈 Cuota acumulador (combinados)</div>
-    <div class="val">@1.65</div>
+
+  <!-- PANTALLA DE ACCESO -->
+  <div class="acceso-wrap" id="pantalla-acceso">
+    <div class="acceso-card">
+      <div class="acceso-logo">💎</div>
+      <div class="acceso-titulo">Picks Premium</div>
+      <div class="acceso-sub">
+        Ingresa tu código de acceso para ver el pick premium de hoy.<br>
+        Código válido solo por 24 horas.
+      </div>
+      <input class="acceso-input" id="codigo-input" type="text"
+        placeholder="XXXXXX" maxlength="8" autocomplete="off"
+        oninput="this.value=this.value.toUpperCase()">
+      <div class="acceso-error" id="error-msg">❌ Código incorrecto. Verifica e intenta de nuevo.</div>
+      <button class="acceso-btn" onclick="verificarCodigo()">Ingresar →</button>
+
+      <hr class="acceso-sep">
+      <div class="acceso-comprar">¿No tienes código? Accede al premium por:</div>
+      <div class="acceso-precio">S/25 — Resto del Mundial 2026</div>
+      <a class="btn-yape" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20el%20pick%20premium%20de%20SportPicks">
+        📱 Pagar por Yape/Plin — 982 730 164
+      </a>
+      <a class="btn-wa" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20el%20pick%20premium">
+        💬 Consultar por WhatsApp
+      </a>
+    </div>
   </div>
-  <div id="picks"></div>
-  <div class="aviso">💡 Picks premium = máxima seguridad. Combínalos en un acumulador
-  para obtener mejor cuota manteniendo alta probabilidad de acierto.</div>
-  <footer>
-    <a href="picks_dia.html">🎯 Ver picks públicos</a> ·
-    <a href="index_final.html">Modelo completo</a> ·
-    ⚠️ Apuesta con responsabilidad
-  </footer>
+
+  <!-- CONTENIDO PREMIUM (oculto) -->
+  <div id="contenido-premium">
+    <header>
+      <h1>💎 Picks Premium — 2026-07-04</h1>
+      <p>Los picks con mayor probabilidad de acierto del modelo</p>
+      <span class="badge hoy">📅 04-07-2026 19:27 UTC</span>
+      <span class="badge">🔒 Acceso exclusivo suscriptores</span>
+    </header>
+    <div class="resumen-p" id="res"></div>
+    <div class="acum">
+      <div class="acum-v">@1.65</div>
+      <div class="acum-l">Cuota acumulador (combinadas)</div>
+    </div>
+    <div id="picks"></div>
+    <footer>
+      <a href="picks_dia.html">🎯 Picks públicos gratis</a> ·
+      <a href="picks_publicos_v2.html">📊 Historial</a> ·
+      <a href="https://t.me/sportpickoficial">📣 Telegram</a>
+    </footer>
+  </div>
+
 </div>
+
 <script>
 const PICKS=[{"partido": "Canadá vs Marruecos", "local": "Canadá", "visitante": "Marruecos", "mercado": "Menos de 2.5 goles", "prob": 75.0, "cuota": 1.65, "cuota_display": 1.65, "ev": 0.237, "emoji": "🔒", "categoria": "Goles", "descripcion": "Partido cerrado — Marruecos 33 partidos sin perder, equipo defensivo por naturaleza", "fuente": "real", "tipo": "premium", "h2h_boost": true}];
 const ISO={"México": "mx", "Sudáfrica": "za", "Corea del Sur": "kr", "República Checa": "cz", "Suiza": "ch", "Bosnia-Herzegovina": "ba", "Canadá": "ca", "Catar": "qa", "Escocia": "gb-sct", "Brasil": "br", "Haití": "ht", "Marruecos": "ma", "Turquía": "tr", "Paraguay": "py", "EE. UU.": "us", "Australia": "au", "Alemania": "de", "Ecuador": "ec", "Costa de Marfil": "ci", "Curazao": "cw", "Suecia": "se", "Países Bajos": "nl", "Túnez": "tn", "Japón": "jp", "Bélgica": "be", "Egipto": "eg", "Irán": "ir", "Nueva Zelanda": "nz", "España": "es", "Uruguay": "uy", "Cabo Verde": "cv", "Arabia Saudí": "sa", "Francia": "fr", "Noruega": "no", "Senegal": "sn", "Irak": "iq", "Austria": "at", "Argentina": "ar", "Argelia": "dz", "Jordania": "jo", "Portugal": "pt", "Colombia": "co", "RD Congo": "cd", "Uzbekistán": "uz", "Croacia": "hr", "Inglaterra": "gb-eng", "Ghana": "gh", "Panamá": "pa"};
-const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
-const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
-const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+p.cuota,0)/PICKS.length).toFixed(2):0;
-document.getElementById('res').innerHTML=`
-  <div><div class="rs-v">${PICKS.length}</div><div class="rs-l">Picks premium</div></div>
-  <div><div class="rs-v">${probP}%</div><div class="rs-l">Prob. promedio</div></div>
-  <div><div class="rs-v">${cuotaP}</div><div class="rs-l">Cuota prom.</div></div>`;
-const cont=document.getElementById('picks');
-PICKS.forEach((pk,i)=>{
-  const d=document.createElement('div');
-  d.className='pick';
-  const esC=pk.tipo==='combinada';
-  let comboH='';
-  if(esC&&pk.picks_combo){
-    comboH='<div style="margin-top:8px">'+pk.picks_combo.map((s,si)=>`
-      <div style="display:flex;align-items:center;gap:7px;padding:5px 9px;
-        background:rgba(255,215,0,.05);border-radius:7px;margin-bottom:4px;font-size:.8rem">
-        ${s.emoji} ${fl(s.local)} ${s.partido} · <b>${s.mercado}</b>
-        <span style="margin-left:auto;color:#34d399">${s.prob}%</span>
-        <span style="color:var(--go);margin-left:5px">@${s.cuota}</span></div>
-      ${si<pk.picks_combo.length-1?'<div style="text-align:center;font-size:.72rem;color:var(--tx2)">✖️</div>':''}
-    `).join('')+'</div>';
+const CODIGO_HOY="SP0407";
+
+function verificarCodigo(){
+  const input=document.getElementById('codigo-input');
+  const err=document.getElementById('error-msg');
+  const val=input.value.trim().toUpperCase();
+
+  if(val===CODIGO_HOY){
+    // Guardar en sessionStorage para no pedir de nuevo en la misma sesion
+    sessionStorage.setItem('sp_acceso','ok_'+CODIGO_HOY);
+    mostrarContenido();
+  } else {
+    input.classList.add('error');
+    err.style.display='block';
+    setTimeout(()=>input.classList.remove('error'),400);
   }
-  d.innerHTML=`
-    <div class="pick-n">💎 #${i+1}</div>
-    <div class="ph">
-      <div class="ph-em">${pk.emoji}</div>
-      <div class="ph-info">
-        <div class="sub">${esC?'🔗 COMBINADA':fl(pk.local)+' '+pk.partido} · ${pk.categoria}</div>
-        <div class="merc">${pk.mercado}</div>
-      </div>
-    </div>
-    <div class="seg-bar"><div class="seg-inner" style="width:${pk.prob}%"></div></div>
-    <div class="stats">
-      <div class="sb"><div class="v" style="color:var(--v)">${pk.prob}%</div><div class="l">Probabilidad</div></div>
-      <div class="sb"><div class="v" style="color:var(--go)">@${pk.cuota_display||pk.cuota}</div><div class="l">Cuota</div></div>
-      <div class="sb"><div class="v" style="color:var(--pu)">#${i+1}</div><div class="l">Ranking</div></div>
-    </div>
-    ${comboH}
-    ${pk.descripcion?`<div class="desc">💡 ${pk.descripcion}</div>`:''}
-  `;
-  cont.appendChild(d);
+}
+
+document.getElementById('codigo-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter') verificarCodigo();
 });
+
+function mostrarContenido(){
+  document.getElementById('pantalla-acceso').style.display='none';
+  document.getElementById('contenido-premium').style.display='block';
+  renderPicks();
+}
+
+// Si ya ingresó el codigo en esta sesion, mostrar directo
+const sesion=sessionStorage.getItem('sp_acceso');
+if(sesion==='ok_'+CODIGO_HOY) mostrarContenido();
+
+const fl=eq=>ISO[eq]?`<img style="width:18px;height:13px;border-radius:2px;vertical-align:-2px;object-fit:cover" src="https://flagcdn.com/w20/${ISO[eq]}.png">`:'';
+
+function renderPicks(){
+  const probP=PICKS.length?Math.round(PICKS.reduce((s,p)=>s+p.prob,0)/PICKS.length):0;
+  const cuotaP=PICKS.length?(PICKS.reduce((s,p)=>s+(p.cuota_display||p.cuota),0)/PICKS.length).toFixed(2):0;
+  document.getElementById('res').innerHTML=`
+    <div><div class="rs-v">${PICKS.length}</div><div class="rs-l">Picks premium</div></div>
+    <div><div class="rs-v">${probP}%</div><div class="rs-l">Prob. promedio</div></div>
+    <div><div class="rs-v">${cuotaP}</div><div class="rs-l">Cuota prom.</div></div>`;
+  const cont=document.getElementById('picks');
+  PICKS.forEach((pk,i)=>{
+    const esC=pk.tipo==='combinada';
+    const cuotaD=pk.cuota_display||pk.cuota;
+    const fB=pk.fuente==='real'?'<span class="freal">real</span>':'<span class="fest">estimada</span>';
+    const evH=pk.ev!=null?`<span class="${pk.ev>0?'ev-pos':'ev-neg'}">${pk.ev>0?'+':''}${(pk.ev*100).toFixed(1)}%</span>`:'—';
+    let comboH='';
+    if(esC&&pk.picks_combo){
+      comboH='<div class="combo-patas">'+pk.picks_combo.map((s,si)=>`
+        <div class="combo-pata">
+          <span>${fl(s.local)} ${s.partido} · ${s.mercado}</span>
+          <span style="color:var(--go);margin-left:5px">@${s.cuota}</span></div>
+        ${si<pk.picks_combo.length-1?'<div style="text-align:center;font-size:.7rem;color:var(--tx2);margin:2px 0">✖️</div>':''}
+      `).join('')+'</div>';
+    }
+    const d=document.createElement('div');
+    d.className='pick';
+    d.innerHTML=`
+      <div class="pick-n">💎 #${i+1}</div>
+      <div class="ph">
+        <div class="ph-em">${pk.emoji}</div>
+        <div class="ph-info">
+          <div class="sub">${esC?'🔗 COMBINADA PREMIUM':fl(pk.local)+' '+pk.partido} · ${pk.categoria}</div>
+          <div class="merc">${pk.mercado}</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="sb"><div class="v" style="color:var(--v)">${pk.prob}%</div><div class="l">Probabilidad</div></div>
+        <div class="sb"><div class="v" style="color:var(--go)">@${cuotaD}</div><div class="l">Cuota ${fB}</div></div>
+        <div class="sb"><div class="v">${evH}</div><div class="l">EV</div></div>
+      </div>
+      ${comboH}
+      ${pk.descripcion?`<div class="desc">💡 ${pk.descripcion}</div>`:''}
+    `;
+    cont.appendChild(d);
+  });
+}
 </script>
 </body></html>
