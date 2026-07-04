@@ -561,15 +561,22 @@ dias.forEach(dia => {{
     }}
 
     const tipoLabel = pk.tipo === 'Premium' ? '💎 PREMIUM' : pk.tipo === 'Público Combinada' ? '🔗 COMBINADA' : '🎯 PÚBLICO';
+    const esPremium = pk.tipo === 'Premium';
+
+    // Pick premium: ocultar mercado exacto en el historial público
+    const mercadoHTML = esPremium
+      ? `<div class="pick-mercado" style="filter:blur(4px);user-select:none;color:var(--pu)">████████████</div>
+         <div style="font-size:.72rem;color:var(--pu);margin-top:2px">🔒 Exclusivo suscriptores premium</div>`
+      : `<div class="pick-mercado">${{pk.mercado}}</div>`;
 
     return `<div class="pick-row ${{estadoCls}}">
       <div class="pick-top">
         <div class="pick-info">
           <div class="pick-tipo">${{tipoLabel}}</div>
-          <div class="pick-mercado">${{pk.mercado}}</div>
+          ${{mercadoHTML}}
           <div class="pick-partido">${{pk.partido}}</div>
           ${{estadoBadge}}
-          ${{comboLegs}}
+          ${{esPremium ? '' : comboLegs}}
         </div>
         <div class="pick-right">
           <div class="pick-cuota">@${{pk.cuota}}</div>
