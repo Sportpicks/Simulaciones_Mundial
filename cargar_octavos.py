@@ -11,6 +11,7 @@ os.chdir(r'C:\Users\PC\Simulaciones_Mundial')
 
 # ── Cruces reales de 16avos (hora Perú) ──
 OCTAVOS = [
+    # ── 16avos de final (ya jugados) ──
     ('2026-06-28', 'Canadá',          'Sudáfrica',          '14:00', 'R16'),
     ('2026-06-29', 'Brasil',           'Japón',              '12:00', 'R16'),
     ('2026-06-29', 'Alemania',         'Paraguay',           '15:30', 'R16'),
@@ -21,6 +22,15 @@ OCTAVOS = [
     ('2026-07-01', 'Inglaterra',       'RD Congo',           '11:00', 'R16'),
     ('2026-07-01', 'Bélgica',          'Senegal',            '15:00', 'R16'),
     ('2026-07-01', 'EE. UU.',          'Bosnia-Herzegovina', '19:00', 'R16'),
+    # ── Octavos de final ──
+    ('2026-07-04', 'Canadá',           'Marruecos',          '12:00', 'R8'),
+    ('2026-07-04', 'Paraguay',         'Francia',            '16:00', 'R8'),
+    ('2026-07-05', 'Brasil',           'Noruega',            '15:00', 'R8'),
+    ('2026-07-05', 'México',           'Inglaterra',         '19:00', 'R8'),
+    ('2026-07-06', 'Portugal',         'España',             '14:00', 'R8'),
+    ('2026-07-06', 'EE. UU.',          'Bélgica',            '19:00', 'R8'),
+    ('2026-07-07', 'Argentina',        'Egipto',             '11:00', 'R8'),
+    ('2026-07-07', 'Suiza',            'Colombia',           '15:00', 'R8'),
     ('2026-07-02', 'España',           'Austria',            '14:00', 'R16'),
     ('2026-07-02', 'Portugal',         'Croacia',            '18:00', 'R16'),
     ('2026-07-02', 'Suiza',            'Argelia',            '22:00', 'R16'),
