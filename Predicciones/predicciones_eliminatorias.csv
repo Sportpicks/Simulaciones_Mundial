@@ -1,17 +1,25 @@
 Fase,Fechas,Local,Visitante,Marcador_Predicho,Avanza,xG_L,xG_V,Prob_1,Prob_X,Prob_2,Detalle
-Dieciseisavos,28 jun - 3 jul,Canadá,Sudáfrica,1-1,Canadá,1.4,1.1,42.0,30.0,28.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Brasil,Japón,2-1,Brasil,1.8,0.9,52.0,28.0,20.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Alemania,Paraguay,2-1,Alemania,2.0,0.8,58.0,25.0,17.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Países Bajos,Marruecos,2-1,Países Bajos,1.7,1.0,50.0,28.0,22.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Costa de Marfil,Noruega,1-1,Costa de Marfil,1.3,1.3,35.0,32.0,33.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Francia,Suecia,2-1,Francia,2.0,0.9,55.0,27.0,18.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,México,Ecuador,2-1,México,1.5,1.2,42.0,30.0,28.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Inglaterra,RD Congo,2-1,Inglaterra,2.1,0.7,60.0,25.0,15.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Bélgica,Senegal,2-1,Bélgica,1.8,1.0,50.0,28.0,22.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,EE. UU.,Bosnia-Herzegovina,2-1,EE. UU.,1.5,1.1,43.0,30.0,27.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,España,Austria,2-1,España,1.9,1.0,52.0,28.0,20.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Portugal,Croacia,2-1,Portugal,1.8,1.1,48.0,29.0,23.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Suiza,Argelia,2-1,Suiza,1.5,1.2,42.0,30.0,28.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Australia,Egipto,1-1,Australia,1.4,1.1,40.0,31.0,29.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Argentina,Cabo Verde,2-1,Argentina,2.3,0.6,65.0,22.0,13.0,Tiempo regular
-Dieciseisavos,28 jun - 3 jul,Colombia,Ghana,2-1,Colombia,1.6,1.0,46.0,29.0,25.0,Tiempo regular
+Dieciseisavos,28 jun - 3 jul,Canadá,Sudáfrica,1-2,Canadá,1.39,1.78,39.8,23.1,60.2,Resultado real
+Dieciseisavos,28 jun - 3 jul,Brasil,Japón,3-1,Brasil,2.64,1.31,68.6,18.2,31.4,Resultado real
+Dieciseisavos,28 jun - 3 jul,Alemania,Paraguay,2-1,Paraguay,1.63,0.98,70.8,24.7,29.2,Resultado real
+Dieciseisavos,28 jun - 3 jul,Países Bajos,Marruecos,2-2,Marruecos,1.99,1.78,56.0,21.3,44.0,Resultado real
+Dieciseisavos,28 jun - 3 jul,Costa de Marfil,Noruega,2-2,Noruega,1.5,1.81,42.2,22.7,57.8,Resultado real
+Dieciseisavos,28 jun - 3 jul,Francia,Suecia,3-1,Francia,2.65,1.21,81.9,16.6,18.1,Resultado real
+Dieciseisavos,28 jun - 3 jul,México,Ecuador,1-1,México,1.37,0.95,65.4,27.4,34.6,Resultado real
+Dieciseisavos,28 jun - 3 jul,Inglaterra,RD Congo,2-1,Inglaterra,2.29,0.93,83.5,18.3,16.5,Resultado real
+Dieciseisavos,28 jun - 3 jul,Bélgica,Senegal,2-2,Bélgica,1.82,1.76,52.3,22.0,47.7,Resultado real
+Dieciseisavos,28 jun - 3 jul,EE. UU.,Bosnia-Herzegovina,1-1,EE. UU.,1.33,1.19,55.7,26.8,44.3,Resultado real
+Dieciseisavos,28 jun - 3 jul,España,Austria,2-1,España,2.4,1.37,74.8,18.9,25.2,Resultado real
+Dieciseisavos,28 jun - 3 jul,Portugal,Croacia,2-2,Portugal,2.35,2.04,57.6,19.5,42.4,Resultado real
+Dieciseisavos,28 jun - 3 jul,Suiza,Argelia,2-2,Suiza,1.69,2.0,42.7,21.4,57.3,Resultado real
+Dieciseisavos,28 jun - 3 jul,Australia,Egipto,1-2,Egipto,1.12,1.54,37.7,25.4,62.3,Resultado real
+Dieciseisavos,28 jun - 3 jul,Argentina,Cabo Verde,2-1,Argentina,1.67,0.9,74.2,24.3,25.8,Resultado real
+Dieciseisavos,28 jun - 3 jul,Colombia,Ghana,1-1,Colombia,1.15,0.79,65.3,30.7,34.7,Resultado real
+Octavos de final,4 jul - 7 jul,Canadá,Marruecos,1-2,Canadá,1.39,1.78,39.8,23.1,37.1,Predicción modelo
+Octavos de final,4 jul - 7 jul,Paraguay,Francia,1-2,Francia,1.03,2.24,20.2,19.1,79.8,Predicción modelo
+Octavos de final,4 jul - 7 jul,Brasil,Noruega,3-2,Brasil,2.64,1.81,68.6,18.2,31.4,Predicción modelo
+Octavos de final,4 jul - 7 jul,México,Inglaterra,1-2,Inglaterra,1.37,2.27,28.3,19.8,71.7,Predicción modelo
+Octavos de final,4 jul - 7 jul,Portugal,España,2-2,Portugal,2.35,1.78,63.9,19.7,36.1,Predicción modelo
+Octavos de final,4 jul - 7 jul,EE. UU.,Bélgica,1-3,Bélgica,1.33,2.98,17.0,14.9,83.0,Predicción modelo
+Octavos de final,4 jul - 7 jul,Argentina,Egipto,2-2,Argentina,1.67,1.54,54.4,23.3,45.6,Predicción modelo
+Octavos de final,4 jul - 7 jul,Suiza,Colombia,2-2,Colombia,1.69,1.93,44.4,21.7,55.6,Predicción modelo
