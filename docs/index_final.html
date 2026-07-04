@@ -100,22 +100,33 @@ details .inner{padding:0 16px 14px;overflow-x:auto}
 footer{text-align:center;color:var(--tx2);font-size:.76rem;margin-top:28px}
 footer a{color:var(--ac);text-decoration:none}
 @media(max-width:560px){.fuentes-grid{grid-template-columns:1fr 1fr}}
+
+.tg-nav{background:#0088cc !important;color:#fff !important;border-radius:6px;
+  padding:4px 12px !important;font-weight:700 !important}
+.tg-banner{display:flex;align-items:center;justify-content:space-between;
+  background:#004f7c;border:1px solid #0088cc;border-radius:12px;
+  padding:14px 20px;margin:16px 0;gap:12px;flex-wrap:wrap}
+.tg-banner-txt{color:#fff;font-size:.9rem;font-weight:600}
+.tg-banner-sub{color:rgba(255,255,255,.75);font-size:.78rem;margin-top:2px}
+.tg-banner-btn{background:#0088cc;color:#fff;border-radius:8px;
+  padding:8px 18px;font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap}
 </style>
 </head>
 <body>
 <nav><div class="wrap">
   <a href="#t-dias">📅 Partidos</a>
   <a href="#t-mc">🏆 Campeón</a>
-  <a href="#t-grupos">📋 Grupos</a>
-  <a href="#t-cuadro">🗺️ Cuadro</a>
-  <a href="picks_publicos_v2.html">🎯 Picks</a>
+  <a href="#t-elim">🗺️ Eliminatorias</a>
+  <a href="picks_dia.html">🎯 Picks hoy</a>
+  <a href="picks_publicos_v2.html">📊 Historial</a>
+  <a class="tg-nav" href="https://t.me/sportpickoficial" target="_blank">📣 Telegram</a>
 </div></nav>
 
 <header class="wrap">
   <h1>⚽ Mundial 2026 — Modelo Final</h1>
   <p>Mercados razonados por equipo o total según datos estadísticos reales</p>
   <div class="badges">
-    <span class="badge">📅 04-07-2026 14:29 UTC</span>
+    <span class="badge">📅 04-07-2026 18:46 UTC</span>
     <span class="badge v1">🤖 XGBoost</span>
     <span class="badge v2">📈 25 Casas de Apuestas</span>
     <span class="badge v3">📐 Dixon-Coles</span>
@@ -136,10 +147,15 @@ footer a{color:var(--ac);text-decoration:none}
   </table></div>
   <button class="btn" id="btn-mc">Ver las 48 selecciones</button></div>
 
-  <h2 id="t-grupos">📋 Grupos</h2>
-  <div id="grupos"></div>
+  <div class="tg-banner">
+    <div>
+      <div class="tg-banner-txt">📣 Únete al canal gratuito de SportPicks</div>
+      <div class="tg-banner-sub">Picks públicos diarios · Análisis del modelo · Mundial 2026</div>
+    </div>
+    <a class="tg-banner-btn" href="https://t.me/sportpickoficial" target="_blank">Unirme gratis →</a>
+  </div>
 
-  <h2 id="t-cuadro">🗺️ Eliminatorias</h2>
+  <h2 id="t-elim">🗺️ Eliminatorias</h2>
   <div id="cuadro"></div>
 
   <div class="aviso">
@@ -151,7 +167,9 @@ footer a{color:var(--ac);text-decoration:none}
   <footer>
     Modelo: <a href="https://github.com/Sportpicks/Simulaciones_Mundial">Simulaciones_Mundial</a>
     · XGBoost + Odds API + Dixon-Coles + Razonamiento por equipo ·
-    <a href="picks_publicos_v2.html">🎯 Ver picks</a>
+    <a href="picks_dia.html">🎯 Picks hoy</a> ·
+    <a href="picks_publicos_v2.html">📊 Historial</a> ·
+    <a href="https://t.me/sportpickoficial" target="_blank">📣 Telegram</a>
   </footer>
 </main>
 
@@ -315,37 +333,12 @@ document.getElementById('btn-mc').onclick=function(){
   this.textContent=abrir?'Mostrar solo el top 12':'Ver las 48 selecciones';
 };
 
-const contG=document.getElementById('grupos');
-[...new Set(PARTIDOS.map(p=>p.grupo))].sort().forEach(g=>{
-  const det=document.createElement('details');
-  const filas=PARTIDOS.filter(p=>p.grupo===g).map(p=>`
-    <tr>
-      <td>${fmtF(p.fecha)}</td>
-      <td>${fl(p.local)}${p.local} – ${fl(p.visitante)}${p.visitante}</td>
-      <td class="num"><b>${p.marcador}</b></td>
-      <td class="num vd">${p.p1}%</td><td class="num em">${p.px}%</td><td class="num dr">${p.p2}%</td>
-      <td style="font-size:.74rem">${p.mejor_apuesta?p.mejor_apuesta.emoji+' '+p.mejor_apuesta.mercado+' ('+p.mejor_apuesta.prob+'%)':'—'}</td>
-    </tr>`).join('');
-  const tabla=(TABLAS[g]||[]).map(t=>{
-    const m=t.pos<=2?' ✅':(t.pos===3?' 🟡':'');
-    return `<tr><td>${t.pos}</td><td>${fl(t.equipo)}${t.equipo}${m}</td>
-    <td class="num">${t.pts}</td><td class="num">${t.dg>0?'+':''}${t.dg.toFixed(2)}</td></tr>`;
-  }).join('');
-  det.innerHTML=`<summary>Grupo ${g}</summary><div class="inner">
-    <div class="subtit">Partidos</div>
-    <table><thead><tr><th>Fecha</th><th>Partido</th><th class="num">Pred.</th>
-    <th class="num">1</th><th class="num">X</th><th class="num">2</th>
-    <th>🏆 Mejor apuesta</th></tr></thead><tbody>${filas}</tbody></table>
-    <div class="subtit">Clasificación predicha</div>
-    <table><thead><tr><th>#</th><th>Selección</th><th class="num">Pts</th><th class="num">DG</th></tr></thead>
-    <tbody>${tabla}</tbody></table></div>`;
-  contG.appendChild(det);
-});
+// Sección grupos eliminada — torneo en fase eliminatoria
 
 const contC=document.getElementById('cuadro');
 [...new Set(CUADRO.map(c=>c.fase))].forEach(f=>{
   const det=document.createElement('details');
-  if(f==='Final')det.open=true;
+  det.open=true;  // Abrir todas las fases eliminatorias por defecto
   const filas=CUADRO.filter(c=>c.fase===f).map(c=>`
     <tr><td>${fl(c.local)}${c.local} – ${fl(c.visitante)}${c.visitante}</td>
     <td class="num"><b>${c.marcador}</b></td><td><b>${fl(c.avanza)}${c.avanza}</b></td>
