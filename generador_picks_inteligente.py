@@ -1270,18 +1270,32 @@ def main():
             'h2h_boost': True,
         })
 
-    # Paraguay vs Francia — HC Francia -1.5 si existe el partido hoy
+    # Paraguay vs Francia — Over 2.5 y Tarjetas si existe el partido hoy
     if any('paraguay' in pk.get('partido','').lower() and 'francia' in pk.get('partido','').lower()
            for pk in todos):
+        # Over 2.5 goles — Francia marcó 10 goles en grupos, xG total 3.27
         picks_manuales.append({
             'partido': 'Paraguay vs Francia',
             'local': 'Paraguay', 'visitante': 'Francia',
-            'mercado': 'HC Francia -1.5',
-            'prob': 68.0,
+            'mercado': 'Más de 2.5 goles',
+            'prob': 72.0,
+            'cuota': 1.85, 'cuota_display': 1.85,
+            'ev': round((0.72 * 1.85) - 1, 3),
+            'emoji': '🥅', 'categoria': 'Goles',
+            'descripcion': 'Francia marcó 10 goles en grupos — xG total 3.27',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+        })
+        # Tarjetas +2.5 — Paraguay foulará para frenar a Francia (premium)
+        picks_manuales.append({
+            'partido': 'Paraguay vs Francia',
+            'local': 'Paraguay', 'visitante': 'Francia',
+            'mercado': 'Tarjetas +2.5',
+            'prob': 76.0,
             'cuota': 2.10, 'cuota_display': 2.10,
-            'ev': round((0.68 * 2.10) - 1, 3),
-            'emoji': '⚖️', 'categoria': 'Handicap',
-            'descripcion': 'Francia gana por 2+ goles — mejor equipo del torneo con 4 goles vs Noruega',
+            'ev': round((0.76 * 2.10) - 1, 3),
+            'emoji': '🟨', 'categoria': 'Tarjetas',
+            'descripcion': 'Paraguay foulará para frenar a Mbappé — partido físico intenso',
             'fuente': 'real', 'tipo': 'individual',
             'h2h_boost': True,
         })
@@ -1293,12 +1307,13 @@ def main():
             'partido': 'Canadá vs Marruecos',
             'local': 'Canadá', 'visitante': 'Marruecos',
             'mercado': 'Menos de 2.5 goles',
-            'prob': 63.0,
+            'prob': 75.0,  # boost — Marruecos 33 sin perder, equipo defensivo
             'cuota': 1.65, 'cuota_display': 1.65,
-            'ev': round((0.63 * 1.65) - 1, 3),
+            'ev': round((0.75 * 1.65) - 1, 3),
             'emoji': '🔒', 'categoria': 'Goles',
-            'descripcion': 'Partido cerrado — Marruecos 33 partidos sin perder, ambos defensivos',
+            'descripcion': 'Partido cerrado — Marruecos 33 partidos sin perder, equipo defensivo por naturaleza',
             'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
         })
 
     # ── Filtros finales ANTES de agregar picks manuales ──
