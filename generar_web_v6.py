@@ -344,6 +344,18 @@ footer a{color:var(--ac);text-decoration:none}
 .tg-banner-sub{color:rgba(255,255,255,.75);font-size:.78rem;margin-top:2px}
 .tg-banner-btn{background:#0088cc;color:#fff;border-radius:8px;
   padding:8px 18px;font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap}
+
+.picks-aviso{display:flex;align-items:center;gap:14px;background:#0d2235;
+  border:2px solid #60a5fa;border-radius:14px;padding:16px 20px;margin:16px 0;flex-wrap:wrap}
+.picks-aviso-ico{font-size:2rem;flex-shrink:0}
+.picks-aviso-txt{flex:1;min-width:180px}
+.picks-aviso-title{font-size:1rem;font-weight:700;color:#eef1f8}
+.picks-aviso-sub{font-size:.78rem;color:#9aa5c0;margin-top:2px}
+.picks-aviso-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-picks-pub{background:#34d399;color:#0d1220;border-radius:8px;
+  padding:8px 16px;font-weight:700;font-size:.82rem;text-decoration:none;white-space:nowrap}
+.btn-picks-prem{background:#a78bfa;color:#0d1220;border-radius:8px;
+  padding:8px 16px;font-weight:700;font-size:.82rem;text-decoration:none;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -387,6 +399,18 @@ footer a{color:var(--ac);text-decoration:none}
       <div class="tg-banner-sub">Picks públicos diarios · Análisis del modelo · Mundial 2026</div>
     </div>
     <a class="tg-banner-btn" href="https://t.me/sportpickoficial" target="_blank">Unirme gratis →</a>
+  </div>
+
+  <div class="picks-aviso">
+    <div class="picks-aviso-ico">🎯</div>
+    <div class="picks-aviso-txt">
+      <div class="picks-aviso-title">Pronósticos del día disponibles</div>
+      <div class="picks-aviso-sub">Análisis con IA · Cuotas reales · Picks públicos gratis y premium</div>
+    </div>
+    <div class="picks-aviso-btns">
+      <a href="picks_dia.html" class="btn-picks-pub">✅ Ver picks gratis</a>
+      <a href="picks_premium.html" class="btn-picks-prem">💎 Ver premium</a>
+    </div>
   </div>
 
   <h2 id="t-elim">🗺️ Eliminatorias</h2>
