@@ -776,7 +776,7 @@ def generar_picks_partido(r, cuotas_p):
 # SELECCIÓN PICKS PÚBLICOS
 # ══════════════════════════════════════════════════════════════════════════════
 
-def seleccionar_publicos(todos, publicos_excluidos=None, max_picks=3):
+def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, max_picks=3):
     """
     Panel publico v4:
     - Max 3 picks individuales
@@ -785,9 +785,12 @@ def seleccionar_publicos(todos, publicos_excluidos=None, max_picks=3):
     - Prob >= 58%
     - Diversidad de mercado y partido
     - No incluir picks ya seleccionados en premium
+    - No incluir picks del mismo partido que el premium (evita contradicciones)
     """
     if publicos_excluidos is None:
         publicos_excluidos = set()
+    if partidos_premium is None:
+        partidos_premium = set()
 
     hay_cuotas_reales = any(pk.get('fuente') == 'real' for pk in todos)
 
@@ -805,12 +808,22 @@ def seleccionar_publicos(todos, publicos_excluidos=None, max_picks=3):
 
     prob_min = 58
 
+    # Contar partidos disponibles distintos al premium
+    partidos_disponibles = set(pk.get('partido','') for pk in todos
+                               if pk.get('partido','') not in partidos_premium)
+    n_partidos_libres = len(partidos_disponibles)
+
     candidatos = []
     for pk in todos:
         mercado_key = pk.get('mercado','')
         if mercado_key in publicos_excluidos:
             continue
-        # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 52%
+        partido = pk.get('partido','')
+        # Si hay partidos libres del premium, excluir partido premium del publico
+        # Solo permitir partido premium si no hay suficientes alternativas
+        if partido in partidos_premium and n_partidos_libres >= 1:
+            continue
+        # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 57%
         prob_min_pk = 57 if pk.get('cuota', 0) >= 2.0 else prob_min
         if pk['prob'] < prob_min_pk:
             continue
@@ -1336,7 +1349,10 @@ def main():
 
     # Excluir del público los picks ya en premium
     mercados_premium = set(pk.get('mercado','') for pk in picks_prem)
-    picks_pub = seleccionar_publicos(todos, publicos_excluidos=mercados_premium)
+    partidos_premium = set(pk.get('partido','') for pk in picks_prem)
+    picks_pub = seleccionar_publicos(todos,
+                                    publicos_excluidos=mercados_premium,
+                                    partidos_premium=partidos_premium)
 
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
