@@ -945,9 +945,17 @@ def seleccionar_premium(todos, max_picks=1):
     return resultado[:max_picks]
 
 
-def html_publico(picks, hoy, fecha_gen, ts):
+def html_publico(picks, hoy, fecha_gen, ts, picks_prem=None):
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
     PICKS_J = json.dumps(picks, ensure_ascii=False, default=str)
+    # Pick premium para mostrar bloqueado
+    prem = picks_prem[0] if picks_prem else None
+    prem_mercado = prem.get('mercado','Pick Premium') if prem else 'Pick Premium del día'
+    prem_partido = prem.get('partido','') if prem else ''
+    prem_prob    = prem.get('prob', 0) if prem else 0
+    prem_cuota   = prem.get('cuota_display', prem.get('cuota',0)) if prem else 0
+    prem_emoji   = prem.get('emoji','💎') if prem else '💎'
+
     return f"""<!DOCTYPE html>
 <html lang="es">
 <!-- ts:{ts} -->
@@ -976,6 +984,13 @@ padding:11px;font-weight:700;text-decoration:none;margin:14px 0;font-size:.88rem
 padding:14px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}}
 .rs-v{{font-size:1.25rem;font-weight:700;color:var(--ac)}}
 .rs-l{{font-size:.7rem;color:var(--tx2)}}
+.seccion-titulo{{display:flex;align-items:center;gap:8px;margin:20px 0 10px;
+font-size:.82rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2)}}
+.seccion-titulo::after{{content:'';flex:1;height:1px;background:var(--lin)}}
+.badge-gratis{{background:#1a3320;color:var(--v);border:1px solid var(--v);border-radius:6px;
+padding:2px 10px;font-size:.72rem;font-weight:700}}
+.badge-prem{{background:#2a1a3d;color:var(--pu);border:1px solid var(--pu);border-radius:6px;
+padding:2px 10px;font-size:.72rem;font-weight:700}}
 .pick{{background:var(--panel);border:1px solid var(--lin);border-radius:14px;
 padding:18px;margin-bottom:12px;position:relative}}
 .pick.alta{{border-color:var(--v)}}.pick.combo{{border-color:var(--pu)}}.pick.value{{border-color:var(--go)}}
@@ -991,19 +1006,35 @@ font-weight:600;background:var(--panel2);border-radius:5px;padding:1px 7px}}
 .sb .v{{font-size:1.2rem;font-weight:700}}
 .sb .l{{font-size:.69rem;color:var(--tx2);margin-top:2px}}
 .desc{{font-size:.79rem;color:var(--tx2);margin-top:8px;padding:7px 10px;
-background:var(--panel2);border-radius:7px;border-left:3px solid var(--ac)}}
-.combo-box{{margin-top:8px}}
-.combo-row{{display:flex;align-items:center;gap:7px;padding:5px 9px;
-background:var(--panel2);border-radius:7px;margin-bottom:4px;font-size:.8rem}}
-.combo-x{{text-align:center;font-size:.72rem;color:var(--tx2)}}
-.freal{{font-size:.68rem;background:rgba(52,211,153,.15);color:var(--v);border-radius:3px;padding:1px 5px}}
-.fest{{font-size:.68rem;background:rgba(251,191,36,.12);color:var(--e);border-radius:3px;padding:1px 5px}}
-.ev-pos{{color:var(--v)}}.ev-neg{{color:var(--d)}}
-.aviso{{background:var(--panel);border-left:4px solid var(--e);border-radius:0 10px 10px 0;
+background:var(--panel2);border-radius:7px;border-left:3px solid var(--go)}}
+.aviso{{background:var(--panel);border-left:4px solid var(--go);border-radius:0 10px 10px 0;
 padding:11px 13px;font-size:.79rem;color:var(--tx2);margin-top:18px}}
+.freal{{font-size:.65rem;background:#1a2f1a;color:var(--v);border-radius:4px;padding:1px 5px;margin-left:4px}}
+.fest{{font-size:.65rem;background:#2a2010;color:var(--e);border-radius:4px;padding:1px 5px;margin-left:4px}}
+.ev-pos{{color:var(--v);font-size:.8rem}}.ev-neg{{color:var(--d);font-size:.8rem}}
+.combo-patas{{margin-top:10px;border-top:1px solid var(--lin);padding-top:8px}}
+.combo-pata{{display:flex;justify-content:space-between;align-items:center;
+padding:4px 0;font-size:.78rem;color:var(--tx2)}}
+.combo-pata span{{color:var(--go);margin-left:5px}}
+.combo-x{{text-align:center;font-size:.7rem;color:var(--tx2);margin:2px 0}}
+/* ── PICK PREMIUM BLOQUEADO ── */
+.pick-prem-bloq{{background:var(--panel);border:2px solid var(--pu);border-radius:14px;
+padding:18px;margin-bottom:12px;position:relative;overflow:hidden}}
+.pick-prem-bloq::before{{content:'';position:absolute;inset:0;
+background:rgba(13,18,32,.75);z-index:2;border-radius:12px}}
+.prem-overlay{{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:14px;padding:20px}}
+.prem-badge{{background:var(--pu);color:#0d1220;border-radius:8px;
+padding:5px 16px;font-size:.85rem;font-weight:700;letter-spacing:.03em}}
+.prem-titulo{{font-size:1rem;font-weight:700;color:var(--tx);text-align:center}}
+.prem-sub{{font-size:.78rem;color:var(--tx2);text-align:center}}
+.prem-precio{{font-size:1.4rem;font-weight:700;color:var(--go)}}
+.prem-btn{{display:block;background:linear-gradient(90deg,#a78bfa,#818cf8);
+color:#fff;border-radius:10px;padding:10px 28px;font-weight:700;font-size:.9rem;
+text-decoration:none;text-align:center;margin-top:4px}}
+.prem-yape{{font-size:.75rem;color:var(--tx2);text-align:center}}
 footer{{text-align:center;color:var(--tx2);font-size:.75rem;margin-top:22px}}
 footer a{{color:var(--ac);text-decoration:none}}
-@media(max-width:520px){{.resumen{{grid-template-columns:repeat(2,1fr)}}}}
 </style>
 </head>
 <body>
@@ -1022,15 +1053,42 @@ footer a{{color:var(--ac);text-decoration:none}}
     <span class="badge hoy">📅 {fecha_gen}</span>
     <span class="badge">🤖 XGBoost + 25 casas + Razonamiento automático</span>
   </header>
-  <a class="tg-btn" href="https://t.me/TU_CANAL" target="_blank">📱 Unirte al canal de Telegram</a>
+  <a class="tg-btn" href="https://t.me/sportpickoficial">📣 Unirte al canal de Telegram</a>
   <div class="resumen" id="res"></div>
+
+  <div class="seccion-titulo"><span class="badge-gratis">✅ GRATIS</span> Picks públicos del día</div>
   <div id="picks"></div>
-  <div class="aviso">⚠️ Cuotas marcadas <span class="freal">real</span> vienen de casas de apuestas.
-  <span class="fest">estimada</span> = calculada por el modelo. Verifica siempre antes de apostar.</div>
+
+  <div class="seccion-titulo"><span class="badge-prem">💎 PREMIUM</span> Pick exclusivo</div>
+  <div class="pick-prem-bloq">
+    <div class="ph">
+      <div class="ph-em">{prem_emoji}</div>
+      <div class="ph-info">
+        <div class="sub">{prem_partido} · Premium</div>
+        <div class="merc" style="filter:blur(5px);user-select:none">████████████████</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="sb"><div class="v" style="color:var(--v);filter:blur(4px)">{prem_prob}%</div><div class="l">Probabilidad</div></div>
+      <div class="sb"><div class="v" style="color:var(--go);filter:blur(4px)">@{prem_cuota}</div><div class="l">Cuota</div></div>
+      <div class="sb"><div class="v" style="color:var(--pu)">🔒</div><div class="l">Bloqueado</div></div>
+    </div>
+    <div class="prem-overlay">
+      <span class="prem-badge">💎 PICK PREMIUM</span>
+      <div class="prem-titulo">{prem_mercado}</div>
+      <div class="prem-sub">{prem_partido} — Análisis profundo del modelo</div>
+      <div class="prem-precio">S/25 — Resto del Mundial</div>
+      <a class="prem-btn" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20acceder%20al%20pick%20premium%20de%20hoy">
+        📱 Activar por Yape/Plin
+      </a>
+      <div class="prem-yape">Yape/Plin: 982 730 164 · DM en Facebook: SportPicks Oficial</div>
+    </div>
+  </div>
+
+  <div class="aviso">💡 Los picks premium incluyen el mercado exacto, análisis del modelo y seguimiento diario hasta el final del Mundial 2026.</div>
   <footer>
-    <a href="index_final.html">Modelo completo</a> ·
-    <a href="picks_premium.html">💎 Picks premium</a> ·
-    ⚠️ Apuesta con responsabilidad
+    Modelo: <a href="index_final.html">Simulaciones_Mundial</a> — XGBoost + Odds API + Dixon-Coles + Razonamiento por equipo —
+    <a href="picks_publicos_v2.html">Ver picks</a>
   </footer>
 </div>
 <script>
@@ -1056,10 +1114,10 @@ PICKS.forEach((pk,i)=>{{
   const evH=pk.ev!=null?`<span class="${{pk.ev>0?'ev-pos':'ev-neg'}}">${{pk.ev>0?'+':''}}${{(pk.ev*100).toFixed(1)}}%</span>`:'—';
   let comboH='';
   if(esC&&pk.picks_combo){{
-    comboH='<div class="combo-box">'+pk.picks_combo.map((s,si)=>`
-      <div class="combo-row">${{s.emoji}} ${{fl(s.local)}} ${{s.partido}} · <b>${{s.mercado}}</b>
-        <span style="margin-left:auto;color:var(--v)">${{s.prob}}%</span>
-        <span style="color:var(--go);margin-left:5px">@${{s.cuota}}</span></div>
+    comboH='<div class="combo-patas">'+pk.picks_combo.map((s,si)=>`
+      <div class="combo-pata">
+        <span>${{fl(s.local)}} ${{s.partido}} · ${{s.mercado}}</span>
+        <span class="v" style="color:var(--go);margin-left:5px">@${{s.cuota}}</span></div>
       ${{si<pk.picks_combo.length-1?'<div class="combo-x">✖️</div>':''}}
     `).join('')+'</div>';
   }}
@@ -1086,11 +1144,6 @@ PICKS.forEach((pk,i)=>{{
 }});
 </script>
 </body></html>"""
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# HTML — PANEL PREMIUM
-# ══════════════════════════════════════════════════════════════════════════════
 
 def html_premium(picks, hoy, fecha_gen, ts):
     import functools
@@ -1368,7 +1421,7 @@ def main():
 
     os.makedirs('docs', exist_ok=True)
     with open('docs/picks_dia.html',     'w', encoding='utf-8') as f:
-        f.write(html_publico(picks_pub,  hoy, fecha_gen, ts))
+        f.write(html_publico(picks_pub,  hoy, fecha_gen, ts, picks_prem))
     with open('docs/picks_premium.html', 'w', encoding='utf-8') as f:
         f.write(html_premium(picks_prem, hoy, fecha_gen, ts))
 
