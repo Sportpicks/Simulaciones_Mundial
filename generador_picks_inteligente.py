@@ -1519,13 +1519,14 @@ def main():
             'victoria brasil' in pk.get('mercado','').lower()
         )]
 
-    # México vs Inglaterra — eliminar Over 2.5 (contradice Under 2.5 premium)
+    # México vs Inglaterra — eliminar picks contradictorios con Under 2.5 premium
     if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
            for pk in todos):
         todos = [pk for pk in todos if not (
             'méxico' in pk.get('partido','').lower() and
             'inglaterra' in pk.get('partido','').lower() and
-            'más de 2.5' in pk.get('mercado','').lower()
+            ('más de 2.5' in pk.get('mercado','').lower() or
+             'ambos anotan' in pk.get('mercado','').lower())
         )]
 
     # ── Filtros finales ANTES de agregar picks manuales ──
