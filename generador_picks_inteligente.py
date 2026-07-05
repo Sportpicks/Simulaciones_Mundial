@@ -1040,7 +1040,7 @@ footer a{{color:var(--ac);text-decoration:none}}
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
   gtag('config', 'G-J4LP4JRR1N');
 </script>
@@ -1255,7 +1255,7 @@ footer a{{color:var(--ac);text-decoration:none}}
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
   gtag('config', 'G-J4LP4JRR1N');
 </script>
