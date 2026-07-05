@@ -1036,6 +1036,14 @@ text-decoration:none;text-align:center;margin-top:4px}}
 footer{{text-align:center;color:var(--tx2);font-size:.75rem;margin-top:22px}}
 footer a{{color:var(--ac);text-decoration:none}}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J4LP4JRR1N');
+</script>
 </head>
 <body>
 <nav>
@@ -1243,6 +1251,14 @@ footer{{text-align:center;color:var(--tx2);font-size:.75rem;margin-top:22px}}
 footer a{{color:var(--ac);text-decoration:none}}
 @keyframes shake{{0%,100%{{transform:translateX(0)}}25%{{transform:translateX(-6px)}}75%{{transform:translateX(6px)}}}}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J4LP4JRR1N');
+</script>
 </head>
 <body>
 <nav>
