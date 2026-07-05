@@ -74,9 +74,11 @@ def mejor_apuesta_global(p):
     do_1x = round(p1+px, 1)
     do_x2 = round(px+p2, 1)
     do_12 = round(p1+p2, 1)
-    if do_1x >= 70: candidatos.append({'mercado': f'1X ({local} o empate)',    'prob': do_1x, 'emoji': '🛡️', 'cat': 'Doble Op.'})
-    if do_x2 >= 70: candidatos.append({'mercado': f'X2 (empate o {visit})',    'prob': do_x2, 'emoji': '🛡️', 'cat': 'Doble Op.'})
-    if do_12 >= 75: candidatos.append({'mercado': 'Sin empate (1 o 2)',         'prob': do_12, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+    # Doble oportunidad: solo mostrar cuando tiene valor real (prob <= 88% para cuota >= 1.14)
+    # "Sin empate" en eliminatorias casi siempre es 95%+ — no tiene valor
+    if do_1x >= 70 and do_1x <= 85: candidatos.append({'mercado': f'1X ({local} o empate)',    'prob': do_1x, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+    if do_x2 >= 70 and do_x2 <= 85: candidatos.append({'mercado': f'X2 (empate o {visit})',    'prob': do_x2, 'emoji': '🛡️', 'cat': 'Doble Op.'})
+    if do_12 >= 75 and do_12 <= 88: candidatos.append({'mercado': 'Sin empate (1 o 2)',         'prob': do_12, 'emoji': '🛡️', 'cat': 'Doble Op.'})
 
     # ── Goles via xG (sin líneas triviales) ──
     for linea, label in [(1.5,'1.5'),(2.5,'2.5'),(3.5,'3.5')]:
@@ -115,8 +117,15 @@ def mejor_apuesta_global(p):
     if not candidatos:
         return None
 
-    # Elegir el de MAYOR probabilidad
-    mejor = max(candidatos, key=lambda x: x['prob'])
+    # Elegir el mercado con mejor valor — no simplemente el de mayor prob
+    # Penalizar mercados con prob > 90% (cuota demasiado baja, sin valor real)
+    # Priorizar mercados de goles, corners, tarjetas sobre doble oportunidad
+    def score_mejor(c):
+        p = c['prob']
+        penalidad = max(0, (p - 88) * 3)  # penalizar prob muy alta
+        bonus_cat = 4 if c.get('cat') in ('Goles', 'Córners', 'Tarjetas', 'Tiros', 'Faltas') else 0
+        return p - penalidad + bonus_cat
+    mejor = max(candidatos, key=score_mejor)
     prob  = mejor['prob']
 
     if prob >= 85:   nivel, emoji_n, clase = 'Muy Alta', '🟢', 'muy-alta'
@@ -361,7 +370,7 @@ footer a{color:var(--ac);text-decoration:none}
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
+  function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-J4LP4JRR1N');
 </script>
