@@ -1522,11 +1522,19 @@ def main():
     # Brasil vs Noruega — eliminar pick correlacionado Victoria Brasil si hay Over 2.5
     if any('brasil' in pk.get('partido','').lower() and 'noruega' in pk.get('partido','').lower()
            for pk in todos):
-        # Quitar Victoria Brasil del pool para evitar correlacion con Over 2.5 Brasil
         todos = [pk for pk in todos if not (
             'brasil' in pk.get('partido','').lower() and
             'noruega' in pk.get('partido','').lower() and
             'victoria brasil' in pk.get('mercado','').lower()
+        )]
+
+    # México vs Inglaterra — eliminar Over 2.5 (contradice Under 2.5 premium)
+    if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
+           for pk in todos):
+        todos = [pk for pk in todos if not (
+            'méxico' in pk.get('partido','').lower() and
+            'inglaterra' in pk.get('partido','').lower() and
+            'más de 2.5' in pk.get('mercado','').lower()
         )]
 
     # ── Filtros finales ANTES de agregar picks manuales ──
