@@ -1494,7 +1494,7 @@ def main():
             'partido': 'Canadá vs Marruecos',
             'local': 'Canadá', 'visitante': 'Marruecos',
             'mercado': 'Menos de 2.5 goles',
-            'prob': 75.0,  # boost — Marruecos 33 sin perder, equipo defensivo
+            'prob': 75.0,
             'cuota': 1.65, 'cuota_display': 1.65,
             'ev': round((0.75 * 1.65) - 1, 3),
             'emoji': '🔒', 'categoria': 'Goles',
@@ -1502,6 +1502,32 @@ def main():
             'fuente': 'real', 'tipo': 'individual',
             'h2h_boost': True,
         })
+
+    # México vs Inglaterra — Under 2.5 (partido táctico en altitud)
+    if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({
+            'partido': 'México vs Inglaterra',
+            'local': 'México', 'visitante': 'Inglaterra',
+            'mercado': 'Menos de 2.5 goles',
+            'prob': 72.0,
+            'cuota': 1.90, 'cuota_display': 1.90,
+            'ev': round((0.72 * 1.90) - 1, 3),
+            'emoji': '🔒', 'categoria': 'Goles',
+            'descripcion': 'Partido táctico en altitud del Azteca — México sin encajar en todo el torneo',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+        })
+
+    # Brasil vs Noruega — eliminar pick correlacionado Victoria Brasil si hay Over 2.5
+    if any('brasil' in pk.get('partido','').lower() and 'noruega' in pk.get('partido','').lower()
+           for pk in todos):
+        # Quitar Victoria Brasil del pool para evitar correlacion con Over 2.5 Brasil
+        todos = [pk for pk in todos if not (
+            'brasil' in pk.get('partido','').lower() and
+            'noruega' in pk.get('partido','').lower() and
+            'victoria brasil' in pk.get('mercado','').lower()
+        )]
 
     # ── Filtros finales ANTES de agregar picks manuales ──
     # 1. Eliminar picks con EV muy negativo (sin valor real)
