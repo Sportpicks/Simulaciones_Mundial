@@ -357,6 +357,14 @@ footer a{color:var(--ac);text-decoration:none}
 .btn-picks-prem{background:#a78bfa;color:#0d1220;border-radius:8px;
   padding:8px 16px;font-weight:700;font-size:.82rem;text-decoration:none;white-space:nowrap}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J4LP4JRR1N');
+</script>
 </head>
 <body>
 <nav><div class="wrap">
