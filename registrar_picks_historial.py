@@ -445,6 +445,14 @@ border-left:3px solid var(--lin)}}
 padding:11px;font-weight:700;text-decoration:none;margin:14px 0;font-size:.88rem}}
 .empty{{text-align:center;color:var(--tx2);font-size:.85rem;padding:32px;}}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J4LP4JRR1N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J4LP4JRR1N');
+</script>
 </head>
 <body>
 <nav>
