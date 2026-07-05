@@ -808,20 +808,11 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
 
     prob_min = 58
 
-    # Contar partidos disponibles distintos al premium
-    partidos_disponibles = set(pk.get('partido','') for pk in todos
-                               if pk.get('partido','') not in partidos_premium)
-    n_partidos_libres = len(partidos_disponibles)
-
     candidatos = []
     for pk in todos:
         mercado_key = pk.get('mercado','')
+        # Solo excluir el mercado exacto del premium, no todo el partido
         if mercado_key in publicos_excluidos:
-            continue
-        partido = pk.get('partido','')
-        # Si hay partidos libres del premium, excluir partido premium del publico
-        # Solo permitir partido premium si no hay suficientes alternativas
-        if partido in partidos_premium and n_partidos_libres >= 1:
             continue
         # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 57%
         prob_min_pk = 57 if pk.get('cuota', 0) >= 2.0 else prob_min
