@@ -1,5 +1,5 @@
 {
-  "bankroll": 101.52,
+  "bankroll": 100.72,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -1401,6 +1401,62 @@
           "cuota": 1.85,
           "prob": 72.0,
           "stake": 2.0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "Francia marcó 10 goles en grupos — xG total 3.27"
+        },
+        {
+          "id": "2026-07-04_pub_1",
+          "tipo": "Público",
+          "partido": "Paraguay vs Francia",
+          "mercado": "Tarjetas +2.5",
+          "cuota": 2.1,
+          "prob": 76.0,
+          "stake": 2.0,
+          "estado": "Ganado",
+          "ganancia": 2.2,
+          "emoji": "🟨",
+          "categoria": "Tarjetas",
+          "descripcion": "Paraguay foulará para frenar a Mbappé — partido físico intenso"
+        },
+        {
+          "id": "2026-07-04_prem_0",
+          "tipo": "Premium",
+          "partido": "Canadá",
+          "mercado": "Menos de 2.5 goles",
+          "cuota": 1.65,
+          "prob": 75.0,
+          "stake": 1.0,
+          "estado": "Perdido",
+          "ganancia": -1.0,
+          "emoji": "🔒",
+          "categoria": "Goles",
+          "descripcion": "Partido cerrado — Marruecos 33 partidos sin perder, equipo defensivo por naturaleza",
+          "picks_combo": []
+        }
+      ],
+      "auditado": false,
+      "resumen": {
+        "ganados": 1,
+        "perdidos": 2,
+        "pendientes": 0,
+        "porcentaje": 33.3,
+        "unidades": -0.8
+      }
+    },
+    {
+      "fecha": "2026-07-05",
+      "picks": [
+        {
+          "id": "2026-07-05_pub_0",
+          "tipo": "Público",
+          "partido": "Paraguay vs Francia",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.85,
+          "prob": 72.0,
+          "stake": 2.0,
           "estado": "Pendiente",
           "ganancia": 0,
           "emoji": "🥅",
@@ -1408,7 +1464,7 @@
           "descripcion": "Francia marcó 10 goles en grupos — xG total 3.27"
         },
         {
-          "id": "2026-07-04_pub_1",
+          "id": "2026-07-05_pub_1",
           "tipo": "Público",
           "partido": "Paraguay vs Francia",
           "mercado": "Tarjetas +2.5",
@@ -1422,7 +1478,7 @@
           "descripcion": "Paraguay foulará para frenar a Mbappé — partido físico intenso"
         },
         {
-          "id": "2026-07-04_prem_0",
+          "id": "2026-07-05_prem_0",
           "tipo": "Premium",
           "partido": "Canadá",
           "mercado": "Menos de 2.5 goles",
