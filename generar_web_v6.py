@@ -423,7 +423,7 @@ footer a{color:var(--ac);text-decoration:none}
         ✅ Ver picks GRATIS
       </a>
       <a href="picks_premium.html" class="hero-btn-prem">
-        💎 Picks Premium S/25
+        💎 Pick Seguro S/10
       </a>
     </div>
 
