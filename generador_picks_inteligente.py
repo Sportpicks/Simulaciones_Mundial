@@ -423,7 +423,12 @@ def obtener_cuotas():
             'totals':{'over_1.5':1.25,'over_2.5':1.90,'under_2.5':1.90,'over_3.5':3.40},'btts_si':3.00,'btts_no':1.33},
         ('Portugal',    'Croacia'):             {'c1':1.82,'cx':3.65,'c2':5.20,'hc':{},
             'totals':{'over_1.5':1.35,'over_2.5':1.85,'under_2.5':1.95,'over_3.5':3.50},
-            'btts_si':1.90,'btts_no':1.85},  # BTTS real Betano — H2H 100% en 6 partidos
+            'btts_si':1.90,'btts_no':1.85},
+        # Octavos de final — cuotas reales API + Betano
+        ('Portugal',    'España'):              {'c1':4.10,'cx':3.70,'c2':1.93,'hc':{},
+            'totals':{'over_1.5':1.55,'over_2.5':1.75,'under_2.5':2.00,'over_3.5':3.80,
+                      'over_10.5_corners':1.70,'over_9.5_corners':1.55,'over_2.5_cards':1.90},
+            'btts_si':1.85,'btts_no':1.90},  # BTTS real Betano — H2H 100% en 6 partidos
         ('Suiza',       'Argelia'):             {'c1':2.15,'cx':3.41,'c2':4.10,'hc':{},
             'totals':{'over_1.5':1.40,'over_2.5':2.10,'under_2.5':1.72,'over_3.5':4.00},
             'btts_si':1.90,'btts_no':1.88},  # BTTS real — Suiza encajó en 3/3, Argelia marcó en 2/3
@@ -468,9 +473,10 @@ def obtener_cuotas():
         ('Portugal',    'España'):              {'c1':2.10,'cx':3.30,'c2':3.50,'hc':{},
             'totals':{'over_1.5':1.35,'over_2.5':1.90,'under_2.5':1.88,'over_3.5':3.50},
             'btts_si':1.90,'btts_no':1.85},
-        ('EE. UU.',     'Bélgica'):             {'c1':4.50,'cx':3.80,'c2':1.80,'hc':{},
-            'totals':{'over_1.5':1.40,'over_2.5':2.05,'under_2.5':1.75,'over_3.5':3.80},
-            'btts_si':2.40,'btts_no':1.55},
+        ('EE. UU.',     'Bélgica'):             {'c1':2.55,'cx':3.40,'c2':2.78,'hc':{},
+            'totals':{'over_1.5':1.40,'over_2.5':1.64,'under_2.5':2.10,'over_3.5':3.20,
+                      'over_22.5_faltas':1.65,'over_20.5_faltas':1.40},
+            'btts_si':2.20,'btts_no':1.62},
         ('Argentina',   'Egipto'):              {'c1':1.85,'cx':3.60,'c2':4.20,'hc':{},
             'totals':{'over_1.5':1.38,'over_2.5':2.00,'under_2.5':1.80,'over_3.5':3.70},
             'btts_si':2.60,'btts_no':1.42},
@@ -1518,6 +1524,56 @@ def main():
             'noruega' in pk.get('partido','').lower() and
             'victoria brasil' in pk.get('mercado','').lower()
         )]
+
+    # Portugal vs España — corners premium + Under 2.5 publico
+    if any('portugal' in pk.get('partido','').lower() and 'españa' in pk.get('partido','').lower()
+           for pk in todos):
+        # Premium: Corners +10.5 (España 7.5/partido en 8 seguidos)
+        picks_manuales.append({
+            'partido': 'Portugal vs España',
+            'local': 'Portugal', 'visitante': 'España',
+            'mercado': 'Córners totales +10.5',
+            'prob': 82.0,
+            'cuota': 1.70, 'cuota_display': 1.70,
+            'ev': round((0.82 * 1.70) - 1, 3),
+            'emoji': '⛳', 'categoria': 'Córners',
+            'descripcion': 'España 7.5 corners/partido en 8 seguidos + Portugal 5.9 = 13+ esperados',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+        })
+        # Publico: Under 2.5 goles (España 0 goles encajados en 5 partidos)
+        picks_manuales.append({
+            'partido': 'Portugal vs España',
+            'local': 'Portugal', 'visitante': 'España',
+            'mercado': 'Menos de 2.5 goles',
+            'prob': 68.0,
+            'cuota': 2.00, 'cuota_display': 2.00,
+            'ev': round((0.68 * 2.00) - 1, 3),
+            'emoji': '🔒', 'categoria': 'Goles',
+            'descripcion': 'España 0 goles encajados en 5 partidos — partido táctico ibérico',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Eliminar Over 2.5 Portugal vs España (contradice Under)
+        todos = [pk for pk in todos if not (
+            'portugal' in pk.get('partido','').lower() and
+            'españa' in pk.get('partido','').lower() and
+            'más de 2.5' in pk.get('mercado','').lower()
+        )]
+
+    # EE.UU. vs Bélgica — faltas publico
+    if any('ee. uu.' in pk.get('partido','').lower() and 'bélgica' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({
+            'partido': 'EE. UU. vs Bélgica',
+            'local': 'EE. UU.', 'visitante': 'Bélgica',
+            'mercado': 'Faltas totales +22.5',
+            'prob': 78.0,
+            'cuota': 1.65, 'cuota_display': 1.65,
+            'ev': round((0.78 * 1.65) - 1, 3),
+            'emoji': '🦵', 'categoria': 'Faltas',
+            'descripcion': 'EE.UU. 15 + Bélgica 20 faltas/partido = 35 esperadas — Balogun habilitado',
+            'fuente': 'real', 'tipo': 'individual',
+        })
 
     # México vs Inglaterra — eliminar picks contradictorios con Under 2.5 premium
     if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
