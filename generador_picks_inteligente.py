@@ -1594,7 +1594,15 @@ def main():
         'argentina' in pk.get('partido','').lower() and
         'menos de 2.5' in pk.get('mercado','').lower()
     )]
-    # 3. Recalcular EV correctamente para picks reales
+    # 3. Eliminar BTTS Portugal vs España (no es el pick correcto hoy)
+    todos = [pk for pk in todos if not (
+        'portugal' in pk.get('partido','').lower() and
+        'españa' in pk.get('partido','').lower() and
+        'ambos anotan' in pk.get('mercado','').lower()
+    )]
+    # 4. Eliminar Over 2.5 EE.UU. Bélgica si hay Faltas en el mismo partido en publico
+    # (permitir Over 2.5 como pick publico — es diferente mercado)
+    # 5. Recalcular EV correctamente para picks reales
     for pk in todos:
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
             pk['ev'] = round((pk['prob']/100) - (1/pk['cuota']), 3)
