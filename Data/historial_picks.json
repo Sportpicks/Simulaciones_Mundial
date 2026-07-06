@@ -1501,6 +1501,70 @@
         "porcentaje": 66.7,
         "unidades": 2.3
       }
+    },
+    {
+      "fecha": "2026-07-06",
+      "picks": [
+        {
+          "id": "2026-07-06_pub_0",
+          "tipo": "Público",
+          "partido": "EE. UU. vs Bélgica",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 2.05,
+          "prob": 70.8,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "xG total 3.7 — cuota real @2.05"
+        },
+        {
+          "id": "2026-07-06_pub_1",
+          "tipo": "Público",
+          "partido": "Portugal vs España",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.9,
+          "prob": 68.1,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "xG total 3.5 — cuota real @1.9"
+        },
+        {
+          "id": "2026-07-06_pub_2",
+          "tipo": "Público",
+          "partido": "EE. UU. vs Bélgica",
+          "mercado": "Victoria Bélgica",
+          "cuota": 1.8,
+          "prob": 83.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "1X2",
+          "descripcion": "Bélgica favorito (83%)"
+        },
+        {
+          "id": "2026-07-06_prem_0",
+          "tipo": "Premium",
+          "partido": "Portugal",
+          "mercado": "Ambos anotan - Sí",
+          "cuota": 1.9,
+          "prob": 67.4,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "Goles",
+          "descripcion": "xG local 2.0 · xG visitante 1.51",
+          "picks_combo": []
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
