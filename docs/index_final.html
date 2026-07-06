@@ -146,7 +146,7 @@ footer a{color:var(--ac);text-decoration:none}
   <h1>⚽ Mundial 2026 — Modelo Final</h1>
   <p>Mercados razonados por equipo o total según datos estadísticos reales</p>
   <div class="badges">
-    <span class="badge">📅 06-07-2026 00:53 UTC</span>
+    <span class="badge">📅 06-07-2026 01:17 UTC</span>
     <span class="badge v1">🤖 XGBoost</span>
     <span class="badge v2">📈 25 Casas de Apuestas</span>
     <span class="badge v3">📐 Dixon-Coles</span>
@@ -167,12 +167,15 @@ footer a{color:var(--ac);text-decoration:none}
   </table></div>
   <button class="btn" id="btn-mc">Ver las 48 selecciones</button></div>
 
-  <div class="tg-banner">
-    <div>
-      <div class="tg-banner-txt">📣 Únete al canal gratuito de SportPicks</div>
-      <div class="tg-banner-sub">Picks públicos diarios · Análisis del modelo · Mundial 2026</div>
+  <div class="tg-banner" onclick="window.open('https://t.me/sportpickoficial','_blank')" style="cursor:pointer">
+    <div style="font-size:1.8rem">📣</div>
+    <div style="flex:1">
+      <div class="tg-banner-txt">Canal GRATIS de SportPicks — Únete ahora</div>
+      <div class="tg-banner-sub">✅ Picks públicos diarios · 💎 Análisis del modelo · ⚽ Mundial 2026</div>
     </div>
-    <a class="tg-banner-btn" href="https://t.me/sportpickoficial" target="_blank">Unirme gratis →</a>
+    <a class="tg-banner-btn" href="https://t.me/sportpickoficial" target="_blank" onclick="event.stopPropagation()">
+      Unirme →
+    </a>
   </div>
 
   <div class="picks-aviso">
@@ -381,6 +384,44 @@ const contC=document.getElementById('cuadro');
     <tbody>${filas}</tbody></table></div>`;
   contC.appendChild(det);
 });
+</script>
+
+<!-- Banner flotante Telegram -->
+<div id="tg-float" style="position:fixed;bottom:20px;right:20px;z-index:9999;
+  background:linear-gradient(135deg,#0088cc,#005f8f);border-radius:16px;
+  padding:14px 18px;box-shadow:0 4px 20px rgba(0,136,204,.5);
+  display:flex;align-items:center;gap:12px;max-width:290px;
+  animation:tgSlide .6s ease;cursor:pointer;border:1px solid rgba(255,255,255,.15)">
+  <div style="font-size:2rem;flex-shrink:0">📣</div>
+  <div style="flex:1">
+    <div style="color:#fff;font-weight:700;font-size:.88rem;line-height:1.3">Canal GRATIS de SportPicks</div>
+    <div style="color:rgba(255,255,255,.8);font-size:.74rem;margin-top:3px">Picks diarios · Mundial 2026</div>
+  </div>
+  <button id="tg-close" style="background:rgba(255,255,255,.15);border:none;color:#fff;
+    border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:.8rem;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
+</div>
+<style>
+@keyframes tgSlide{{
+  from{{transform:translateY(80px);opacity:0}}
+  to{{transform:translateY(0);opacity:1}}
+}}
+</style>
+<script>
+(function(){{
+  var b=document.getElementById('tg-float');
+  var c=document.getElementById('tg-close');
+  if(sessionStorage.getItem('tg_cerrado')){{b.style.display='none';return;}}
+  b.addEventListener('click',function(e){{
+    if(e.target!==c && !c.contains(e.target))
+      window.open('https://t.me/sportpickoficial','_blank');
+  }});
+  c.addEventListener('click',function(e){{
+    e.stopPropagation();
+    b.style.display='none';
+    sessionStorage.setItem('tg_cerrado','1');
+  }});
+}})();
 </script>
 </body>
 </html>
