@@ -1,35 +1,11 @@
 {
-  "Egipto": {
-    "puntos_forma": 1.6,
-    "racha": 4,
-    "gf_forma": 1.0,
-    "gc_forma": 0.2,
-    "tendencia": "bajada",
-    "partidos": 34
-  },
-  "Jordania": {
-    "puntos_forma": 1.2,
-    "racha": 2,
-    "gf_forma": 1.6,
-    "gc_forma": 1.2,
-    "tendencia": "bajada",
-    "partidos": 28
-  },
-  "Turquía": {
-    "puntos_forma": 2.6,
-    "racha": 6,
-    "gf_forma": 2.0,
-    "gc_forma": 0.6,
-    "tendencia": "estable",
-    "partidos": 46
-  },
-  "Argelia": {
-    "puntos_forma": 1.6,
-    "racha": 2,
-    "gf_forma": 2.0,
-    "gc_forma": 0.6,
-    "tendencia": "bajada",
-    "partidos": 31
+  "Alemania": {
+    "puntos_forma": 3.0,
+    "racha": 7,
+    "gf_forma": 3.0,
+    "gc_forma": 0.8,
+    "tendencia": "subida",
+    "partidos": 42
   },
   "Ghana": {
     "puntos_forma": 1.2,
@@ -39,13 +15,13 @@
     "tendencia": "bajada",
     "partidos": 30
   },
-  "Bélgica": {
-    "puntos_forma": 2.2,
-    "racha": 11,
-    "gf_forma": 3.6,
-    "gc_forma": 1.2,
+  "Canadá": {
+    "puntos_forma": 1.8,
+    "racha": 8,
+    "gf_forma": 1.2,
+    "gc_forma": 0.6,
     "tendencia": "estable",
-    "partidos": 47
+    "partidos": 35
   },
   "Brasil": {
     "puntos_forma": 1.8,
@@ -55,133 +31,13 @@
     "tendencia": "estable",
     "partidos": 29
   },
-  "Países Bajos": {
-    "puntos_forma": 2.2,
-    "racha": 14,
-    "gf_forma": 2.4,
-    "gc_forma": 0.6,
-    "tendencia": "bajada",
-    "partidos": 55
-  },
-  "Senegal": {
-    "puntos_forma": 2.4,
-    "racha": 2,
-    "gf_forma": 1.4,
-    "gc_forma": 0.25,
-    "tendencia": "estable",
-    "partidos": 36
-  },
-  "Alemania": {
-    "puntos_forma": 3.0,
-    "racha": 7,
-    "gf_forma": 3.0,
-    "gc_forma": 0.8,
-    "tendencia": "subida",
-    "partidos": 42
-  },
-  "Japón": {
-    "puntos_forma": 2.0,
-    "racha": 3,
-    "gf_forma": 1.6,
-    "gc_forma": 0.2,
-    "tendencia": "bajada",
-    "partidos": 40
-  },
-  "Catar": {
+  "Bosnia-Herzegovina": {
     "puntos_forma": 1.4,
-    "racha": 0,
-    "gf_forma": 0.6,
-    "gc_forma": 1.0,
-    "tendencia": "estable",
-    "partidos": 31
-  },
-  "Arabia Saudí": {
-    "puntos_forma": 0.8,
-    "racha": 0,
-    "gf_forma": 0.8,
-    "gc_forma": 2.0,
-    "tendencia": "bajada",
-    "partidos": 45
-  },
-  "Cabo Verde": {
-    "puntos_forma": 2.6,
     "racha": 6,
-    "gf_forma": 2.2,
-    "gc_forma": 0.8,
-    "tendencia": "subida",
-    "partidos": 18
-  },
-  "México": {
-    "puntos_forma": 2.2,
-    "racha": 15,
-    "gf_forma": 1.6,
-    "gc_forma": 0.2,
-    "tendencia": "bajada",
-    "partidos": 36
-  },
-  "Haití": {
-    "puntos_forma": 1.4,
-    "racha": 1,
-    "gf_forma": 0.8,
-    "gc_forma": 1.0,
-    "tendencia": "estable",
-    "partidos": 12
-  },
-  "Colombia": {
-    "puntos_forma": 1.4,
-    "racha": 0,
-    "gf_forma": 2.4,
-    "gc_forma": 1.8,
-    "tendencia": "estable",
-    "partidos": 27
-  },
-  "Canadá": {
-    "puntos_forma": 1.8,
-    "racha": 8,
     "gf_forma": 1.2,
-    "gc_forma": 0.6,
-    "tendencia": "estable",
-    "partidos": 35
-  },
-  "Uzbekistán": {
-    "puntos_forma": 2.2,
-    "racha": 5,
-    "gf_forma": 1.4,
-    "gc_forma": 0.4,
-    "tendencia": "estable",
-    "partidos": 27
-  },
-  "Panamá": {
-    "puntos_forma": 2.0,
-    "racha": 2,
-    "gf_forma": 1.8,
-    "gc_forma": 1.0,
-    "tendencia": "subida",
-    "partidos": 36
-  },
-  "Irán": {
-    "puntos_forma": 2.0,
-    "racha": 2,
-    "gf_forma": 2.4,
-    "gc_forma": 0.6,
+    "gc_forma": 0.8,
     "tendencia": "bajada",
-    "partidos": 38
-  },
-  "Escocia": {
-    "puntos_forma": 1.2,
-    "racha": 0,
-    "gf_forma": 1.6,
-    "gc_forma": 1.6,
-    "tendencia": "bajada",
-    "partidos": 44
-  },
-  "Costa de Marfil": {
-    "puntos_forma": 2.4,
-    "racha": 2,
-    "gf_forma": 2.6,
-    "gc_forma": 1.0,
-    "tendencia": "estable",
-    "partidos": 27
+    "partidos": 42
   },
   "Ecuador": {
     "puntos_forma": 1.4,
@@ -191,85 +47,21 @@
     "tendencia": "bajada",
     "partidos": 28
   },
-  "Túnez": {
-    "puntos_forma": 1.2,
-    "racha": 4,
-    "gf_forma": 1.0,
-    "gc_forma": 1.0,
-    "tendencia": "bajada",
-    "partidos": 32
-  },
-  "Marruecos": {
-    "puntos_forma": 1.6,
-    "racha": 2,
-    "gf_forma": 1.25,
+  "Uzbekistán": {
+    "puntos_forma": 2.2,
+    "racha": 5,
+    "gf_forma": 1.4,
     "gc_forma": 0.4,
-    "tendencia": "bajada",
-    "partidos": 38
+    "tendencia": "estable",
+    "partidos": 27
   },
-  "Paraguay": {
+  "Colombia": {
     "puntos_forma": 1.4,
-    "racha": 0,
-    "gf_forma": 0.6,
-    "gc_forma": 0.6,
-    "tendencia": "estable",
-    "partidos": 24
-  },
-  "Nueva Zelanda": {
-    "puntos_forma": 0.0,
-    "racha": 0,
-    "gf_forma": 0.0,
-    "gc_forma": 1.0,
-    "tendencia": "estable",
-    "partidos": 1
-  },
-  "Croacia": {
-    "puntos_forma": 2.4,
     "racha": 0,
     "gf_forma": 2.4,
-    "gc_forma": 1.4,
-    "tendencia": "estable",
-    "partidos": 54
-  },
-  "Austria": {
-    "puntos_forma": 2.0,
-    "racha": 4,
-    "gf_forma": 1.8,
-    "gc_forma": 0.6,
-    "tendencia": "bajada",
-    "partidos": 47
-  },
-  "Suecia": {
-    "puntos_forma": 1.4,
-    "racha": 3,
-    "gf_forma": 1.6,
     "gc_forma": 1.8,
     "tendencia": "estable",
-    "partidos": 38
-  },
-  "República Checa": {
-    "puntos_forma": 1.2,
-    "racha": 3,
-    "gf_forma": 2.0,
-    "gc_forma": 1.0,
-    "tendencia": "bajada",
-    "partidos": 42
-  },
-  "Curazao": {
-    "puntos_forma": 2.2,
-    "racha": 6,
-    "gf_forma": 2.6,
-    "gc_forma": 0.6,
-    "tendencia": "subida",
-    "partidos": 10
-  },
-  "Portugal": {
-    "puntos_forma": 1.6,
-    "racha": 3,
-    "gf_forma": 2.6,
-    "gc_forma": 1.0,
-    "tendencia": "bajada",
-    "partidos": 54
+    "partidos": 27
   },
   "EE. UU.": {
     "puntos_forma": 0.8,
@@ -279,70 +71,6 @@
     "tendencia": "bajada",
     "partidos": 33
   },
-  "Noruega": {
-    "puntos_forma": 2.0,
-    "racha": 1,
-    "gf_forma": 2.8,
-    "gc_forma": 0.8,
-    "tendencia": "bajada",
-    "partidos": 40
-  },
-  "Bosnia-Herzegovina": {
-    "puntos_forma": 1.4,
-    "racha": 6,
-    "gf_forma": 1.2,
-    "gc_forma": 0.8,
-    "tendencia": "bajada",
-    "partidos": 42
-  },
-  "España": {
-    "puntos_forma": 2.2,
-    "racha": 33,
-    "gf_forma": 2.6,
-    "gc_forma": 0.4,
-    "tendencia": "bajada",
-    "partidos": 53
-  },
-  "Francia": {
-    "puntos_forma": 2.6,
-    "racha": 9,
-    "gf_forma": 2.8,
-    "gc_forma": 1.0,
-    "tendencia": "estable",
-    "partidos": 53
-  },
-  "Uruguay": {
-    "puntos_forma": 1.8,
-    "racha": 5,
-    "gf_forma": 1.2,
-    "gc_forma": 0.2,
-    "tendencia": "subida",
-    "partidos": 30
-  },
-  "Inglaterra": {
-    "puntos_forma": 2.0,
-    "racha": 0,
-    "gf_forma": 2.0,
-    "gc_forma": 0.4,
-    "tendencia": "bajada",
-    "partidos": 52
-  },
-  "Argentina": {
-    "puntos_forma": 2.0,
-    "racha": 2,
-    "gf_forma": 2.2,
-    "gc_forma": 0.6,
-    "tendencia": "estable",
-    "partidos": 33
-  },
-  "Irak": {
-    "puntos_forma": 2.2,
-    "racha": 7,
-    "gf_forma": 1.2,
-    "gc_forma": 0.6,
-    "tendencia": "subida",
-    "partidos": 38
-  },
   "Australia": {
     "puntos_forma": 2.6,
     "racha": 9,
@@ -351,13 +79,45 @@
     "tendencia": "subida",
     "partidos": 41
   },
-  "Sudáfrica": {
-    "puntos_forma": 1.0,
-    "racha": 1,
-    "gf_forma": 1.2,
-    "gc_forma": 1.4,
+  "Jordania": {
+    "puntos_forma": 1.2,
+    "racha": 2,
+    "gf_forma": 1.6,
+    "gc_forma": 1.2,
     "tendencia": "bajada",
-    "partidos": 29
+    "partidos": 28
+  },
+  "Japón": {
+    "puntos_forma": 2.0,
+    "racha": 3,
+    "gf_forma": 1.6,
+    "gc_forma": 0.2,
+    "tendencia": "bajada",
+    "partidos": 40
+  },
+  "Noruega": {
+    "puntos_forma": 2.0,
+    "racha": 1,
+    "gf_forma": 2.8,
+    "gc_forma": 0.8,
+    "tendencia": "bajada",
+    "partidos": 40
+  },
+  "Croacia": {
+    "puntos_forma": 2.4,
+    "racha": 0,
+    "gf_forma": 2.4,
+    "gc_forma": 1.4,
+    "tendencia": "estable",
+    "partidos": 54
+  },
+  "México": {
+    "puntos_forma": 2.2,
+    "racha": 15,
+    "gf_forma": 1.6,
+    "gc_forma": 0.2,
+    "tendencia": "bajada",
+    "partidos": 36
   },
   "Corea del Sur": {
     "puntos_forma": 1.4,
@@ -367,6 +127,150 @@
     "tendencia": "bajada",
     "partidos": 41
   },
+  "Curazao": {
+    "puntos_forma": 2.2,
+    "racha": 6,
+    "gf_forma": 2.6,
+    "gc_forma": 0.6,
+    "tendencia": "subida",
+    "partidos": 10
+  },
+  "España": {
+    "puntos_forma": 2.2,
+    "racha": 33,
+    "gf_forma": 2.6,
+    "gc_forma": 0.4,
+    "tendencia": "bajada",
+    "partidos": 53
+  },
+  "Túnez": {
+    "puntos_forma": 1.2,
+    "racha": 4,
+    "gf_forma": 1.0,
+    "gc_forma": 1.0,
+    "tendencia": "bajada",
+    "partidos": 32
+  },
+  "Uruguay": {
+    "puntos_forma": 1.8,
+    "racha": 5,
+    "gf_forma": 1.2,
+    "gc_forma": 0.2,
+    "tendencia": "subida",
+    "partidos": 30
+  },
+  "República Checa": {
+    "puntos_forma": 1.2,
+    "racha": 3,
+    "gf_forma": 2.0,
+    "gc_forma": 1.0,
+    "tendencia": "bajada",
+    "partidos": 42
+  },
+  "Países Bajos": {
+    "puntos_forma": 2.2,
+    "racha": 14,
+    "gf_forma": 2.4,
+    "gc_forma": 0.6,
+    "tendencia": "bajada",
+    "partidos": 55
+  },
+  "Paraguay": {
+    "puntos_forma": 1.4,
+    "racha": 0,
+    "gf_forma": 0.6,
+    "gc_forma": 0.6,
+    "tendencia": "estable",
+    "partidos": 24
+  },
+  "Escocia": {
+    "puntos_forma": 1.2,
+    "racha": 0,
+    "gf_forma": 1.6,
+    "gc_forma": 1.6,
+    "tendencia": "bajada",
+    "partidos": 44
+  },
+  "Suecia": {
+    "puntos_forma": 1.4,
+    "racha": 3,
+    "gf_forma": 1.6,
+    "gc_forma": 1.8,
+    "tendencia": "estable",
+    "partidos": 38
+  },
+  "Egipto": {
+    "puntos_forma": 1.6,
+    "racha": 4,
+    "gf_forma": 1.0,
+    "gc_forma": 0.2,
+    "tendencia": "bajada",
+    "partidos": 34
+  },
+  "Arabia Saudí": {
+    "puntos_forma": 0.8,
+    "racha": 0,
+    "gf_forma": 0.8,
+    "gc_forma": 2.0,
+    "tendencia": "bajada",
+    "partidos": 45
+  },
+  "Catar": {
+    "puntos_forma": 1.4,
+    "racha": 0,
+    "gf_forma": 0.6,
+    "gc_forma": 1.0,
+    "tendencia": "estable",
+    "partidos": 31
+  },
+  "Bélgica": {
+    "puntos_forma": 2.2,
+    "racha": 11,
+    "gf_forma": 3.6,
+    "gc_forma": 1.2,
+    "tendencia": "estable",
+    "partidos": 47
+  },
+  "Irán": {
+    "puntos_forma": 2.0,
+    "racha": 2,
+    "gf_forma": 2.4,
+    "gc_forma": 0.6,
+    "tendencia": "bajada",
+    "partidos": 38
+  },
+  "Sudáfrica": {
+    "puntos_forma": 1.0,
+    "racha": 1,
+    "gf_forma": 1.2,
+    "gc_forma": 1.4,
+    "tendencia": "bajada",
+    "partidos": 29
+  },
+  "Irak": {
+    "puntos_forma": 2.2,
+    "racha": 7,
+    "gf_forma": 1.2,
+    "gc_forma": 0.6,
+    "tendencia": "subida",
+    "partidos": 38
+  },
+  "Portugal": {
+    "puntos_forma": 1.6,
+    "racha": 3,
+    "gf_forma": 2.6,
+    "gc_forma": 1.0,
+    "tendencia": "bajada",
+    "partidos": 54
+  },
+  "Turquía": {
+    "puntos_forma": 2.6,
+    "racha": 6,
+    "gf_forma": 2.0,
+    "gc_forma": 0.6,
+    "tendencia": "estable",
+    "partidos": 46
+  },
   "Suiza": {
     "puntos_forma": 1.2,
     "racha": 1,
@@ -375,6 +279,54 @@
     "tendencia": "bajada",
     "partidos": 47
   },
+  "Argelia": {
+    "puntos_forma": 1.6,
+    "racha": 2,
+    "gf_forma": 2.0,
+    "gc_forma": 0.6,
+    "tendencia": "bajada",
+    "partidos": 31
+  },
+  "Costa de Marfil": {
+    "puntos_forma": 2.4,
+    "racha": 2,
+    "gf_forma": 2.6,
+    "gc_forma": 1.0,
+    "tendencia": "estable",
+    "partidos": 27
+  },
+  "Cabo Verde": {
+    "puntos_forma": 2.6,
+    "racha": 6,
+    "gf_forma": 2.2,
+    "gc_forma": 0.8,
+    "tendencia": "subida",
+    "partidos": 18
+  },
+  "Argentina": {
+    "puntos_forma": 2.0,
+    "racha": 2,
+    "gf_forma": 2.2,
+    "gc_forma": 0.6,
+    "tendencia": "estable",
+    "partidos": 33
+  },
+  "Nueva Zelanda": {
+    "puntos_forma": 0.0,
+    "racha": 0,
+    "gf_forma": 0.0,
+    "gc_forma": 1.0,
+    "tendencia": "estable",
+    "partidos": 1
+  },
+  "Senegal": {
+    "puntos_forma": 2.4,
+    "racha": 2,
+    "gf_forma": 1.4,
+    "gc_forma": 0.25,
+    "tendencia": "estable",
+    "partidos": 36
+  },
   "RD Congo": {
     "puntos_forma": 1.8,
     "racha": 9,
@@ -382,5 +334,53 @@
     "gc_forma": 0.2,
     "tendencia": "estable",
     "partidos": 25
+  },
+  "Haití": {
+    "puntos_forma": 1.4,
+    "racha": 1,
+    "gf_forma": 0.8,
+    "gc_forma": 1.0,
+    "tendencia": "estable",
+    "partidos": 12
+  },
+  "Francia": {
+    "puntos_forma": 2.6,
+    "racha": 9,
+    "gf_forma": 2.8,
+    "gc_forma": 1.0,
+    "tendencia": "estable",
+    "partidos": 53
+  },
+  "Austria": {
+    "puntos_forma": 2.0,
+    "racha": 4,
+    "gf_forma": 1.8,
+    "gc_forma": 0.6,
+    "tendencia": "bajada",
+    "partidos": 47
+  },
+  "Panamá": {
+    "puntos_forma": 2.0,
+    "racha": 2,
+    "gf_forma": 1.8,
+    "gc_forma": 1.0,
+    "tendencia": "subida",
+    "partidos": 36
+  },
+  "Inglaterra": {
+    "puntos_forma": 2.0,
+    "racha": 0,
+    "gf_forma": 2.0,
+    "gc_forma": 0.4,
+    "tendencia": "bajada",
+    "partidos": 52
+  },
+  "Marruecos": {
+    "puntos_forma": 1.6,
+    "racha": 2,
+    "gf_forma": 1.25,
+    "gc_forma": 0.4,
+    "tendencia": "bajada",
+    "partidos": 38
   }
 }
