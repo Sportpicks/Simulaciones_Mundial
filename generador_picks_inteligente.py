@@ -1076,8 +1076,8 @@ footer a{{color:var(--ac);text-decoration:none}}
       <span class="prem-badge">💎 PICK PREMIUM</span>
       <div class="prem-titulo">{prem_mercado}</div>
       <div class="prem-sub">{prem_partido} — Análisis profundo del modelo</div>
-      <div class="prem-precio">S/25 — Resto del Mundial</div>
-      <a class="prem-btn" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20acceder%20al%20pick%20premium%20de%20hoy">
+      <div class="prem-precio">S/10 · $5 USD — Pick Seguro 🔥</div>
+      <a class="prem-btn" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20el%20pick%20seguro%20premium%20de%20hoy">
         📱 Activar por Yape/Plin
       </a>
       <div class="prem-yape">Yape/Plin: 982 730 164 · DM en Facebook: SportPicks Oficial</div>
@@ -1280,7 +1280,7 @@ footer a{{color:var(--ac);text-decoration:none}}
 
       <hr class="acceso-sep">
       <div class="acceso-comprar">¿No tienes código? Accede al premium por:</div>
-      <div class="acceso-precio">S/25 — Resto del Mundial 2026</div>
+      <div class="acceso-precio">S/10 · $5 USD — Pick Seguro 🔥</div>
       <a class="btn-yape" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20el%20pick%20premium%20de%20SportPicks">
         📱 Pagar por Yape/Plin — 982 730 164
       </a>
