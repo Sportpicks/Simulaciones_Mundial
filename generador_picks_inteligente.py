@@ -1069,7 +1069,7 @@ footer a{{color:var(--ac);text-decoration:none}}
     <div class="ph">
       <div class="ph-em">{prem_emoji}</div>
       <div class="ph-info">
-        <div class="sub">{prem_partido} · Premium</div>
+        <div class="sub" style="filter:blur(5px);user-select:none">██████████ · Premium</div>
         <div class="merc" style="filter:blur(5px);user-select:none">████████████████</div>
       </div>
     </div>
@@ -1080,8 +1080,8 @@ footer a{{color:var(--ac);text-decoration:none}}
     </div>
     <div class="prem-overlay">
       <span class="prem-badge">💎 PICK PREMIUM</span>
-      <div class="prem-titulo">{prem_mercado}</div>
-      <div class="prem-sub">{prem_partido} — Análisis profundo del modelo</div>
+      <div class="prem-titulo">🔒 Pick Exclusivo del Día</div>
+      <div class="prem-sub">Mercado y partido revelados al pagar · Análisis profundo del modelo</div>
       <div class="prem-precio">S/10 · $5 USD — Pick Seguro 🔥</div>
       <a class="prem-btn" href="https://wa.me/51982730164?text=Hola%2C%20quiero%20el%20pick%20seguro%20premium%20de%20hoy">
         📱 Activar por Yape/Plin
