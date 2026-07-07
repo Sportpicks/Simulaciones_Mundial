@@ -1655,11 +1655,11 @@ def main():
             'partido': 'Argentina vs Egipto',
             'local': 'Argentina', 'visitante': 'Egipto',
             'mercado': 'Combinada: Más 1.5 goles + Tiros +5.5',
-            'prob': 75.0, 'cuota': 1.55, 'cuota_display': 1.55,
-            'ev': round((0.75 * 1.55) - 1, 3),
+            'prob': 65.0, 'cuota': 1.55, 'cuota_display': 1.55,
+            'ev': round((0.65 * 1.55) - 1, 3),
             'emoji': '🎯', 'categoria': 'Goles',
             'descripcion': 'Messi 7 goles en 4 partidos · Argentina presión alta · Egipto contraataca con Salah',
-            'fuente': 'real', 'tipo': 'combinada', 'h2h_boost': True,
+            'fuente': 'real', 'tipo': 'combinada',
             'picks_combo': [
                 {'partido': 'Argentina vs Egipto', 'local': 'Argentina', 'visitante': 'Egipto',
                  'mercado': 'Más de 1.5 goles', 'cuota': 1.32},
@@ -1674,11 +1674,11 @@ def main():
             'partido': 'Suiza vs Colombia',
             'local': 'Suiza', 'visitante': 'Colombia',
             'mercado': 'Combinada: Más 1.5 goles + X2 Colombia o Empate',
-            'prob': 78.0, 'cuota': 1.87, 'cuota_display': 1.87,
-            'ev': round((0.78 * 1.87) - 1, 3),
+            'prob': 68.0, 'cuota': 1.87, 'cuota_display': 1.87,
+            'ev': round((0.68 * 1.87) - 1, 3),
             'emoji': '🎯', 'categoria': 'Goles',
             'descripcion': 'Colombia favorita xG superior · Manzambi Suiza en duda · Colombia local Vancouver',
-            'fuente': 'real', 'tipo': 'combinada', 'h2h_boost': True,
+            'fuente': 'real', 'tipo': 'combinada',
             'picks_combo': [
                 {'partido': 'Suiza vs Colombia', 'local': 'Suiza', 'visitante': 'Colombia',
                  'mercado': 'Más de 1.5 goles', 'cuota': 1.42},
@@ -1686,16 +1686,31 @@ def main():
                  'mercado': 'X2 Colombia o Empate', 'cuota': 1.32},
             ],
         })
-        # Victoria Colombia — premium
+        # Victoria Colombia — publico (cuota alta con EV real)
         picks_forzados.append({
             'partido': 'Suiza vs Colombia',
             'local': 'Suiza', 'visitante': 'Colombia',
             'mercado': 'Victoria Colombia',
-            'prob': 82.0, 'cuota': 2.25, 'cuota_display': 2.25,
-            'ev': round((0.82 * 2.25) - 1, 3),
+            'prob': 65.0, 'cuota': 2.25, 'cuota_display': 2.25,
+            'ev': round((0.65 * 2.25) - 1, 3),
             'emoji': '⚽', 'categoria': '1X2',
             'descripcion': 'Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+    # Pick premium forzado: Victoria Colombia
+    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos):
+        picks_forzados.append({
+            'partido': 'Suiza vs Colombia',
+            'local': 'Suiza', 'visitante': 'Colombia',
+            'mercado': 'Victoria Colombia',
+            'prob': 88.0,  # solo para premium — factores externos incluidos
+            'cuota': 2.25, 'cuota_display': 2.25,
+            'ev': round((0.88 * 2.25) - 1, 3),
+            'emoji': '⚽', 'categoria': '1X2',
+            'descripcion': 'PREMIUM: Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial',
             'fuente': 'real', 'tipo': 'individual', 'h2h_boost': True,
+            'es_premium_forzado': True,
         })
 
     # ── Agregar todos los picks ──
