@@ -1716,14 +1716,49 @@ def main():
     # ── Agregar todos los picks ──
     todos = todos + picks_manuales + picks_forzados
 
-    picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
+    # ── Eliminar Over 2.5 Suiza vs Colombia del pool (no es pick del día) ──
+    todos = [pk for pk in todos if not (
+        'suiza' in pk.get('partido','').lower() and
+        'colombia' in pk.get('partido','').lower() and
+        'más de 2.5' in pk.get('mercado','').lower() and
+        not pk.get('picks_combo')  # no eliminar si es parte de combinada
+    )]
 
-    # Excluir del público los picks ya en premium
+    # ── Selección con picks forzados ──
+    # 1. Premium forzado: buscar pick con es_premium_forzado=True
+    picks_prem = []
+    for pk in picks_forzados:
+        if pk.get('es_premium_forzado'):
+            pk['tipo'] = 'premium'
+            picks_prem = [pk]
+            break
+
+    # Si no hay premium forzado, usar selección normal
+    if not picks_prem:
+        picks_prem = seleccionar_premium(todos)
+
+    # 2. Público: excluir solo el mercado exacto del premium
     mercados_premium = set(pk.get('mercado','') for pk in picks_prem)
-    partidos_premium = set(pk.get('partido','') for pk in picks_prem)
-    picks_pub = seleccionar_publicos(todos,
-                                    publicos_excluidos=mercados_premium,
-                                    partidos_premium=partidos_premium)
+
+    # Picks públicos: primero las combinadas forzadas, luego selección normal
+    picks_pub = []
+    for pk in picks_forzados:
+        if pk.get('tipo') == 'combinada' and pk.get('mercado','') not in mercados_premium:
+            picks_pub.append(pk)
+
+    # Completar con selección normal hasta max 3 picks
+    candidatos_normales = seleccionar_publicos(
+        todos,
+        publicos_excluidos=mercados_premium | set(pk.get('mercado','') for pk in picks_pub),
+        partidos_premium=set(pk.get('partido','') for pk in picks_prem)
+    )
+    for pk in candidatos_normales:
+        if len(picks_pub) >= 3:
+            break
+        # No duplicar partidos ya en picks_pub
+        partidos_pub = set(p.get('partido','') for p in picks_pub)
+        if pk.get('partido','') not in partidos_pub or len(partidos_pub) < 2:
+            picks_pub.append(pk)
 
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
