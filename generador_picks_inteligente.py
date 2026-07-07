@@ -1435,8 +1435,47 @@ def main():
 
     print(f"\n✅ Total picks candidatos: {len(todos)}")
 
+    # ── Leer reporte de análisis automático de mercado ──
+    reporte_analisis = {}
+    try:
+        ruta_reporte = os.path.join(RAIZ, 'Data', 'analisis_mercado.json')
+        if os.path.exists(ruta_reporte):
+            reporte_analisis = json.load(open(ruta_reporte, encoding='utf-8'))
+            hoy_reporte = reporte_analisis.get('fecha', '')
+            if hoy_reporte == hoy_peru():
+                picks_top = reporte_analisis.get('picks_top', [])
+                n_alto = sum(1 for p in picks_top if p.get('nivel') == 'ALTO')
+                print(f"  📊 Análisis de mercado cargado: {len(picks_top)} picks recomendados ({n_alto} ALTO valor)")
+            else:
+                reporte_analisis = {}
+    except Exception as e:
+        print(f"  ⚠️ Sin reporte de análisis: {e}")
+
     # ── Picks manuales basados en análisis del mercado ──
     picks_manuales = []
+
+    # Agregar picks del análisis automático como candidatos
+    if reporte_analisis:
+        for pk_rep in reporte_analisis.get('picks_top', []):
+            if pk_rep.get('nivel') == 'ALTO' and pk_rep.get('tiene_valor'):
+                # Solo agregar si el pick tiene valor real confirmado
+                partido_str = pk_rep.get('partido', '')
+                picks_manuales.append({
+                    'partido': partido_str,
+                    'local': partido_str.split(' vs ')[0] if ' vs ' in partido_str else '',
+                    'visitante': partido_str.split(' vs ')[1] if ' vs ' in partido_str else '',
+                    'mercado': pk_rep['mercado'],
+                    'prob': pk_rep['prob_modelo'],
+                    'cuota': pk_rep['cuota'],
+                    'cuota_display': pk_rep['cuota'],
+                    'ev': pk_rep['ev'],
+                    'emoji': pk_rep.get('emoji', '⚽'),
+                    'categoria': pk_rep.get('categoria', 'Goles'),
+                    'descripcion': f"Análisis automático: {pk_rep['nivel']} valor | EV{pk_rep['ev']:+.2f}",
+                    'fuente': 'real' if pk_rep.get('prob_mercado') else 'estimada',
+                    'tipo': 'individual',
+                    'h2h_boost': pk_rep.get('nivel') == 'ALTO',
+                })
 
     # Argentina vs Cabo Verde — HC -1.5 si existe el partido hoy
     if any('argentina' in pk.get('partido','').lower() and 'cabo' in pk.get('partido','').lower()
