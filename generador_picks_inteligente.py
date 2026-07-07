@@ -1649,11 +1649,64 @@ def main():
     # ── Agregar picks manuales DESPUES de filtros ──
     todos = todos + picks_manuales
 
-    # ── DEBUG: mostrar todos los candidatos ordenados por prob ──
-    print('\n📊 TODOS LOS CANDIDATOS:')
-    for pk in sorted(todos, key=lambda x: x['prob'], reverse=True)[:25]:
-        print(f"  {pk['prob']:5.1f}% @{pk['cuota']:.2f} [{pk.get('fuente','?'):8}] {pk.get('partido','')[:22]} — {pk['mercado'][:38]}")
-    import sys; sys.exit()
+    # ── PICKS MANUALES FORZADOS 07-07 ──
+    # Argentina vs Egipto — Combinada: Over 1.5 goles + Tiros +5.5
+    if any('argentina' in pk.get('partido','').lower() and 'egipto' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({{
+            'partido': 'Argentina vs Egipto',
+            'local': 'Argentina', 'visitante': 'Egipto',
+            'mercado': 'Combinada: Más 1.5 goles + Tiros +5.5',
+            'prob': 57.4,
+            'cuota': 1.55, 'cuota_display': 1.55,
+            'ev': round((0.574 * 1.55) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Goles',
+            'descripcion': 'Messi 7 goles en 4 partidos · Argentina presión alta · Egipto contraataca con Salah',
+            'fuente': 'real', 'tipo': 'combinada',
+            'picks_combo': [
+                {{'partido': 'Argentina vs Egipto', 'local': 'Argentina', 'visitante': 'Egipto',
+                  'mercado': 'Más de 1.5 goles', 'cuota': 1.32}},
+                {{'partido': 'Argentina vs Egipto', 'local': 'Argentina', 'visitante': 'Egipto',
+                  'mercado': 'Tiros a puerta +5.5', 'cuota': 1.17}},
+            ],
+        }})
+
+    # Suiza vs Colombia — Combinada: Over 1.5 goles + X2
+    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({{
+            'partido': 'Suiza vs Colombia',
+            'local': 'Suiza', 'visitante': 'Colombia',
+            'mercado': 'Combinada: Más 1.5 goles + X2 Colombia o Empate',
+            'prob': 62.8,
+            'cuota': 1.87, 'cuota_display': 1.87,
+            'ev': round((0.628 * 1.87) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Goles',
+            'descripcion': 'Colombia favorita con xG superior · Manzambi de Suiza en duda · Colombia local en Vancouver',
+            'fuente': 'real', 'tipo': 'combinada',
+            'picks_combo': [
+                {{'partido': 'Suiza vs Colombia', 'local': 'Suiza', 'visitante': 'Colombia',
+                  'mercado': 'Más de 1.5 goles', 'cuota': 1.42}},
+                {{'partido': 'Suiza vs Colombia', 'local': 'Suiza', 'visitante': 'Colombia',
+                  'mercado': 'X2 Colombia o Empate', 'cuota': 1.32}},
+            ],
+        }})
+
+    # Premium: Victoria Colombia
+    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower()
+           for pk in todos):
+        picks_manuales.append({{
+            'partido': 'Suiza vs Colombia',
+            'local': 'Suiza', 'visitante': 'Colombia',
+            'mercado': 'Victoria Colombia',
+            'prob': 72.0,  # boost con factores externos
+            'cuota': 2.25, 'cuota_display': 2.25,
+            'ev': round((0.72 * 2.25) - 1, 3),
+            'emoji': '⚽', 'categoria': '1X2',
+            'descripcion': 'Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+        }})
 
     picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
