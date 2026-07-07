@@ -1419,6 +1419,19 @@ def main():
     csv = os.path.join(RAIZ,'Predicciones','predicciones_finales.csv')
     df  = pd.read_csv(csv)
     hoy_df = df[df['Fecha']==hoy]
+
+    # Si no hay partidos hoy, buscar el próximo día con partidos
+    if len(hoy_df) == 0:
+        from datetime import datetime as dt2
+        fechas_futuras = sorted([f for f in df['Fecha'].unique() if f > hoy])
+        if fechas_futuras:
+            proximo = fechas_futuras[0]
+            hoy_df = df[df['Fecha']==proximo]
+            hoy = proximo  # actualizar hoy para el resto del script
+            print(f"\n⚠️  Sin partidos hoy — generando picks para: {proximo}")
+        else:
+            print("\n⚠️  No hay partidos próximos en el modelo")
+
     print(f"\n✅ Partidos de hoy: {len(hoy_df)}")
 
     print("📡 Obteniendo cuotas (h2h + asian_handicap)...")
