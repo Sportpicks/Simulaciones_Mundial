@@ -31,6 +31,11 @@ OCTAVOS = [
     ('2026-07-06', 'EE. UU.',          'Bélgica',            '19:00', 'R8'),
     ('2026-07-07', 'Argentina',        'Egipto',             '11:00', 'R8'),
     ('2026-07-07', 'Suiza',            'Colombia',           '15:00', 'R8'),
+    # ── Cuartos de final ──
+    ('2026-07-09', 'Francia',          'Marruecos',          '15:00', 'QF'),
+    ('2026-07-10', 'España',           'Bélgica',            '14:00', 'QF'),
+    ('2026-07-11', 'Noruega',          'Inglaterra',         '16:00', 'QF'),
+    ('2026-07-11', 'Argentina',        'Suiza',              '20:00', 'QF'),
     ('2026-07-02', 'España',           'Austria',            '14:00', 'R16'),
     ('2026-07-02', 'Portugal',         'Croacia',            '18:00', 'R16'),
     ('2026-07-02', 'Suiza',            'Argelia',            '22:00', 'R16'),
