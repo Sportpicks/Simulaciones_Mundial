@@ -396,6 +396,11 @@ def main():
 # ── PASO 9: Registro automático de picks en historial ──
 def registrar_historial():
     titulo("9", "Registrar picks en historial")
+    # Paso 9a.0: Análisis automático de mercado (lesiones + cuotas + valor)
+    script_analisis = os.path.join(RAIZ, 'analisis_mercado.py')
+    if os.path.exists(script_analisis):
+        ejecutar(script_analisis, "Análisis de mercado pre-picks")
+
     # Paso 9a: Generar picks inteligentes primero
     script_gen = os.path.join(RAIZ, 'generador_picks_inteligente.py')
     if os.path.exists(script_gen):
