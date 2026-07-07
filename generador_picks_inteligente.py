@@ -1649,6 +1649,12 @@ def main():
     # ── Agregar picks manuales DESPUES de filtros ──
     todos = todos + picks_manuales
 
+    # ── DEBUG: mostrar todos los candidatos ordenados por prob ──
+    print('\n📊 TODOS LOS CANDIDATOS:')
+    for pk in sorted(todos, key=lambda x: x['prob'], reverse=True)[:25]:
+        print(f"  {pk['prob']:5.1f}% @{pk['cuota']:.2f} [{pk.get('fuente','?'):8}] {pk.get('partido','')[:22]} — {pk['mercado'][:38]}")
+    import sys; sys.exit()
+
     picks_prem  = seleccionar_premium(todos)  # Premium PRIMERO
 
     # Excluir del público los picks ya en premium
