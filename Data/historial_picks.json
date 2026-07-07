@@ -1,5 +1,5 @@
 {
-  "bankroll": 101.3,
+  "bankroll": 99.4,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -1583,8 +1583,8 @@
           "cuota": 1.55,
           "prob": 65.0,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.1,
           "picks_combo": [
             {
               "partido": "Argentina vs Egipto",
@@ -1610,8 +1610,8 @@
           "cuota": 1.87,
           "prob": 68.0,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
           "picks_combo": [
             {
               "partido": "Suiza vs Colombia",
@@ -1637,8 +1637,8 @@
           "cuota": 2.25,
           "prob": 88.0,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -1.0,
           "emoji": "⚽",
           "categoria": "1X2",
           "descripcion": "PREMIUM: Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial",
@@ -1646,7 +1646,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 1,
+        "perdidos": 2,
+        "pendientes": 0,
+        "porcentaje": 33.3,
+        "unidades": -1.9
+      }
     }
   ]
 }
