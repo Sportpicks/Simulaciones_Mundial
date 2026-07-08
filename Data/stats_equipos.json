@@ -120,20 +120,23 @@
   },
   "Argentina": {
     "partidos": 1,
-    "tiros_favor_5": 5.0,
+    "tiros_favor_5": 7.0,
     "tiros_favor_tot": 5.0,
     "tiros_contra_5": 1.0,
     "tiros_contra_tot": 1.0,
     "remates_favor_5": 9.0,
     "remates_favor_tot": 9.0,
-    "corners_favor_5": 6.0,
+    "corners_favor_5": 7.0,
     "corners_favor_tot": 6.0,
     "corners_contra_5": 4.0,
     "corners_contra_tot": 4.0,
-    "faltas_cometidas_5": 6.0,
+    "faltas_cometidas_5": 7.0,
     "faltas_cometidas_tot": 6.0,
     "faltas_recibidas_5": 9.0,
-    "faltas_recibidas_tot": 9.0
+    "faltas_recibidas_tot": 9.0,
+    "tarjetas_5": 1.0,
+    "goles_favor_5": 2.4,
+    "goles_contra_5": 1.0
   },
   "Austria": {
     "partidos": 1,
@@ -273,20 +276,23 @@
   },
   "Bélgica": {
     "partidos": 1,
-    "tiros_favor_5": 2.0,
+    "tiros_favor_5": 7.0,
     "tiros_favor_tot": 2.0,
     "tiros_contra_5": 3.0,
     "tiros_contra_tot": 3.0,
     "remates_favor_5": 5.0,
     "remates_favor_tot": 5.0,
-    "corners_favor_5": 2.0,
+    "corners_favor_5": 5.0,
     "corners_favor_tot": 2.0,
     "corners_contra_5": 3.0,
     "corners_contra_tot": 3.0,
-    "faltas_cometidas_5": 20.0,
+    "faltas_cometidas_5": 9.0,
     "faltas_cometidas_tot": 20.0,
     "faltas_recibidas_5": 14.0,
-    "faltas_recibidas_tot": 14.0
+    "faltas_recibidas_tot": 14.0,
+    "tarjetas_5": 0.8,
+    "goles_favor_5": 2.8,
+    "goles_contra_5": 0.8
   },
   "Canadá": {
     "partidos": 1,
@@ -653,14 +659,17 @@
     "tiros_contra_tot": 1.0,
     "remates_favor_5": 25.0,
     "remates_favor_tot": 25.0,
-    "corners_favor_5": 11.0,
+    "corners_favor_5": 7.5,
     "corners_favor_tot": 11.0,
     "corners_contra_5": 0.0,
     "corners_contra_tot": 0.0,
     "faltas_cometidas_5": 11.0,
     "faltas_cometidas_tot": 11.0,
     "faltas_recibidas_5": 9.0,
-    "faltas_recibidas_tot": 9.0
+    "faltas_recibidas_tot": 9.0,
+    "tarjetas_5": 1.0,
+    "goles_favor_5": 2.0,
+    "goles_contra_5": 0.2
   },
   "España Sub-17": {
     "partidos": 2,
@@ -936,20 +945,23 @@
   },
   "Inglaterra": {
     "partidos": 1,
-    "tiros_favor_5": 4.0,
+    "tiros_favor_5": 5.0,
     "tiros_favor_tot": 4.0,
     "tiros_contra_5": 2.0,
     "tiros_contra_tot": 2.0,
     "remates_favor_5": 19.0,
     "remates_favor_tot": 19.0,
-    "corners_favor_5": 11.0,
+    "corners_favor_5": 6.0,
     "corners_favor_tot": 11.0,
     "corners_contra_5": 1.0,
     "corners_contra_tot": 1.0,
-    "faltas_cometidas_5": 7.0,
+    "faltas_cometidas_5": 9.0,
     "faltas_cometidas_tot": 7.0,
     "faltas_recibidas_5": 13.0,
-    "faltas_recibidas_tot": 13.0
+    "faltas_recibidas_tot": 13.0,
+    "tarjetas_5": 1.0,
+    "goles_favor_5": 2.4,
+    "goles_contra_5": 0.8
   },
   "Inglaterra Sub-18": {
     "partidos": 1,
@@ -1225,20 +1237,23 @@
   },
   "Marruecos": {
     "partidos": 2,
-    "tiros_favor_5": 4.0,
+    "tiros_favor_5": 3.5,
     "tiros_favor_tot": 4.0,
     "tiros_contra_5": 7.0,
     "tiros_contra_tot": 7.0,
     "remates_favor_5": 6.0,
     "remates_favor_tot": 6.0,
-    "corners_favor_5": 1.0,
+    "corners_favor_5": 4.0,
     "corners_favor_tot": 1.0,
     "corners_contra_5": 3.0,
     "corners_contra_tot": 3.0,
-    "faltas_cometidas_5": 8.0,
+    "faltas_cometidas_5": 12.0,
     "faltas_cometidas_tot": 8.0,
     "faltas_recibidas_5": 11.0,
-    "faltas_recibidas_tot": 11.0
+    "faltas_recibidas_tot": 11.0,
+    "tarjetas_5": 1.0,
+    "goles_favor_5": 1.8,
+    "goles_contra_5": 0.4
   },
   "Montenegro": {
     "partidos": 1,
@@ -1310,20 +1325,23 @@
   },
   "Noruega": {
     "partidos": 1,
-    "tiros_favor_5": 1.0,
+    "tiros_favor_5": 5.0,
     "tiros_favor_tot": 1.0,
     "tiros_contra_5": 1.0,
     "tiros_contra_tot": 1.0,
     "remates_favor_5": 5.0,
     "remates_favor_tot": 5.0,
-    "corners_favor_5": 4.0,
+    "corners_favor_5": 5.0,
     "corners_favor_tot": 4.0,
     "corners_contra_5": 2.0,
     "corners_contra_tot": 2.0,
-    "faltas_cometidas_5": 5.0,
+    "faltas_cometidas_5": 10.0,
     "faltas_cometidas_tot": 5.0,
     "faltas_recibidas_5": 8.0,
-    "faltas_recibidas_tot": 8.0
+    "faltas_recibidas_tot": 8.0,
+    "tarjetas_5": 1.2,
+    "goles_favor_5": 2.0,
+    "goles_contra_5": 1.4
   },
   "Níger": {
     "partidos": 1,
@@ -1633,20 +1651,23 @@
   },
   "Suiza": {
     "partidos": 1,
-    "tiros_favor_5": 1.0,
+    "tiros_favor_5": 2.0,
     "tiros_favor_tot": 1.0,
     "tiros_contra_5": 1.0,
     "tiros_contra_tot": 1.0,
     "remates_favor_5": 10.0,
     "remates_favor_tot": 10.0,
-    "corners_favor_5": 2.0,
+    "corners_favor_5": 4.0,
     "corners_favor_tot": 2.0,
     "corners_contra_5": 4.0,
     "corners_contra_tot": 4.0,
-    "faltas_cometidas_5": 8.0,
+    "faltas_cometidas_5": 10.0,
     "faltas_cometidas_tot": 8.0,
     "faltas_recibidas_5": 5.0,
-    "faltas_recibidas_tot": 5.0
+    "faltas_recibidas_tot": 5.0,
+    "tarjetas_5": 0.8,
+    "goles_favor_5": 0.8,
+    "goles_contra_5": 0.4
   },
   "Tayikistán Sub-20": {
     "partidos": 4,
@@ -1868,5 +1889,13 @@
     "faltas_cometidas_tot": NaN,
     "faltas_recibidas_5": NaN,
     "faltas_recibidas_tot": NaN
+  },
+  "Francia": {
+    "corners_favor_5": 7.5,
+    "faltas_cometidas_5": 11.0,
+    "tiros_favor_5": 6.0,
+    "tarjetas_5": 1.2,
+    "goles_favor_5": 2.6,
+    "goles_contra_5": 0.4
   }
 }
