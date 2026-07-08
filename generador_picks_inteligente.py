@@ -1418,21 +1418,23 @@ def main():
 
     csv = os.path.join(RAIZ,'Predicciones','predicciones_finales.csv')
     df  = pd.read_csv(csv)
+
+    # Si son más de las 18:00 hora Perú, los partidos de hoy ya terminaron
+    # Buscar el próximo día con partidos futuros
+    hora_peru = datetime.now(PERU_TZ).hour
     hoy_df = df[df['Fecha']==hoy]
 
-    # Si no hay partidos hoy, buscar el próximo día con partidos
-    if len(hoy_df) == 0:
-        from datetime import datetime as dt2
+    if hora_peru >= 18 or len(hoy_df) == 0:
         fechas_futuras = sorted([f for f in df['Fecha'].unique() if f > hoy])
         if fechas_futuras:
             proximo = fechas_futuras[0]
-            hoy_df = df[df['Fecha']==proximo]
-            hoy = proximo  # actualizar hoy para el resto del script
-            print(f"\n⚠️  Sin partidos hoy — generando picks para: {proximo}")
-        else:
-            print("\n⚠️  No hay partidos próximos en el modelo")
+            hoy_df_proximo = df[df['Fecha']==proximo]
+            if len(hoy_df_proximo) > 0:
+                hoy_df = hoy_df_proximo
+                hoy = proximo
+                print(f"\n⚠️  Partidos de hoy ya terminaron — generando picks para: {proximo}")
 
-    print(f"\n✅ Partidos de hoy: {len(hoy_df)}")
+    print(f"\n✅ Partidos {'de hoy' if hoy == hoy_peru() else 'del '+hoy}: {len(hoy_df)}")
 
     print("📡 Obteniendo cuotas (h2h + asian_handicap)...")
     cuotas = obtener_cuotas()
@@ -1659,11 +1661,12 @@ def main():
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
             pk['ev'] = round((pk['prob']/100) - (1/pk['cuota']), 3)
 
-    # ── Picks forzados del día — agregar directo a todos ──
+    # ── Picks forzados del día — solo si el partido existe en hoy_df ──
     picks_forzados = []
+    partidos_hoy_nombres = [f"{r['Local']} vs {r['Visitante']}" for _, r in hoy_df.iterrows()] if 'hoy_df' in dir() else []
 
     # Argentina vs Egipto — Combinada pública
-    if any('argentina' in pk.get('partido','').lower() and 'egipto' in pk.get('partido','').lower() for pk in todos):
+    if any('argentina' in pk.get('partido','').lower() and 'egipto' in pk.get('partido','').lower() for pk in todos) and any('argentina' in p.lower() and 'egipto' in p.lower() for p in partidos_hoy_nombres):
         picks_forzados.append({
             'partido': 'Argentina vs Egipto',
             'local': 'Argentina', 'visitante': 'Egipto',
@@ -1682,7 +1685,7 @@ def main():
         })
 
     # Suiza vs Colombia — Combinada pública
-    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos):
+    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos) and any('suiza' in p.lower() and 'colombia' in p.lower() for p in partidos_hoy_nombres):
         picks_forzados.append({
             'partido': 'Suiza vs Colombia',
             'local': 'Suiza', 'visitante': 'Colombia',
@@ -1712,7 +1715,7 @@ def main():
         })
 
     # Pick premium forzado: Victoria Colombia
-    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos):
+    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos) and any('suiza' in p.lower() and 'colombia' in p.lower() for p in partidos_hoy_nombres):
         picks_forzados.append({
             'partido': 'Suiza vs Colombia',
             'local': 'Suiza', 'visitante': 'Colombia',
