@@ -1661,120 +1661,15 @@ def main():
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
             pk['ev'] = round((pk['prob']/100) - (1/pk['cuota']), 3)
 
-    # ── Picks forzados del día — solo si el partido existe en hoy_df ──
-    picks_forzados = []
-    partidos_hoy_nombres = [f"{r['Local']} vs {r['Visitante']}" for _, r in hoy_df.iterrows()] if 'hoy_df' in dir() else []
+    # ── Agregar picks manuales a todos ──
+    todos = todos + picks_manuales
 
-    # Argentina vs Egipto — Combinada pública
-    if any('argentina' in pk.get('partido','').lower() and 'egipto' in pk.get('partido','').lower() for pk in todos) and any('argentina' in p.lower() and 'egipto' in p.lower() for p in partidos_hoy_nombres):
-        picks_forzados.append({
-            'partido': 'Argentina vs Egipto',
-            'local': 'Argentina', 'visitante': 'Egipto',
-            'mercado': 'Combinada: Más 1.5 goles + Tiros +5.5',
-            'prob': 65.0, 'cuota': 1.55, 'cuota_display': 1.55,
-            'ev': round((0.65 * 1.55) - 1, 3),
-            'emoji': '🎯', 'categoria': 'Goles',
-            'descripcion': 'Messi 7 goles en 4 partidos · Argentina presión alta · Egipto contraataca con Salah',
-            'fuente': 'real', 'tipo': 'combinada',
-            'picks_combo': [
-                {'partido': 'Argentina vs Egipto', 'local': 'Argentina', 'visitante': 'Egipto',
-                 'mercado': 'Más de 1.5 goles', 'cuota': 1.32},
-                {'partido': 'Argentina vs Egipto', 'local': 'Argentina', 'visitante': 'Egipto',
-                 'mercado': 'Tiros a puerta +5.5', 'cuota': 1.17},
-            ],
-        })
+    # ── Selección limpia: Premium primero, luego público ──
+    picks_prem = seleccionar_premium(todos)
 
-    # Suiza vs Colombia — Combinada pública
-    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos) and any('suiza' in p.lower() and 'colombia' in p.lower() for p in partidos_hoy_nombres):
-        picks_forzados.append({
-            'partido': 'Suiza vs Colombia',
-            'local': 'Suiza', 'visitante': 'Colombia',
-            'mercado': 'Combinada: Más 1.5 goles + X2 Colombia o Empate',
-            'prob': 68.0, 'cuota': 1.87, 'cuota_display': 1.87,
-            'ev': round((0.68 * 1.87) - 1, 3),
-            'emoji': '🎯', 'categoria': 'Goles',
-            'descripcion': 'Colombia favorita xG superior · Manzambi Suiza en duda · Colombia local Vancouver',
-            'fuente': 'real', 'tipo': 'combinada',
-            'picks_combo': [
-                {'partido': 'Suiza vs Colombia', 'local': 'Suiza', 'visitante': 'Colombia',
-                 'mercado': 'Más de 1.5 goles', 'cuota': 1.42},
-                {'partido': 'Suiza vs Colombia', 'local': 'Suiza', 'visitante': 'Colombia',
-                 'mercado': 'X2 Colombia o Empate', 'cuota': 1.32},
-            ],
-        })
-        # Victoria Colombia — publico (cuota alta con EV real)
-        picks_forzados.append({
-            'partido': 'Suiza vs Colombia',
-            'local': 'Suiza', 'visitante': 'Colombia',
-            'mercado': 'Victoria Colombia',
-            'prob': 65.0, 'cuota': 2.25, 'cuota_display': 2.25,
-            'ev': round((0.65 * 2.25) - 1, 3),
-            'emoji': '⚽', 'categoria': '1X2',
-            'descripcion': 'Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial',
-            'fuente': 'real', 'tipo': 'individual',
-        })
-
-    # Pick premium forzado: Victoria Colombia
-    if any('suiza' in pk.get('partido','').lower() and 'colombia' in pk.get('partido','').lower() for pk in todos) and any('suiza' in p.lower() and 'colombia' in p.lower() for p in partidos_hoy_nombres):
-        picks_forzados.append({
-            'partido': 'Suiza vs Colombia',
-            'local': 'Suiza', 'visitante': 'Colombia',
-            'mercado': 'Victoria Colombia',
-            'prob': 88.0,  # solo para premium — factores externos incluidos
-            'cuota': 2.25, 'cuota_display': 2.25,
-            'ev': round((0.88 * 2.25) - 1, 3),
-            'emoji': '⚽', 'categoria': '1X2',
-            'descripcion': 'PREMIUM: Colombia local Vancouver · Manzambi en duda · H2H favorable · James último Mundial',
-            'fuente': 'real', 'tipo': 'individual', 'h2h_boost': True,
-            'es_premium_forzado': True,
-        })
-
-    # ── Agregar todos los picks ──
-    todos = todos + picks_manuales + picks_forzados
-
-    # ── Eliminar Over 2.5 Suiza vs Colombia del pool (no es pick del día) ──
-    todos = [pk for pk in todos if not (
-        'suiza' in pk.get('partido','').lower() and
-        'colombia' in pk.get('partido','').lower() and
-        'más de 2.5' in pk.get('mercado','').lower() and
-        not pk.get('picks_combo')  # no eliminar si es parte de combinada
-    )]
-
-    # ── Selección con picks forzados ──
-    # 1. Premium forzado: buscar pick con es_premium_forzado=True
-    picks_prem = []
-    for pk in picks_forzados:
-        if pk.get('es_premium_forzado'):
-            pk['tipo'] = 'premium'
-            picks_prem = [pk]
-            break
-
-    # Si no hay premium forzado, usar selección normal
-    if not picks_prem:
-        picks_prem = seleccionar_premium(todos)
-
-    # 2. Público: excluir solo el mercado exacto del premium
+    # Excluir del público el mercado exacto del premium
     mercados_premium = set(pk.get('mercado','') for pk in picks_prem)
-
-    # Picks públicos: primero las combinadas forzadas, luego selección normal
-    picks_pub = []
-    for pk in picks_forzados:
-        if pk.get('tipo') == 'combinada' and pk.get('mercado','') not in mercados_premium:
-            picks_pub.append(pk)
-
-    # Completar con selección normal hasta max 3 picks
-    candidatos_normales = seleccionar_publicos(
-        todos,
-        publicos_excluidos=mercados_premium | set(pk.get('mercado','') for pk in picks_pub),
-        partidos_premium=set(pk.get('partido','') for pk in picks_prem)
-    )
-    for pk in candidatos_normales:
-        if len(picks_pub) >= 3:
-            break
-        # No duplicar partidos ya en picks_pub
-        partidos_pub = set(p.get('partido','') for p in picks_pub)
-        if pk.get('partido','') not in partidos_pub or len(partidos_pub) < 2:
-            picks_pub.append(pk)
+    picks_pub = seleccionar_publicos(todos, publicos_excluidos=mercados_premium)
 
     print(f"\n📋 PANEL PÚBLICO ({len(picks_pub)} picks):")
     for i,pk in enumerate(picks_pub,1):
