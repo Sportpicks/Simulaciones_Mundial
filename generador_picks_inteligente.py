@@ -952,6 +952,9 @@ def seleccionar_premium(todos, max_picks=1):
 
 def html_publico(picks, hoy, fecha_gen, ts, picks_prem=None):
     ISO_J   = json.dumps(BANDERAS_ISO, ensure_ascii=False)
+    # Agregar fecha_partido a cada pick para que el registrador la lea
+    for pk in picks:
+        pk['fecha_partido'] = hoy
     PICKS_J = json.dumps(picks, ensure_ascii=False, default=str)
     # Pick premium para mostrar bloqueado
     prem = picks_prem[0] if picks_prem else None
