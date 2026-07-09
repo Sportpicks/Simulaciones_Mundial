@@ -885,10 +885,11 @@ def seleccionar_premium(todos, max_picks=1):
     - Si no hay individual >= 1.60, buscar combinada de 2 picks mismo partido
     - Combinada: prob1 * prob2 como indicador, cuota1 * cuota2 >= 1.60
     """
-    # Paso 1: buscar pick individual con cuota >= 1.60 y prob >= 70%
+    # Paso 1: buscar pick individual con cuota >= 1.60 y prob >= 85%
+    # Solo elegir individual si tiene prob muy alta — sino preferir combinada
     candidatos_ind = []
     for pk in todos:
-        if pk['prob'] < 70:
+        if pk['prob'] < 85:
             continue
         if pk['cuota'] < 1.60 or pk['cuota'] > 3.00:
             continue
