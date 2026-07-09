@@ -627,7 +627,28 @@ def main():
     parser.add_argument('--fecha', default=None, help='Fecha a auditar (YYYY-MM-DD)')
     args = parser.parse_args()
 
-    hoy = args.fecha or hoy_peru()  # Hora Perú UTC-5
+    # Intentar leer la fecha del HTML generado (picks_dia.html)
+    # para que coincida con la fecha del partido, no la de hoy
+    fecha_html = None
+    try:
+        import re
+        with open(PICKS_DIA_HTML, encoding='utf-8') as fh:
+            html_content = fh.read()
+        # Buscar fecha en el HTML: "Picks del Día — 2026-07-09" o en PICKS JSON
+        m = re.search(r'const PICKS=(\[.*?\]);', html_content, re.DOTALL)
+        if m:
+            picks_json = json.loads(m.group(1))
+            if picks_json:
+                fecha_html = picks_json[0].get('fecha_partido') or picks_json[0].get('fecha')
+        if not fecha_html:
+            # Buscar en el título del HTML
+            m2 = re.search(r'Picks del D[ií]a.*?(\d{4}-\d{2}-\d{2})', html_content)
+            if m2:
+                fecha_html = m2.group(1)
+    except Exception as e:
+        pass
+
+    hoy = args.fecha or fecha_html or hoy_peru()  # Hora Perú UTC-5
 
     print(f"\n📊 REGISTRADOR DE PICKS — {hoy}")
     print("="*50)
