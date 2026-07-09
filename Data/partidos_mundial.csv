@@ -1,30 +1,30 @@
 Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
-2026-06-11,14:00,México,Sudáfrica,2-3,A,FINISHED
+2026-06-11,14:00,México,Sudáfrica,2:0,A,FINISHED
 2026-06-11,21:00,Corea del Sur,República Checa,2:1,A,FINISHED
-2026-06-12,14:00,Canadá,Bosnia-Herzegovina,0-3,B,FINISHED
-2026-06-12,20:00,EE. UU.,Paraguay,1-4,D,FINISHED
+2026-06-12,14:00,Canadá,Bosnia-Herzegovina,1:1,B,FINISHED
+2026-06-12,20:00,EE. UU.,Paraguay,4:1,D,FINISHED
 2026-06-13,14:00,Catar,Suiza,1:1,B,FINISHED
-2026-06-13,17:00,Brasil,Marruecos,1-2,C,FINISHED
+2026-06-13,17:00,Brasil,Marruecos,1:1,C,FINISHED
 2026-06-13,20:00,Haití,Escocia,0:1,C,FINISHED
-2026-06-13,23:00,Australia,Turquía,1-1,D,FINISHED
-2026-06-14,12:00,Alemania,Curazao,1-1,E,FINISHED
-2026-06-14,15:00,Países Bajos,Japón,1-1,F,FINISHED
-2026-06-14,18:00,Costa de Marfil,Ecuador,1-2,E,FINISHED
+2026-06-13,23:00,Australia,Turquía,2:0,D,FINISHED
+2026-06-14,12:00,Alemania,Curazao,7:1,E,FINISHED
+2026-06-14,15:00,Países Bajos,Japón,2:2,F,FINISHED
+2026-06-14,18:00,Costa de Marfil,Ecuador,1:0,E,FINISHED
 2026-06-14,21:00,Suecia,Túnez,5:1,F,FINISHED
-2026-06-15,11:00,España,Cabo Verde,3-0,H,FINISHED
-2026-06-15,14:00,Bélgica,Egipto,3-2,G,FINISHED
+2026-06-15,11:00,España,Cabo Verde,0:0,H,FINISHED
+2026-06-15,14:00,Bélgica,Egipto,1:1,G,FINISHED
 2026-06-15,17:00,Arabia Saudí,Uruguay,1:1,H,FINISHED
 2026-06-15,20:00,Irán,Nueva Zelanda,2:2,G,FINISHED
-2026-06-16,14:00,Francia,Senegal,3-0,I,FINISHED
+2026-06-16,14:00,Francia,Senegal,3:1,I,FINISHED
 2026-06-16,17:00,Irak,Noruega,1:4,I,FINISHED
-2026-06-16,20:00,Argentina,Argelia,3-2,J,FINISHED
+2026-06-16,20:00,Argentina,Argelia,3:0,J,FINISHED
 2026-06-16,23:00,Austria,Jordania,3:1,J,FINISHED
-2026-06-17,12:00,Portugal,RD Congo,2-1,K,FINISHED
-2026-06-17,15:00,Inglaterra,Croacia,2-1,L,FINISHED
+2026-06-17,12:00,Portugal,RD Congo,1:1,K,FINISHED
+2026-06-17,15:00,Inglaterra,Croacia,4:2,L,FINISHED
 2026-06-17,18:00,Ghana,Panamá,1:0,L,FINISHED
 2026-06-17,21:00,Uzbekistán,Colombia,1:3,K,FINISHED
 2026-06-18,11:00,República Checa,Sudáfrica,1:1,A,FINISHED
-2026-06-18,14:00,Suiza,Bosnia-Herzegovina,2-0,B,FINISHED
+2026-06-18,14:00,Suiza,Bosnia-Herzegovina,4:1,B,FINISHED
 2026-06-18,17:00,Canadá,Catar,6:0,B,FINISHED
 2026-06-18,20:00,México,Corea del Sur,1:0,A,FINISHED
 2026-06-19,14:00,EE. UU.,Australia,2:0,D,FINISHED
@@ -46,7 +46,7 @@ Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
 2026-06-23,12:00,Portugal,Uzbekistán,5:0,K,FINISHED
 2026-06-23,15:00,Inglaterra,Ghana,0:0,L,FINISHED
 2026-06-23,18:00,Panamá,Croacia,0:1,L,FINISHED
-2026-06-23,21:00,Colombia,RD Congo,1-0,K,FINISHED
+2026-06-23,21:00,Colombia,RD Congo,1:0,K,FINISHED
 2026-06-24,14:00,Suiza,Canadá,2:1,B,FINISHED
 2026-06-24,14:00,Bosnia-Herzegovina,Catar,3:1,B,FINISHED
 2026-06-24,17:00,Marruecos,Haití,4:2,C,FINISHED
@@ -58,7 +58,7 @@ Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
 2026-06-25,18:00,Túnez,Países Bajos,1:3,F,FINISHED
 2026-06-25,18:00,Japón,Suecia,1:1,F,FINISHED
 2026-06-25,21:00,Turquía,EE. UU.,3:2,D,FINISHED
-2026-06-25,21:00,Paraguay,Australia,0-1,D,FINISHED
+2026-06-25,21:00,Paraguay,Australia,0:0,D,FINISHED
 2026-06-26,14:00,Noruega,Francia,1:4,I,FINISHED
 2026-06-26,14:00,Senegal,Irak,5:0,I,FINISHED
 2026-06-26,19:00,Uruguay,España,0:1,H,FINISHED
@@ -71,31 +71,31 @@ Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
 2026-06-27,18:30,RD Congo,Uzbekistán,3:1,K,FINISHED
 2026-06-27,21:00,Jordania,Argentina,1:3,J,FINISHED
 2026-06-27,21:00,Argelia,Austria,3:3,J,FINISHED
-2026-06-28,14:00,Canadá,Sudáfrica,1-0,R16,FINISHED
-2026-06-29,12:00,Brasil,Japón,2-1,R16,FINISHED
-2026-06-29,15:30,Alemania,Paraguay,1-1,R16,FINISHED
-2026-06-29,20:00,Países Bajos,Marruecos,1-1,R16,FINISHED
-2026-06-30,12:00,Costa de Marfil,Noruega,1-2,R16,FINISHED
-2026-06-30,16:00,Francia,Suecia,3-0,R16,FINISHED
-2026-06-30,20:00,México,Ecuador,2-0,R16,FINISHED
-2026-07-01,11:00,Inglaterra,RD Congo,2-1,R16,FINISHED
-2026-07-01,15:00,Bélgica,Senegal,3-2,R16,FINISHED
-2026-07-01,19:00,EE. UU.,Bosnia-Herzegovina,2-0,R16,FINISHED
-2026-07-04,12:00,Canadá,Marruecos,0-3,R8,FINISHED
-2026-07-04,16:00,Paraguay,Francia,0-1,R8,FINISHED
-2026-07-05,15:00,Brasil,Noruega,1-2,R8,FINISHED
-2026-07-05,19:00,México,Inglaterra,2-3,R8,FINISHED
-2026-07-06,14:00,Portugal,España,0-1,R8,FINISHED
-2026-07-06,19:00,EE. UU.,Bélgica,1-4,R8,FINISHED
-2026-07-07,11:00,Argentina,Egipto,3-2,R8,FINISHED
-2026-07-07,15:00,Suiza,Colombia,0-0,R8,FINISHED
+2026-06-28,14:00,Canadá,Sudáfrica,,R16,SCHEDULED
+2026-06-29,12:00,Brasil,Japón,,R16,SCHEDULED
+2026-06-29,15:30,Alemania,Paraguay,,R16,SCHEDULED
+2026-06-29,20:00,Países Bajos,Marruecos,,R16,SCHEDULED
+2026-06-30,12:00,Costa de Marfil,Noruega,,R16,SCHEDULED
+2026-06-30,16:00,Francia,Suecia,,R16,SCHEDULED
+2026-06-30,20:00,México,Ecuador,,R16,SCHEDULED
+2026-07-01,11:00,Inglaterra,RD Congo,,R16,SCHEDULED
+2026-07-01,15:00,Bélgica,Senegal,,R16,SCHEDULED
+2026-07-01,19:00,EE. UU.,Bosnia-Herzegovina,,R16,SCHEDULED
+2026-07-04,12:00,Canadá,Marruecos,,R8,SCHEDULED
+2026-07-04,16:00,Paraguay,Francia,,R8,SCHEDULED
+2026-07-05,15:00,Brasil,Noruega,,R8,SCHEDULED
+2026-07-05,19:00,México,Inglaterra,,R8,SCHEDULED
+2026-07-06,14:00,Portugal,España,,R8,SCHEDULED
+2026-07-06,19:00,EE. UU.,Bélgica,,R8,SCHEDULED
+2026-07-07,11:00,Argentina,Egipto,,R8,SCHEDULED
+2026-07-07,15:00,Suiza,Colombia,,R8,SCHEDULED
 2026-07-09,15:00,Francia,Marruecos,,QF,SCHEDULED
 2026-07-10,14:00,España,Bélgica,,QF,SCHEDULED
 2026-07-11,16:00,Noruega,Inglaterra,,QF,SCHEDULED
 2026-07-11,20:00,Argentina,Suiza,,QF,SCHEDULED
-2026-07-02,14:00,España,Austria,3-0,R16,FINISHED
-2026-07-02,18:00,Portugal,Croacia,2-1,R16,FINISHED
-2026-07-02,22:00,Suiza,Argelia,2-0,R16,FINISHED
-2026-07-03,13:00,Australia,Egipto,1-1,R16,FINISHED
-2026-07-03,17:00,Argentina,Cabo Verde,3-2,R16,FINISHED
-2026-07-03,20:30,Colombia,Ghana,1-0,R16,FINISHED
+2026-07-02,14:00,España,Austria,,R16,SCHEDULED
+2026-07-02,18:00,Portugal,Croacia,,R16,SCHEDULED
+2026-07-02,22:00,Suiza,Argelia,,R16,SCHEDULED
+2026-07-03,13:00,Australia,Egipto,,R16,SCHEDULED
+2026-07-03,17:00,Argentina,Cabo Verde,,R16,SCHEDULED
+2026-07-03,20:30,Colombia,Ghana,,R16,SCHEDULED
