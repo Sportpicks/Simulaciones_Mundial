@@ -830,10 +830,10 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
         if pk['prob'] < prob_min_pk:
             continue
         if pk.get('fuente') == 'real':
-            if 1.60 <= pk['cuota'] <= 2.50:
+            if 1.50 <= pk['cuota'] <= 2.50:
                 candidatos.append(pk)
         else:
-            if (1.60 <= pk['cuota'] <= 2.50) or (pk['prob'] >= 78 and pk['cuota'] >= 1.50):
+            if (1.50 <= pk['cuota'] <= 2.50) or (pk['prob'] >= 78 and pk['cuota'] >= 1.50):
                 candidatos.append(pk)
 
     candidatos.sort(key=score, reverse=True)
@@ -878,73 +878,92 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
 
 def seleccionar_premium(todos, max_picks=1):
     """
-    Panel premium v4:
-    - 1 pick — el MAS confiable del dia
-    - Cuota entre 1.50 y 1.90 (alta confianza = casa tambien lo ve probable)
-    - Prob >= 65%
-    - Prioridad: BTTS > Under 2.5 > 1X2 favorito > otros
-    - Nunca duplicar picks publicos
-    - H2H boost automatico
+    Panel premium v5:
+    - 1 pick individual o combinada del MISMO partido
+    - Cuota final >= 1.60
+    - Extrema confianza — picks con prob muy alta
+    - Si no hay individual >= 1.60, buscar combinada de 2 picks mismo partido
+    - Combinada: prob1 * prob2 como indicador, cuota1 * cuota2 >= 1.60
     """
-    # Candidatos premium: prob alta, cuota en rango de confianza
-    candidatos = []
+    # Paso 1: buscar pick individual con cuota >= 1.60 y prob >= 70%
+    candidatos_ind = []
     for pk in todos:
-        if pk['prob'] < 65:
+        if pk['prob'] < 70:
             continue
-        if pk['cuota'] < 1.50 or pk['cuota'] > 2.20:
+        if pk['cuota'] < 1.60 or pk['cuota'] > 3.00:
             continue
-        candidatos.append(pk)
+        candidatos_ind.append(pk)
 
-    # Boost H2H automatico
-    for pk in candidatos:
-        desc = pk.get('descripcion','')
-        if 'H2H' in desc:
-            try:
-                pct = float(desc.split('H2H')[1].strip().split('%')[0])
-                if pct >= 60:
-                    pk['prob'] = min(pk['prob'] + 8, 99)
-                    pk['h2h_boost'] = True
-            except: pass
+    if candidatos_ind:
+        candidatos_ind.sort(key=lambda x: (x['prob'], x['cuota']), reverse=True)
+        mejor = candidatos_ind[0]
+        mejor['tipo'] = 'premium'
+        return [mejor]
 
-    # Orden de prioridad por mercado
-    PRIO_MERCADO = {
-        'ambos anotan - sí': 10,
-        'ambos anotan': 10,
-        'menos de 2.5': 9,
-        'menos de 1.5': 8,
-        '1x': 7,
-        'x2': 7,
-        'victoria': 6,
-        'más de 1.5': 5,
-        'más de 2.5': 4,
-    }
+    # Paso 2: buscar combinada de 2 picks del mismo partido con cuota >= 1.60
+    # Solo picks con prob >= 65% y cuota entre 1.10 y 1.60
+    picks_combo = [pk for pk in todos if pk['prob'] >= 65 and 1.10 <= pk['cuota'] <= 1.59]
 
-    def score_prem(pk):
-        m = pk.get('mercado','').lower()
-        prio = max((v for k,v in PRIO_MERCADO.items() if k in m), default=1)
-        boost = 5 if pk.get('h2h_boost') else 0
-        return (prio + boost, pk['prob'], pk['cuota'])
+    mejor_combo = None
+    mejor_score = 0
 
-    candidatos.sort(key=score_prem, reverse=True)
+    partidos = set(pk['partido'] for pk in picks_combo)
+    for partido in partidos:
+        pks_partido = [pk for pk in picks_combo if pk['partido'] == partido]
+        # Evitar picks correlacionados
+        for i, pk1 in enumerate(pks_partido):
+            for pk2 in pks_partido[i+1:]:
+                # No combinar mercados contradictorios
+                m1 = pk1['mercado'].lower()
+                m2 = pk2['mercado'].lower()
+                if ('más de' in m1 and 'menos de' in m2) or ('menos de' in m1 and 'más de' in m2):
+                    continue
+                if 'ambos anotan - sí' in m1 and 'menos de 2.5' in m2:
+                    continue
+                if 'ambos anotan - sí' in m2 and 'menos de 2.5' in m1:
+                    continue
 
-    resultado = []
-    vistos = set()
-    for pk in candidatos:
-        if pk['partido'] not in vistos:
+                cuota_combo = round(pk1['cuota'] * pk2['cuota'], 2)
+                if cuota_combo < 1.60:
+                    continue
+
+                prob_combo = round(pk1['prob'] * pk2['prob'] / 100, 1)
+                score = prob_combo * cuota_combo
+
+                if score > mejor_score:
+                    mejor_score = score
+                    mejor_combo = {
+                        'partido': partido,
+                        'local': pk1['local'],
+                        'visitante': pk1['visitante'],
+                        'mercado': f"Combinada: {pk1['mercado']} + {pk2['mercado']}",
+                        'prob': prob_combo,
+                        'cuota': cuota_combo,
+                        'cuota_display': cuota_combo,
+                        'ev': round((prob_combo/100) * cuota_combo - 1, 3),
+                        'emoji': '🎯',
+                        'categoria': 'Combinada',
+                        'descripcion': f"{pk1['mercado']} @{pk1['cuota']} × {pk2['mercado']} @{pk2['cuota']}",
+                        'fuente': 'real',
+                        'tipo': 'premium',
+                        'picks_combo': [
+                            {'partido': partido, 'local': pk1['local'], 'visitante': pk1['visitante'],
+                             'mercado': pk1['mercado'], 'cuota': pk1['cuota']},
+                            {'partido': partido, 'local': pk2['local'], 'visitante': pk2['visitante'],
+                             'mercado': pk2['mercado'], 'cuota': pk2['cuota']},
+                        ]
+                    }
+
+    if mejor_combo:
+        return [mejor_combo]
+
+    # Paso 3: fallback — mejor pick disponible
+    for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
+        if pk['prob'] >= 62 and 1.40 <= pk['cuota'] <= 3.00:
             pk['tipo'] = 'premium'
-            resultado.append(pk)
-            vistos.add(pk['partido'])
-            break
+            return [pk]
 
-    # Si no hay candidato en rango 1.50-2.20, ampliar a 1.40-2.50
-    if not resultado:
-        for pk in sorted(todos, key=lambda x: x['prob'], reverse=True):
-            if pk['prob'] >= 62 and 1.40 <= pk['cuota'] <= 2.50:
-                pk['tipo'] = 'premium'
-                resultado.append(pk)
-                break
-
-    return resultado[:max_picks]
+    return []
 
 
 def html_publico(picks, hoy, fecha_gen, ts, picks_prem=None):
