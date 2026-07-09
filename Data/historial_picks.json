@@ -1653,6 +1653,85 @@
         "porcentaje": 33.3,
         "unidades": -1.9
       }
+    },
+    {
+      "fecha": "2026-07-08",
+      "picks": [
+        {
+          "id": "2026-07-08_pub_0",
+          "tipo": "Público",
+          "partido": "Francia vs Marruecos",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.95,
+          "prob": 81.8,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "xG total 4.4 — cuota real @1.95"
+        },
+        {
+          "id": "2026-07-08_pub_1",
+          "tipo": "Público",
+          "partido": "Francia vs Marruecos",
+          "mercado": "Ambos anotan - Sí",
+          "cuota": 1.95,
+          "prob": 77.3,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "Goles",
+          "descripcion": "xG local 2.65 · xG visitante 1.78"
+        },
+        {
+          "id": "2026-07-08_pub_2",
+          "tipo": "Público",
+          "partido": "Francia vs Marruecos",
+          "mercado": "Victoria Francia",
+          "cuota": 1.56,
+          "prob": 69.5,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "1X2",
+          "descripcion": "Francia favorito (70%)"
+        },
+        {
+          "id": "2026-07-08_prem_0",
+          "tipo": "Premium",
+          "partido": "Francia",
+          "mercado": "Combinada: Más de 1.5 goles + Francia tiros a puerta +4.5",
+          "cuota": 1.6,
+          "prob": 73.6,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Combinada",
+          "descripcion": "Más de 1.5 goles (94%) @1.32 × Francia tiros a puerta +4.5 (79%) @1.21",
+          "picks_combo": [
+            {
+              "partido": "Francia vs Marruecos",
+              "local": "Francia",
+              "visitante": "Marruecos",
+              "mercado": "Más de 1.5 goles",
+              "cuota": 1.32
+            },
+            {
+              "partido": "Francia vs Marruecos",
+              "local": "Francia",
+              "visitante": "Marruecos",
+              "mercado": "Francia tiros a puerta +4.5",
+              "cuota": 1.21
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
