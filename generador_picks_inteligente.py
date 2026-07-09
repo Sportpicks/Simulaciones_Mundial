@@ -817,7 +817,7 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
         boost   = 5 if pk.get('h2h_boost') else 0
         return (es_real + boost, cat_p, pk['prob'])
 
-    prob_min = 58
+    prob_min = 60
 
     candidatos = []
     for pk in todos:
@@ -825,15 +825,15 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
         # Solo excluir el mercado exacto del premium, no todo el partido
         if mercado_key in publicos_excluidos:
             continue
-        # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 57%
-        prob_min_pk = 57 if pk.get('cuota', 0) >= 2.0 else prob_min
+        # Para picks de valor alto (cuota >= 2.0), bajar umbral de prob a 58%
+        prob_min_pk = 58 if pk.get('cuota', 0) >= 2.0 else prob_min
         if pk['prob'] < prob_min_pk:
             continue
         if pk.get('fuente') == 'real':
-            if 1.50 <= pk['cuota'] <= 2.50:
+            if 1.50 <= pk['cuota'] <= 3.00:
                 candidatos.append(pk)
         else:
-            if (1.50 <= pk['cuota'] <= 2.50) or (pk['prob'] >= 78 and pk['cuota'] >= 1.50):
+            if (1.50 <= pk['cuota'] <= 3.00) or (pk['prob'] >= 75 and pk['cuota'] >= 1.50):
                 candidatos.append(pk)
 
     candidatos.sort(key=score, reverse=True)
@@ -843,7 +843,7 @@ def seleccionar_publicos(todos, publicos_excluidos=None, partidos_premium=None, 
     categorias_usadas = {}
     hc_count = 0
     n_partidos = len(set(pk['partido'] for pk in todos))
-    max_por_partido = 2 if n_partidos <= 3 else 1
+    max_por_partido = 3 if n_partidos == 1 else (2 if n_partidos <= 3 else 1)
 
     for pk in candidatos:
         if len(resultado) >= max_picks:
@@ -931,6 +931,8 @@ def seleccionar_premium(todos, max_picks=1):
                 prob_combo = round(pk1['prob'] * pk2['prob'] / 100, 1)
                 score = prob_combo * cuota_combo
 
+                # Priorizar combinadas con mayor prob combinada (picks más confiables)
+                score = prob_combo  # usar solo prob, no cuota
                 if score > mejor_score:
                     mejor_score = score
                     mejor_combo = {
