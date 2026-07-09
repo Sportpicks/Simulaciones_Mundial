@@ -1478,7 +1478,6 @@ def main():
     if reporte_analisis:
         for pk_rep in reporte_analisis.get('picks_top', []):
             if pk_rep.get('nivel') == 'ALTO' and pk_rep.get('tiene_valor'):
-                # Solo agregar si el pick tiene valor real confirmado
                 partido_str = pk_rep.get('partido', '')
                 picks_manuales.append({
                     'partido': partido_str,
@@ -1497,176 +1496,12 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
-    # Argentina vs Cabo Verde — HC -1.5 si existe el partido hoy
-    if any('argentina' in pk.get('partido','').lower() and 'cabo' in pk.get('partido','').lower()
-           for pk in todos):
-        picks_manuales.append({
-            'partido': 'Argentina vs Cabo Verde',
-            'local': 'Argentina', 'visitante': 'Cabo Verde',
-            'mercado': 'HC Argentina -1.5',
-            'prob': 82.0,
-            'cuota': 1.80, 'cuota_display': 1.80,
-            'ev': round((0.82 * 1.80) - 1, 3),
-            'emoji': '⚖️', 'categoria': 'Handicap',
-            'descripcion': 'Argentina gana por 2+ goles — Messi 6 goles en el torneo',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-
-    # Paraguay vs Francia — Over 2.5 y Tarjetas si existe el partido hoy
-    if any('paraguay' in pk.get('partido','').lower() and 'francia' in pk.get('partido','').lower()
-           for pk in todos):
-        # Over 2.5 goles — Francia marcó 10 goles en grupos, xG total 3.27
-        picks_manuales.append({
-            'partido': 'Paraguay vs Francia',
-            'local': 'Paraguay', 'visitante': 'Francia',
-            'mercado': 'Más de 2.5 goles',
-            'prob': 72.0,
-            'cuota': 1.85, 'cuota_display': 1.85,
-            'ev': round((0.72 * 1.85) - 1, 3),
-            'emoji': '🥅', 'categoria': 'Goles',
-            'descripcion': 'Francia marcó 10 goles en grupos — xG total 3.27',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-        # Tarjetas +2.5 — Paraguay foulará para frenar a Francia (premium)
-        picks_manuales.append({
-            'partido': 'Paraguay vs Francia',
-            'local': 'Paraguay', 'visitante': 'Francia',
-            'mercado': 'Tarjetas +2.5',
-            'prob': 76.0,
-            'cuota': 2.10, 'cuota_display': 2.10,
-            'ev': round((0.76 * 2.10) - 1, 3),
-            'emoji': '🟨', 'categoria': 'Tarjetas',
-            'descripcion': 'Paraguay foulará para frenar a Mbappé — partido físico intenso',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-
-    # Canada vs Marruecos — Under 2.5 si existe el partido hoy
-    if any('canadá' in pk.get('partido','').lower() and 'marruecos' in pk.get('partido','').lower()
-           for pk in todos):
-        picks_manuales.append({
-            'partido': 'Canadá vs Marruecos',
-            'local': 'Canadá', 'visitante': 'Marruecos',
-            'mercado': 'Menos de 2.5 goles',
-            'prob': 75.0,
-            'cuota': 1.65, 'cuota_display': 1.65,
-            'ev': round((0.75 * 1.65) - 1, 3),
-            'emoji': '🔒', 'categoria': 'Goles',
-            'descripcion': 'Partido cerrado — Marruecos 33 partidos sin perder, equipo defensivo por naturaleza',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-
-    # México vs Inglaterra — Under 2.5 (partido táctico en altitud)
-    if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
-           for pk in todos):
-        picks_manuales.append({
-            'partido': 'México vs Inglaterra',
-            'local': 'México', 'visitante': 'Inglaterra',
-            'mercado': 'Menos de 2.5 goles',
-            'prob': 72.0,
-            'cuota': 1.90, 'cuota_display': 1.90,
-            'ev': round((0.72 * 1.90) - 1, 3),
-            'emoji': '🔒', 'categoria': 'Goles',
-            'descripcion': 'Partido táctico en altitud del Azteca — México sin encajar en todo el torneo',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-
-    # Brasil vs Noruega — eliminar pick correlacionado Victoria Brasil si hay Over 2.5
-    if any('brasil' in pk.get('partido','').lower() and 'noruega' in pk.get('partido','').lower()
-           for pk in todos):
-        todos = [pk for pk in todos if not (
-            'brasil' in pk.get('partido','').lower() and
-            'noruega' in pk.get('partido','').lower() and
-            'victoria brasil' in pk.get('mercado','').lower()
-        )]
-
-    # Portugal vs España — corners premium + Under 2.5 publico
-    if any('portugal' in pk.get('partido','').lower() and 'españa' in pk.get('partido','').lower()
-           for pk in todos):
-        # Premium: Corners +10.5 (España 7.5/partido en 8 seguidos)
-        picks_manuales.append({
-            'partido': 'Portugal vs España',
-            'local': 'Portugal', 'visitante': 'España',
-            'mercado': 'Córners totales +10.5',
-            'prob': 82.0,
-            'cuota': 1.70, 'cuota_display': 1.70,
-            'ev': round((0.82 * 1.70) - 1, 3),
-            'emoji': '⛳', 'categoria': 'Córners',
-            'descripcion': 'España 7.5 corners/partido en 8 seguidos + Portugal 5.9 = 13+ esperados',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-        # Publico: Under 2.5 goles (España 0 goles encajados en 5 partidos)
-        picks_manuales.append({
-            'partido': 'Portugal vs España',
-            'local': 'Portugal', 'visitante': 'España',
-            'mercado': 'Menos de 2.5 goles',
-            'prob': 68.0,
-            'cuota': 2.00, 'cuota_display': 2.00,
-            'ev': round((0.68 * 2.00) - 1, 3),
-            'emoji': '🔒', 'categoria': 'Goles',
-            'descripcion': 'España 0 goles encajados en 5 partidos — partido táctico ibérico',
-            'fuente': 'real', 'tipo': 'individual',
-        })
-        # Eliminar Over 2.5 Portugal vs España (contradice Under)
-        todos = [pk for pk in todos if not (
-            'portugal' in pk.get('partido','').lower() and
-            'españa' in pk.get('partido','').lower() and
-            'más de 2.5' in pk.get('mercado','').lower()
-        )]
-
-    # EE.UU. vs Bélgica — faltas PREMIUM (forzado)
-    if any('ee. uu.' in pk.get('partido','').lower() and 'bélgica' in pk.get('partido','').lower()
-           for pk in todos):
-        picks_manuales.append({
-            'partido': 'EE. UU. vs Bélgica',
-            'local': 'EE. UU.', 'visitante': 'Bélgica',
-            'mercado': 'Faltas totales +22.5',
-            'prob': 92.0,  # boost alto para forzar al premium
-            'cuota': 1.65, 'cuota_display': 1.65,
-            'ev': round((0.92 * 1.65) - 1, 3),
-            'emoji': '🦵', 'categoria': 'Faltas',
-            'descripcion': 'EE.UU. 15 + Bélgica 20 faltas/partido = 35 esperadas — Balogun habilitado — modelo 98.7%',
-            'fuente': 'real', 'tipo': 'individual',
-            'h2h_boost': True,
-        })
-
-    # México vs Inglaterra — eliminar picks contradictorios con Under 2.5 premium
-    if any('méxico' in pk.get('partido','').lower() and 'inglaterra' in pk.get('partido','').lower()
-           for pk in todos):
-        todos = [pk for pk in todos if not (
-            'méxico' in pk.get('partido','').lower() and
-            'inglaterra' in pk.get('partido','').lower() and
-            ('más de 2.5' in pk.get('mercado','').lower() or
-             'ambos anotan' in pk.get('mercado','').lower())
-        )]
-
-    # ── Filtros finales ANTES de agregar picks manuales ──
-    # 1. Eliminar picks con EV muy negativo (sin valor real)
-    todos = [pk for pk in todos if pk.get('ev', 0) > -0.15 or pk.get('fuente') != 'real']
-    # 2. Eliminar Under 2.5 Argentina cuando hay HC -1.5 (contradictorios)
-    todos = [pk for pk in todos if not (
-        'argentina' in pk.get('partido','').lower() and
-        'menos de 2.5' in pk.get('mercado','').lower()
-    )]
-    # 3. Eliminar BTTS Portugal vs España (no es el pick correcto hoy)
-    todos = [pk for pk in todos if not (
-        'portugal' in pk.get('partido','').lower() and
-        'españa' in pk.get('partido','').lower() and
-        'ambos anotan' in pk.get('mercado','').lower()
-    )]
-    # 4. Eliminar Over 2.5 EE.UU. Bélgica si hay Faltas en el mismo partido en publico
-    # (permitir Over 2.5 como pick publico — es diferente mercado)
-    # 5. Recalcular EV correctamente para picks reales
+    # ── Recalcular EV correctamente para picks reales ──
     for pk in todos:
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
             pk['ev'] = round((pk['prob']/100) - (1/pk['cuota']), 3)
 
-    # ── Agregar picks manuales a todos ──
+        # ── Agregar picks manuales a todos ──
     todos = todos + picks_manuales
 
     # ── Selección limpia: Premium primero, luego público ──
