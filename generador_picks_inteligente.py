@@ -1513,6 +1513,51 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
+    # ── Picks manuales España vs Bélgica 10-07 ──
+    partidos_hoy = [pk.get('partido','').lower() for pk in todos]
+    if any('españa' in p and 'bélgica' in p for p in partidos_hoy):
+
+        # Eliminar BTTS Sí (España 6 porterías a cero — conflicto lógico)
+        todos = [pk for pk in todos if not (
+            'españa' in pk.get('partido','').lower() and
+            'bélgica' in pk.get('partido','').lower() and
+            'ambos anotan - sí' in pk.get('mercado','').lower()
+        )]
+
+        # Agregar España tiros +5.5 @1.80 al pool de públicos
+        picks_manuales.append({
+            'partido': 'España vs Bélgica',
+            'local': 'España', 'visitante': 'Bélgica',
+            'mercado': 'España tiros a puerta +5.5',
+            'prob': 67.3,
+            'cuota': 1.80, 'cuota_display': 1.80,
+            'ev': round((0.673 * 1.80) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Tiros',
+            'descripcion': 'España 8 tiros/partido × factor eliminatoria — dominio ofensivo garantizado',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+        # Premium forzado: Combinada Bet Builder España tiros +4.5 + Over 1.5 goles @1.70
+        picks_manuales.append({
+            'partido': 'España vs Bélgica',
+            'local': 'España', 'visitante': 'Bélgica',
+            'mercado': 'Combinada: España tiros +4.5 + Más 1.5 goles',
+            'prob': 73.0,
+            'cuota': 1.70, 'cuota_display': 1.70,
+            'ev': round((0.73 * 1.70) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Combinada',
+            'descripcion': 'Bet Builder: España tiros a puerta +4.5 (80.8%) + Más 1.5 goles (90.4%) @1.70',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+            'es_premium_forzado': True,
+            'picks_combo': [
+                {'partido': 'España vs Bélgica', 'local': 'España', 'visitante': 'Bélgica',
+                 'mercado': 'España tiros a puerta +4.5', 'cuota': 1.15},
+                {'partido': 'España vs Bélgica', 'local': 'España', 'visitante': 'Bélgica',
+                 'mercado': 'Más de 1.5 goles', 'cuota': 1.27},
+            ]
+        })
+
     # ── Recalcular EV correctamente para picks reales ──
     for pk in todos:
         if pk.get('fuente') == 'real' and pk.get('cuota', 0) > 0:
