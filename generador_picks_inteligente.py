@@ -886,6 +886,12 @@ def seleccionar_premium(todos, max_picks=1):
     - Si ninguna combinada alcanza 1.60, usa el mejor pick individual >= 1.60
     - Última opción: mejor pick individual disponible
     """
+    # Paso 0: pick premium forzado (Bet Builder u otros manuales)
+    for pk in todos:
+        if pk.get('es_premium_forzado'):
+            pk['tipo'] = 'premium'
+            return [pk]
+
     # Paso 1: buscar la mejor combinada (2 picks del mismo partido, mayor prob, cuota >= 1.60)
     # Picks candidatos para combinada: prob >= 65%, cuota entre 1.05 y 1.59
     picks_combo = sorted(
