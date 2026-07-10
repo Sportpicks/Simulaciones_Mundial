@@ -1529,6 +1529,24 @@ def main():
             'bélgica' in pk.get('partido','').lower() and
             'ambos anotan - sí' in pk.get('mercado','').lower()
         )]
+        # Eliminar 1X (EV negativo @1.50 — sin valor real)
+        todos = [pk for pk in todos if not (
+            'españa' in pk.get('partido','').lower() and
+            'bélgica' in pk.get('partido','').lower() and
+            '1x' in pk.get('mercado','').lower()
+        )]
+        # Agregar Victoria España como pick público
+        picks_manuales.append({
+            'partido': 'España vs Bélgica',
+            'local': 'España', 'visitante': 'Bélgica',
+            'mercado': 'Victoria España',
+            'prob': 65.0,
+            'cuota': 1.67, 'cuota_display': 1.67,
+            'ev': round((0.65 * 1.67) - 1, 3),
+            'emoji': '⚽', 'categoria': '1X2',
+            'descripcion': 'España invicta 35 partidos — Bélgica sin Onana — favorita clara',
+            'fuente': 'real', 'tipo': 'individual',
+        })
 
         # Agregar España tiros +5.5 @1.80 al pool de públicos
         picks_manuales.append({
