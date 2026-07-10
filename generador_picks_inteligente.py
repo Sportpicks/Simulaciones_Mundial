@@ -460,6 +460,10 @@ def obtener_cuotas():
             'totals':{'over_1.5':1.32,'over_2.5':1.95,'under_2.5':1.87,'over_3.5':3.30,'under_3.5':1.34},
             'btts_si':1.95,'btts_no':1.80,
             'corners':{'over_8.5':1.60,'under_8.5':2.25,'over_9.5':2.00,'under_9.5':1.75,'over_10.5':2.67}},
+        ('España',      'Bélgica'):             {'c1':1.67,'cx':3.85,'c2':5.20,'hc':{},
+            'totals':{'over_1.5':1.27,'under_1.5':3.80,'over_2.5':1.80,'under_2.5':2.02,'over_3.5':2.95,'under_3.5':1.40},
+            'btts_si':1.78,'btts_no':1.98,
+            'corners':{'over_8.5':1.52,'under_8.5':2.42,'over_9.5':1.87,'under_9.5':1.87,'over_10.5':2.42,'under_10.5':1.52}},
         # ── Octavos de final ──
         ('Canadá',      'Marruecos'):           {'c1':2.55,'cx':2.90,'c2':2.70,'hc':{},
             'totals':{'over_1.5':1.60,'over_2.5':2.25,'under_2.5':1.65,'over_3.5':4.50},
