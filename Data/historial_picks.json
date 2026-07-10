@@ -1738,6 +1738,85 @@
         "porcentaje": 50.0,
         "unidades": -2.28
       }
+    },
+    {
+      "fecha": "2026-07-10",
+      "picks": [
+        {
+          "id": "2026-07-10_pub_0",
+          "tipo": "Público",
+          "partido": "España vs Bélgica",
+          "mercado": "Más de 2.5 goles",
+          "cuota": 1.82,
+          "prob": 75.3,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🥅",
+          "categoria": "Goles",
+          "descripcion": "xG total 3.9 — cuota real @1.82"
+        },
+        {
+          "id": "2026-07-10_pub_1",
+          "tipo": "Público",
+          "partido": "España vs Bélgica",
+          "mercado": "Victoria España",
+          "cuota": 1.67,
+          "prob": 65.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "1X2",
+          "descripcion": "España invicta 35 partidos — Bélgica sin Onana — favorita clara"
+        },
+        {
+          "id": "2026-07-10_pub_2",
+          "tipo": "Público",
+          "partido": "España vs Bélgica",
+          "mercado": "España tiros a puerta +5.5",
+          "cuota": 1.8,
+          "prob": 67.3,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Tiros",
+          "descripcion": "España 8 tiros/partido × factor eliminatoria — dominio ofensivo garantizado"
+        },
+        {
+          "id": "2026-07-10_prem_0",
+          "tipo": "Premium",
+          "partido": "España",
+          "mercado": "Combinada: España tiros +4.5 + Más 1.5 goles",
+          "cuota": 1.7,
+          "prob": 73.0,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Combinada",
+          "descripcion": "Bet Builder: España tiros a puerta +4.5 (80.8%) + Más 1.5 goles (90.4%) @1.70",
+          "picks_combo": [
+            {
+              "partido": "España vs Bélgica",
+              "local": "España",
+              "visitante": "Bélgica",
+              "mercado": "España tiros a puerta +4.5",
+              "cuota": 1.15
+            },
+            {
+              "partido": "España vs Bélgica",
+              "local": "España",
+              "visitante": "Bélgica",
+              "mercado": "Más de 1.5 goles",
+              "cuota": 1.27
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
