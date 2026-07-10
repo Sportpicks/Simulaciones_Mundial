@@ -1,5 +1,5 @@
 {
-  "bankroll": 99.4,
+  "bankroll": 97.12,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -1665,8 +1665,8 @@
           "cuota": 1.95,
           "prob": 81.8,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
           "emoji": "🥅",
           "categoria": "Goles",
           "descripcion": "xG total 4.4 — cuota real @1.95"
@@ -1679,8 +1679,8 @@
           "cuota": 1.95,
           "prob": 77.3,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Perdido",
+          "ganancia": -2.0,
           "emoji": "⚽",
           "categoria": "Goles",
           "descripcion": "xG local 2.65 · xG visitante 1.78"
@@ -1693,8 +1693,8 @@
           "cuota": 1.56,
           "prob": 69.5,
           "stake": 2.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 1.12,
           "emoji": "⚽",
           "categoria": "1X2",
           "descripcion": "Francia favorito (70%)"
@@ -1707,8 +1707,8 @@
           "cuota": 1.6,
           "prob": 73.6,
           "stake": 1.0,
-          "estado": "Pendiente",
-          "ganancia": 0,
+          "estado": "Ganado",
+          "ganancia": 0.6,
           "emoji": "🎯",
           "categoria": "Combinada",
           "descripcion": "Más de 1.5 goles (94%) @1.32 × Francia tiros a puerta +4.5 (79%) @1.21",
@@ -1731,7 +1731,13 @@
         }
       ],
       "auditado": false,
-      "resumen": null
+      "resumen": {
+        "ganados": 2,
+        "perdidos": 2,
+        "pendientes": 0,
+        "porcentaje": 50.0,
+        "unidades": -2.28
+      }
     }
   ]
 }
