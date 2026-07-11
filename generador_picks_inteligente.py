@@ -1584,8 +1584,84 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
-    # ── Picks manuales España vs Bélgica 10-07 ──
+    # ── Picks manuales 11-07 ──
     partidos_hoy = [pk.get('partido','').lower() for pk in todos]
+
+    # Noruega vs Inglaterra — premium forzado + BTTS público
+    if any('noruega' in p and 'inglaterra' in p for p in partidos_hoy):
+        # Eliminar Over 2.5 Noruega vs Inglaterra (modelo sobreestima a Inglaterra)
+        todos = [pk for pk in todos if not (
+            'noruega' in pk.get('partido','').lower() and
+            'inglaterra' in pk.get('partido','').lower() and
+            'más de 2.5' in pk.get('mercado','').lower()
+        )]
+        # BTTS Sí al público — 11/12 partidos Noruega con ambos marcando
+        picks_manuales.append({
+            'partido': 'Noruega vs Inglaterra',
+            'local': 'Noruega', 'visitante': 'Inglaterra',
+            'mercado': 'Ambos anotan - Sí',
+            'prob': 75.0,
+            'cuota': 1.60, 'cuota_display': 1.60,
+            'ev': round((0.75 * 1.60) - 1, 3),
+            'emoji': '⚽', 'categoria': 'Goles',
+            'descripcion': '11/12 partidos de Noruega con ambos marcando — Quansah suspendido debilita defensa inglesa',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Victoria Inglaterra al público
+        picks_manuales.append({
+            'partido': 'Noruega vs Inglaterra',
+            'local': 'Noruega', 'visitante': 'Inglaterra',
+            'mercado': 'Victoria Inglaterra',
+            'prob': 72.0,
+            'cuota': 1.93, 'cuota_display': 1.93,
+            'ev': round((0.72 * 1.93) - 1, 3),
+            'emoji': '⚽', 'categoria': '1X2',
+            'descripcion': 'Inglaterra favorita — Kane + Bellingham — Henderson fuera no afecta el ataque',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Premium forzado: Bet Builder Más 1.5 goles + Faltas +18.5
+        picks_manuales.append({
+            'partido': 'Noruega vs Inglaterra',
+            'local': 'Noruega', 'visitante': 'Inglaterra',
+            'mercado': 'Combinada: Más 1.5 goles + Faltas +18.5',
+            'prob': 62.6,
+            'cuota': 1.65, 'cuota_display': 1.65,
+            'ev': round((0.626 * 1.65) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Combinada',
+            'descripcion': 'Bet Builder: Más 1.5 goles (87%) + Faltas +18.5 (72%) — partido abierto y físico',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+            'es_premium_forzado': True,
+            'picks_combo': [
+                {'partido': 'Noruega vs Inglaterra', 'local': 'Noruega', 'visitante': 'Inglaterra',
+                 'mercado': 'Más de 1.5 goles', 'cuota': 1.24},
+                {'partido': 'Noruega vs Inglaterra', 'local': 'Noruega', 'visitante': 'Inglaterra',
+                 'mercado': 'Faltas totales +18.5', 'cuota': 1.91},
+            ]
+        })
+
+    # Argentina vs Suiza — Over 2.5 al público
+    if any('argentina' in p and 'suiza' in p for p in partidos_hoy):
+        # Eliminar BTTS Sí Argentina vs Suiza (Suiza 0 goles vs Colombia)
+        todos = [pk for pk in todos if not (
+            'argentina' in pk.get('partido','').lower() and
+            'suiza' in pk.get('partido','').lower() and
+            'ambos anotan - sí' in pk.get('mercado','').lower()
+        )]
+        # Over 2.5 al público — Argentina 14 goles en el torneo
+        picks_manuales.append({
+            'partido': 'Argentina vs Suiza',
+            'local': 'Argentina', 'visitante': 'Suiza',
+            'mercado': 'Más de 2.5 goles',
+            'prob': 65.0,
+            'cuota': 2.18, 'cuota_display': 2.18,
+            'ev': round((0.65 * 2.18) - 1, 3),
+            'emoji': '🥅', 'categoria': 'Goles',
+            'descripcion': 'Argentina 14 goles en el torneo — Messi 7 goles — H2H 5-0-2 a favor de Argentina',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+    # ── Picks manuales España vs Bélgica 10-07 ──
     if any('españa' in p and 'bélgica' in p for p in partidos_hoy):
 
         # Eliminar BTTS Sí (España 6 porterías a cero — conflicto lógico)
