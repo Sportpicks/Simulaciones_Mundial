@@ -1823,6 +1823,85 @@
         "porcentaje": 100.0,
         "unidades": 5.28
       }
+    },
+    {
+      "fecha": "2026-07-11",
+      "picks": [
+        {
+          "id": "2026-07-11_pub_0",
+          "tipo": "Público",
+          "partido": "Noruega vs Inglaterra",
+          "mercado": "Ambos anotan - Sí",
+          "cuota": 1.6,
+          "prob": 75.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "Goles",
+          "descripcion": "11/12 partidos de Noruega con ambos marcando — Quansah suspendido debilita defensa inglesa"
+        },
+        {
+          "id": "2026-07-11_pub_1",
+          "tipo": "Público",
+          "partido": "Noruega vs Inglaterra",
+          "mercado": "Victoria Inglaterra",
+          "cuota": 1.93,
+          "prob": 83.4,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "1X2",
+          "descripcion": "Inglaterra favorito (83%)"
+        },
+        {
+          "id": "2026-07-11_pub_2",
+          "tipo": "Público",
+          "partido": "Argentina vs Suiza",
+          "mercado": "Victoria Argentina",
+          "cuota": 1.75,
+          "prob": 65.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "1X2",
+          "descripcion": "H2H 5-0-2 a favor de Argentina — Messi 7 goles — Suiza sin poder ofensivo"
+        },
+        {
+          "id": "2026-07-11_prem_0",
+          "tipo": "Premium",
+          "partido": "Noruega",
+          "mercado": "Combinada: Más 1.5 goles + Faltas +18.5",
+          "cuota": 1.65,
+          "prob": 62.6,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Combinada",
+          "descripcion": "Bet Builder: Más 1.5 goles (87%) + Faltas +18.5 (72%) — partido abierto y físico",
+          "picks_combo": [
+            {
+              "partido": "Noruega vs Inglaterra",
+              "local": "Noruega",
+              "visitante": "Inglaterra",
+              "mercado": "Más de 1.5 goles",
+              "cuota": 1.24
+            },
+            {
+              "partido": "Noruega vs Inglaterra",
+              "local": "Noruega",
+              "visitante": "Inglaterra",
+              "mercado": "Faltas totales +18.5",
+              "cuota": 1.91
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
