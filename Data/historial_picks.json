@@ -1856,18 +1856,21 @@
           "descripcion": "Inglaterra favorito (83%)"
         },
         {
-          "id": "2026-07-11_pub_2",
-          "tipo": "Público",
           "partido": "Argentina vs Suiza",
-          "mercado": "Victoria Argentina",
-          "cuota": 1.75,
-          "prob": 65.0,
-          "stake": 2.0,
+          "local": "Argentina",
+          "visitante": "Suiza",
+          "mercado": "Menos de 2.5 goles",
+          "prob": 63.5,
+          "cuota": 1.7,
+          "cuota_display": 1.7,
+          "ev": 0.079,
+          "emoji": "🔒",
+          "categoria": "Goles",
+          "stake": 2,
+          "tipo": "publico",
           "estado": "Pendiente",
           "ganancia": 0,
-          "emoji": "⚽",
-          "categoria": "1X2",
-          "descripcion": "H2H 5-0-2 a favor de Argentina — Messi 7 goles — Suiza sin poder ofensivo"
+          "descripcion": "xG corregido — Suiza defensiva 0-0 vs Colombia — partido cerrado"
         },
         {
           "id": "2026-07-11_prem_0",
