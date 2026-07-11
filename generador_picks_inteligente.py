@@ -1607,16 +1607,16 @@ def main():
             'descripcion': '11/12 partidos de Noruega con ambos marcando — Quansah suspendido debilita defensa inglesa',
             'fuente': 'real', 'tipo': 'individual',
         })
-        # Victoria Inglaterra al público
+        # Victoria Inglaterra al público con prob ajustada
         picks_manuales.append({
             'partido': 'Noruega vs Inglaterra',
             'local': 'Noruega', 'visitante': 'Inglaterra',
             'mercado': 'Victoria Inglaterra',
-            'prob': 72.0,
+            'prob': 68.0,
             'cuota': 1.93, 'cuota_display': 1.93,
-            'ev': round((0.72 * 1.93) - 1, 3),
+            'ev': round((0.68 * 1.93) - 1, 3),
             'emoji': '⚽', 'categoria': '1X2',
-            'descripcion': 'Inglaterra favorita — Kane + Bellingham — Henderson fuera no afecta el ataque',
+            'descripcion': 'Inglaterra favorita — Kane + Bellingham — xG corregido 61.7% en 90 min',
             'fuente': 'real', 'tipo': 'individual',
         })
         # Premium forzado: Bet Builder Más 1.5 goles + Faltas +18.5
@@ -1640,24 +1640,36 @@ def main():
             ]
         })
 
-    # Argentina vs Suiza — Over 2.5 al público
+    # Argentina vs Suiza — picks corregidos con xG real
     if any('argentina' in p and 'suiza' in p for p in partidos_hoy):
-        # Eliminar BTTS Sí Argentina vs Suiza (Suiza 0 goles vs Colombia)
+        # Eliminar BTTS Sí (Suiza 0 goles vs Colombia — muralla defensiva)
         todos = [pk for pk in todos if not (
             'argentina' in pk.get('partido','').lower() and
             'suiza' in pk.get('partido','').lower() and
             'ambos anotan - sí' in pk.get('mercado','').lower()
         )]
-        # Over 2.5 al público — Argentina 14 goles en el torneo
+        # Eliminar Over 2.5 (xG corregido solo 36.5% — partido cerrado)
+        todos = [pk for pk in todos if not (
+            'argentina' in pk.get('partido','').lower() and
+            'suiza' in pk.get('partido','').lower() and
+            'más de 2.5' in pk.get('mercado','').lower()
+        )]
+        # Eliminar X2 EV negativo
+        todos = [pk for pk in todos if not (
+            'argentina' in pk.get('partido','').lower() and
+            'suiza' in pk.get('partido','').lower() and
+            'x2' in pk.get('mercado','').lower()
+        )]
+        # Victoria Argentina @1.75 — H2H 5-0-2, Messi 7 goles
         picks_manuales.append({
             'partido': 'Argentina vs Suiza',
             'local': 'Argentina', 'visitante': 'Suiza',
-            'mercado': 'Más de 2.5 goles',
+            'mercado': 'Victoria Argentina',
             'prob': 65.0,
-            'cuota': 2.18, 'cuota_display': 2.18,
-            'ev': round((0.65 * 2.18) - 1, 3),
-            'emoji': '🥅', 'categoria': 'Goles',
-            'descripcion': 'Argentina 14 goles en el torneo — Messi 7 goles — H2H 5-0-2 a favor de Argentina',
+            'cuota': 1.75, 'cuota_display': 1.75,
+            'ev': round((0.65 * 1.75) - 1, 3),
+            'emoji': '⚽', 'categoria': '1X2',
+            'descripcion': 'H2H 5-0-2 a favor de Argentina — Messi 7 goles — Suiza sin poder ofensivo',
             'fuente': 'real', 'tipo': 'individual',
         })
 
