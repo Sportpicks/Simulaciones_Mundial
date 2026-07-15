@@ -1625,6 +1625,7 @@ def main():
                 })
 
     # ── Picks manuales Argentina vs Inglaterra 15-07 ──
+    partidos_hoy = [pk.get('partido','').lower() for pk in todos]
     if any('argentina' in p and 'inglaterra' in p for p in partidos_hoy):
         # Eliminar picks automáticos que no queremos
         todos = [pk for pk in todos if not (
