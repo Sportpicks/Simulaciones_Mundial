@@ -36,6 +36,13 @@ OCTAVOS = [
     ('2026-07-10', 'España',           'Bélgica',            '14:00', 'QF'),
     ('2026-07-11', 'Noruega',          'Inglaterra',         '16:00', 'QF'),
     ('2026-07-11', 'Argentina',        'Suiza',              '20:00', 'QF'),
+    # ── Semifinales ──
+    ('2026-07-14', 'España',           'Francia',            '19:00', 'SF'),
+    ('2026-07-15', 'Argentina',        'Inglaterra',         '19:00', 'SF'),
+    # ── Tercer puesto ──
+    ('2026-07-18', 'Francia',          'Noruega',            '15:00', '3P'),
+    # ── Final ──
+    ('2026-07-19', 'España',           'Ganador SF2',        '15:00', 'F'),
     ('2026-07-02', 'España',           'Austria',            '14:00', 'R16'),
     ('2026-07-02', 'Portugal',         'Croacia',            '18:00', 'R16'),
     ('2026-07-02', 'Suiza',            'Argelia',            '22:00', 'R16'),
