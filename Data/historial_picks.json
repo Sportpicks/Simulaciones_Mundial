@@ -1911,6 +1911,85 @@
         "porcentaje": 50.0,
         "unidades": 0.06
       }
+    },
+    {
+      "fecha": "2026-07-15",
+      "picks": [
+        {
+          "id": "2026-07-15_pub_0",
+          "tipo": "Público",
+          "partido": "Argentina vs Inglaterra",
+          "mercado": "Ambos anotan - Sí",
+          "cuota": 1.83,
+          "prob": 64.8,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "⚽",
+          "categoria": "Goles",
+          "descripcion": "xG local 1.42 · xG visitante 1.93"
+        },
+        {
+          "id": "2026-07-15_pub_1",
+          "tipo": "Público",
+          "partido": "Argentina vs Inglaterra",
+          "mercado": "Remates totales +19.5",
+          "cuota": 1.53,
+          "prob": 72.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Remates",
+          "descripcion": "Argentina ~17 + Inglaterra ~8 = 25 esperados — ambos equipos generan alto volumen"
+        },
+        {
+          "id": "2026-07-15_pub_2",
+          "tipo": "Público",
+          "partido": "Argentina vs Inglaterra",
+          "mercado": "Argentina remates totales +9.5",
+          "cuota": 1.67,
+          "prob": 65.0,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Remates",
+          "descripcion": "Argentina 22 remates vs Suiza, 16 vs Egipto, 15 vs Cabo Verde — dominio ofensivo independiente del resultado"
+        },
+        {
+          "id": "2026-07-15_prem_0",
+          "tipo": "Premium",
+          "partido": "Argentina",
+          "mercado": "Combinada: Más 1.5 goles + Argentina remates +8.5",
+          "cuota": 1.9,
+          "prob": 59.3,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Combinada",
+          "descripcion": "Bet Builder: Más 1.5 goles (84.7%) + Argentina remates +8.5 (70%) — EV+12.7%",
+          "picks_combo": [
+            {
+              "partido": "Argentina vs Inglaterra",
+              "local": "Argentina",
+              "visitante": "Inglaterra",
+              "mercado": "Más de 1.5 goles",
+              "cuota": 1.44
+            },
+            {
+              "partido": "Argentina vs Inglaterra",
+              "local": "Argentina",
+              "visitante": "Inglaterra",
+              "mercado": "Argentina remates totales +8.5",
+              "cuota": 1.4
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
