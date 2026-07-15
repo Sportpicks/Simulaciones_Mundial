@@ -40,7 +40,7 @@ OCTAVOS = [
     ('2026-07-14', 'España',           'Francia',            '19:00', 'SF'),
     ('2026-07-15', 'Argentina',        'Inglaterra',         '19:00', 'SF'),
     # ── Tercer puesto ──
-    ('2026-07-18', 'Francia',          'Noruega',            '15:00', '3P'),
+    ('2026-07-18', 'Francia',          'Perdedor SF2',       '15:00', '3P'),
     # ── Final ──
     ('2026-07-19', 'España',           'Ganador SF2',        '15:00', 'F'),
     ('2026-07-02', 'España',           'Austria',            '14:00', 'R16'),
