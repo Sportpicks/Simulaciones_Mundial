@@ -1624,6 +1624,79 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
+    # ── Picks manuales Argentina vs Inglaterra 15-07 ──
+    if any('argentina' in p and 'inglaterra' in p for p in partidos_hoy):
+        # Eliminar picks automáticos que no queremos
+        todos = [pk for pk in todos if not (
+            'argentina' in pk.get('partido','').lower() and
+            'inglaterra' in pk.get('partido','').lower() and
+            pk.get('mercado','').lower() in [
+                'más de 2.5 goles', 'victoria argentina',
+                'victoria inglaterra', '1x — argentina o empate',
+                'x2 — empate o inglaterra'
+            ]
+        )]
+
+        # Público #1: BTTS Sí @1.83
+        picks_manuales.append({
+            'partido': 'Argentina vs Inglaterra',
+            'local': 'Argentina', 'visitante': 'Inglaterra',
+            'mercado': 'Ambos anotan - Sí',
+            'prob': 64.8,
+            'cuota': 1.83, 'cuota_display': 1.83,
+            'ev': round((0.648 * 1.83) - 1, 3),
+            'emoji': '⚽', 'categoria': 'Goles',
+            'descripcion': 'Dibu encajó 5 goles en últimos 3 partidos — Kane 6 goles + Bellingham 6 — Messi 8 goles',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+        # Público #2: Argentina remates +9.5 @1.67
+        picks_manuales.append({
+            'partido': 'Argentina vs Inglaterra',
+            'local': 'Argentina', 'visitante': 'Inglaterra',
+            'mercado': 'Argentina remates totales +9.5',
+            'prob': 65.0,
+            'cuota': 1.67, 'cuota_display': 1.67,
+            'ev': round((0.65 * 1.67) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Remates',
+            'descripcion': 'Argentina 22 remates vs Suiza, 16 vs Egipto, 15 vs Cabo Verde — dominio ofensivo independiente del resultado',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+        # Público #3: Remates totales +19.5 @1.53
+        picks_manuales.append({
+            'partido': 'Argentina vs Inglaterra',
+            'local': 'Argentina', 'visitante': 'Inglaterra',
+            'mercado': 'Remates totales +19.5',
+            'prob': 72.0,
+            'cuota': 1.53, 'cuota_display': 1.53,
+            'ev': round((0.72 * 1.53) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Remates',
+            'descripcion': 'Argentina ~17 + Inglaterra ~8 = 25 esperados — ambos equipos generan alto volumen',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+
+        # Premium forzado: Bet Builder Más 1.5 goles + Argentina remates +8.5 @1.90
+        picks_manuales.append({
+            'partido': 'Argentina vs Inglaterra',
+            'local': 'Argentina', 'visitante': 'Inglaterra',
+            'mercado': 'Combinada: Más 1.5 goles + Argentina remates +8.5',
+            'prob': 59.3,
+            'cuota': 1.90, 'cuota_display': 1.90,
+            'ev': round((0.593 * 1.90) - 1, 3),
+            'emoji': '🎯', 'categoria': 'Combinada',
+            'descripcion': 'Bet Builder: Más 1.5 goles (84.7%) + Argentina remates +8.5 (70%) — EV+12.7%',
+            'fuente': 'real', 'tipo': 'individual',
+            'h2h_boost': True,
+            'es_premium_forzado': True,
+            'picks_combo': [
+                {'partido': 'Argentina vs Inglaterra', 'local': 'Argentina', 'visitante': 'Inglaterra',
+                 'mercado': 'Más de 1.5 goles', 'cuota': 1.44},
+                {'partido': 'Argentina vs Inglaterra', 'local': 'Argentina', 'visitante': 'Inglaterra',
+                 'mercado': 'Argentina remates totales +8.5', 'cuota': 1.40},
+            ]
+        })
+
     # ── Picks manuales 11-07 ──
     partidos_hoy = [pk.get('partido','').lower() for pk in todos]
 
