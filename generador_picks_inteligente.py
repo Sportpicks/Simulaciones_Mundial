@@ -1654,6 +1654,62 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
+    # ── Picks manuales Francia vs Inglaterra 18-07 (3er puesto) ──
+    partidos_hoy = [pk.get('partido','').lower() for pk in todos]
+    if any('francia' in p and 'inglaterra' in p for p in partidos_hoy):
+        # Eliminar picks automáticos con EV negativo
+        todos = [pk for pk in todos if not (
+            'francia' in pk.get('partido','').lower() and
+            'inglaterra' in pk.get('partido','').lower() and
+            pk.get('ev', 0) < 0.05 and
+            pk.get('mercado','').lower() not in ['menos de 3.5 goles', 'menos de 2.5 goles']
+        )]
+        # Público #1: Under 3.5 goles
+        picks_manuales.append({
+            'partido': 'Francia vs Inglaterra',
+            'local': 'Francia', 'visitante': 'Inglaterra',
+            'mercado': 'Menos de 3.5 goles',
+            'prob': 64.7, 'cuota': 1.75, 'cuota_display': 1.75,
+            'ev': round((0.647*1.75)-1, 3),
+            'emoji': '🔒', 'categoria': 'Goles',
+            'descripcion': 'Partido 3er puesto — intensidad baja en 2T — cubre hasta 2-1 o 3-0',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Público #2: Inglaterra Under 1.5 goles
+        picks_manuales.append({
+            'partido': 'Francia vs Inglaterra',
+            'local': 'Francia', 'visitante': 'Inglaterra',
+            'mercado': 'Inglaterra menos de 1.5 goles',
+            'prob': 66.3, 'cuota': 1.62, 'cuota_display': 1.62,
+            'ev': round((0.663*1.62)-1, 3),
+            'emoji': '🔒', 'categoria': 'Goles',
+            'descripcion': 'xG Inglaterra 1.20 — apatía ofensiva confirmada — sin motivación máxima',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Público #3: Francia remates +13.5
+        picks_manuales.append({
+            'partido': 'Francia vs Inglaterra',
+            'local': 'Francia', 'visitante': 'Inglaterra',
+            'mercado': 'Francia remates totales +13.5',
+            'prob': 65.0, 'cuota': 1.62, 'cuota_display': 1.62,
+            'ev': round((0.65*1.62)-1, 3),
+            'emoji': '🎯', 'categoria': 'Remates',
+            'descripcion': 'Francia domina posesión — 13 remates promedio histórico — dominio natural',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Premium: Inglaterra tiros al arco -3.5 @2.45
+        picks_manuales.append({
+            'partido': 'Francia vs Inglaterra',
+            'local': 'Francia', 'visitante': 'Inglaterra',
+            'mercado': 'Inglaterra tiros al arco -3.5',
+            'prob': 46.8, 'cuota': 2.45, 'cuota_display': 2.45,
+            'ev': round((0.468*2.45)-1, 3),
+            'emoji': '💎', 'categoria': 'Tiros',
+            'descripcion': 'Ineficiencia dorada — xG 1.20 Inglaterra — apatía ofensiva — EV+14.7%',
+            'fuente': 'real', 'tipo': 'individual',
+            'es_premium_forzado': True,
+        })
+
     # ── Picks manuales Argentina vs Inglaterra 15-07 ──
     partidos_hoy = [pk.get('partido','').lower() for pk in todos]
     if any('argentina' in p and 'inglaterra' in p for p in partidos_hoy):
