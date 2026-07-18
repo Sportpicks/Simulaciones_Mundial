@@ -1996,6 +1996,43 @@
         "porcentaje": 100.0,
         "unidades": 4.96
       }
+    },
+    {
+      "fecha": "2026-07-18",
+      "picks": [
+        {
+          "id": "2026-07-18_prem_0",
+          "tipo": "Premium",
+          "partido": "Francia",
+          "mercado": "Combinada: Faltas +18.5 + Francia faltas +8.5",
+          "cuota": 1.66,
+          "prob": 54.2,
+          "stake": 1.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🎯",
+          "categoria": "Combinada",
+          "descripcion": "Faltas +18.5 (74%) @1.28 × Francia faltas +8.5 (73%) @1.3",
+          "picks_combo": [
+            {
+              "partido": "Francia vs Perdedor SF2",
+              "local": "Francia",
+              "visitante": "Perdedor SF2",
+              "mercado": "Faltas +18.5",
+              "cuota": 1.28
+            },
+            {
+              "partido": "Francia vs Perdedor SF2",
+              "local": "Francia",
+              "visitante": "Perdedor SF2",
+              "mercado": "Francia faltas +8.5",
+              "cuota": 1.3
+            }
+          ]
+        }
+      ],
+      "auditado": false,
+      "resumen": null
     }
   ]
 }
