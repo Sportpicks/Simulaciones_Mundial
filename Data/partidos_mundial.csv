@@ -71,6 +71,16 @@ Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
 2026-06-27,18:30,RD Congo,Uzbekistán,3:1,K,FINISHED
 2026-06-27,21:00,Jordania,Argentina,1:3,J,FINISHED
 2026-06-27,21:00,Argelia,Austria,3:3,J,FINISHED
+2026-06-28,14:00,Canadá,Sudáfrica,,R16,SCHEDULED
+2026-06-29,12:00,Brasil,Japón,,R16,SCHEDULED
+2026-06-29,15:30,Alemania,Paraguay,,R16,SCHEDULED
+2026-06-29,20:00,Países Bajos,Marruecos,,R16,SCHEDULED
+2026-06-30,12:00,Costa de Marfil,Noruega,,R16,SCHEDULED
+2026-06-30,16:00,Francia,Suecia,,R16,SCHEDULED
+2026-06-30,20:00,México,Ecuador,,R16,SCHEDULED
+2026-07-01,11:00,Inglaterra,RD Congo,,R16,SCHEDULED
+2026-07-01,15:00,Bélgica,Senegal,,R16,SCHEDULED
+2026-07-01,19:00,EE. UU.,Bosnia-Herzegovina,,R16,SCHEDULED
 2026-07-04,12:00,Canadá,Marruecos,,R8,SCHEDULED
 2026-07-04,16:00,Paraguay,Francia,,R8,SCHEDULED
 2026-07-05,15:00,Brasil,Noruega,,R8,SCHEDULED
@@ -85,18 +95,8 @@ Fecha,Hora_Peru,Equipo_Local,Equipo_Visitante,Resultado,Grupo,Estado
 2026-07-11,20:00,Argentina,Suiza,,QF,SCHEDULED
 2026-07-14,19:00,España,Francia,,SF,SCHEDULED
 2026-07-15,19:00,Argentina,Inglaterra,,SF,SCHEDULED
-2026-07-18,15:00,Francia,Noruega,,3P,SCHEDULED
+2026-07-18,15:00,Francia,Perdedor SF2,,3P,SCHEDULED
 2026-07-19,15:00,España,Ganador SF2,,F,SCHEDULED
-2026-06-28,14:00,Canadá,Sudáfrica,,R16,SCHEDULED
-2026-06-29,12:00,Brasil,Japón,,R16,SCHEDULED
-2026-06-29,15:30,Alemania,Paraguay,,R16,SCHEDULED
-2026-06-29,20:00,Países Bajos,Marruecos,,R16,SCHEDULED
-2026-06-30,12:00,Costa de Marfil,Noruega,,R16,SCHEDULED
-2026-06-30,16:00,Francia,Suecia,,R16,SCHEDULED
-2026-06-30,20:00,México,Ecuador,,R16,SCHEDULED
-2026-07-01,11:00,Inglaterra,RD Congo,,R16,SCHEDULED
-2026-07-01,15:00,Bélgica,Senegal,,R16,SCHEDULED
-2026-07-01,19:00,EE. UU.,Bosnia-Herzegovina,,R16,SCHEDULED
 2026-07-02,14:00,España,Austria,,R16,SCHEDULED
 2026-07-02,18:00,Portugal,Croacia,,R16,SCHEDULED
 2026-07-02,22:00,Suiza,Argelia,,R16,SCHEDULED
