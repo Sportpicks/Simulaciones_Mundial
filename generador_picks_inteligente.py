@@ -1697,6 +1697,60 @@ def main():
                     'h2h_boost': pk_rep.get('nivel') == 'ALTO',
                 })
 
+    # ── Picks manuales España vs Argentina 19-07 (FINAL) ──
+    if any('españa' in p and 'argentina' in p for p in partidos_hoy):
+        # Eliminar todos los picks automáticos con EV negativo
+        todos = [pk for pk in todos if not (
+            'españa' in pk.get('partido','').lower() and
+            'argentina' in pk.get('partido','').lower() and
+            pk.get('ev', 0) <= 0
+        )]
+        # Público #1: Over 1.5 goles
+        picks_manuales.append({
+            'partido': 'España vs Argentina',
+            'local': 'España', 'visitante': 'Argentina',
+            'mercado': 'Más de 1.5 goles',
+            'prob': 81.7, 'cuota': 1.44, 'cuota_display': 1.44,
+            'ev': round((0.817*1.44)-1, 3),
+            'emoji': '🥅', 'categoria': 'Goles',
+            'descripcion': 'Monte Carlo 100K: 81.7% — Final con máxima motivación — ambos equipos atacan',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Público #2: Córners totales +7.5
+        picks_manuales.append({
+            'partido': 'España vs Argentina',
+            'local': 'España', 'visitante': 'Argentina',
+            'mercado': 'Córners totales +7.5',
+            'prob': 77.8, 'cuota': 1.75, 'cuota_display': 1.75,
+            'ev': round((0.778*1.75)-1, 3),
+            'emoji': '⛳', 'categoria': 'Córners',
+            'descripcion': 'Monte Carlo 100K: 77.8% — España 9 córners/partido — Argentina 4 — total esperado 10',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Público #3: España tiros al arco +4.5
+        picks_manuales.append({
+            'partido': 'España vs Argentina',
+            'local': 'España', 'visitante': 'Argentina',
+            'mercado': 'España tiros al arco +4.5',
+            'prob': 71.3, 'cuota': 1.87, 'cuota_display': 1.87,
+            'ev': round((0.713*1.87)-1, 3),
+            'emoji': '🎯', 'categoria': 'Tiros',
+            'descripcion': 'Monte Carlo 100K: 71.3% — España 6 tiros/partido promedio — asedio garantizado',
+            'fuente': 'real', 'tipo': 'individual',
+        })
+        # Premium: España córners +4.5 @2.00
+        picks_manuales.append({
+            'partido': 'España vs Argentina',
+            'local': 'España', 'visitante': 'Argentina',
+            'mercado': 'España córners +4.5',
+            'prob': 71.5, 'cuota': 2.00, 'cuota_display': 2.00,
+            'ev': round((0.715*2.00)-1, 3),
+            'emoji': '💎', 'categoria': 'Córners',
+            'descripcion': 'Ineficiencia dorada — salto de valor de @1.45 a @2.00 por un córner — EV+43%',
+            'fuente': 'real', 'tipo': 'individual',
+            'es_premium_forzado': True,
+        })
+
     # ── Picks manuales Francia vs Inglaterra 18-07 (3er puesto) ──
     partidos_hoy = [pk.get('partido','').lower() for pk in todos]
     if any('francia' in p and 'inglaterra' in p for p in partidos_hoy):
