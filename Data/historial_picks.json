@@ -1,5 +1,5 @@
 {
-  "bankroll": 107.42,
+  "bankroll": 103.66,
   "dias": [
     {
       "fecha": "2026-06-25",
@@ -2001,30 +2001,44 @@
       "fecha": "2026-07-18",
       "picks": [
         {
+          "id": "2026-07-18_pub_0",
+          "tipo": "Público",
+          "partido": "Francia vs Inglaterra",
+          "mercado": "Menos de 3.5 goles",
+          "cuota": 1.75,
+          "prob": 64.7,
+          "stake": 2.0,
+          "estado": "Pendiente",
+          "ganancia": 0,
+          "emoji": "🔒",
+          "categoria": "Goles",
+          "descripcion": "xG total 3.0 — cuota real @1.75"
+        },
+        {
           "id": "2026-07-18_prem_0",
           "tipo": "Premium",
           "partido": "Francia",
-          "mercado": "Combinada: Faltas +18.5 + Francia faltas +8.5",
-          "cuota": 1.66,
-          "prob": 54.2,
+          "mercado": "Combinada: Sin empate (1 o 2) + Francia faltas +8.5",
+          "cuota": 1.61,
+          "prob": 56.1,
           "stake": 1.0,
           "estado": "Pendiente",
           "ganancia": 0,
           "emoji": "🎯",
           "categoria": "Combinada",
-          "descripcion": "Faltas +18.5 (74%) @1.28 × Francia faltas +8.5 (73%) @1.3",
+          "descripcion": "Sin empate (1 o 2) (77%) @1.24 × Francia faltas +8.5 (73%) @1.3",
           "picks_combo": [
             {
-              "partido": "Francia vs Perdedor SF2",
+              "partido": "Francia vs Inglaterra",
               "local": "Francia",
-              "visitante": "Perdedor SF2",
-              "mercado": "Faltas +18.5",
-              "cuota": 1.28
+              "visitante": "Inglaterra",
+              "mercado": "Sin empate (1 o 2)",
+              "cuota": 1.24
             },
             {
-              "partido": "Francia vs Perdedor SF2",
+              "partido": "Francia vs Inglaterra",
               "local": "Francia",
-              "visitante": "Perdedor SF2",
+              "visitante": "Inglaterra",
               "mercado": "Francia faltas +8.5",
               "cuota": 1.3
             }
